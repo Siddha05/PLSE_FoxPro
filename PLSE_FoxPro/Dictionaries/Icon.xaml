@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    
+    <Style x:Key="FlashIcon" TargetType="{x:Type materialDesign:PackIcon}">
+        <Setter Property="materialDesign:PackIcon.Kind" Value="Flash"/>
+        <Setter Property="materialDesign:PackIcon.Foreground" Value="#FFE6E605"/>
+        <Setter Property="materialDesign:PackIcon.Height" Value="30"/>
+        <Setter Property="materialDesign:PackIcon.Width" Value="30"/>
+        <Setter Property="materialDesign:PackIcon.VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="HelpIcon" TargetType="{x:Type materialDesign:PackIcon}">
+        <Setter Property="materialDesign:PackIcon.Kind" Value="HelpCircle"/>
+        <Setter Property="materialDesign:PackIcon.Foreground" Value="Blue"/>
+        <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+        <Setter Property="materialDesign:PackIcon.Height" Value="24"/>
+        <Setter Property="materialDesign:PackIcon.Width" Value="24"/>
+        <Setter Property="materialDesign:PackIcon.VerticalAlignment" Value="Center"/>
+        <Setter Property="materialDesign:PackIcon.Background" Value="Transparent"/>
+    </Style>
+</ResourceDictionary>

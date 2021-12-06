@@ -1,0 +1,85 @@
+﻿<Page x:Class="PLSE_FoxPro.Pages.AddEditSpeciality"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:converters="clr-namespace:PLSE_FoxPro.Converters"
+      xmlns:viewmodels="clr-namespace:PLSE_FoxPro.ViewModels"
+      xmlns:local="clr-namespace:PLSE_FoxPro.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="650" d:DesignWidth="900"
+      Title="AddEditSpeciality">
+    <Page.Resources>
+        <converters:NullableByteToStringConverter x:Key="NByteToStringConv"/>
+    </Page.Resources>
+    <Grid HorizontalAlignment="Left" Margin="40,20,0,0" VerticalAlignment="Top" Width="800">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Style="{StaticResource InactiveTextBlock}" Grid.Row="0" Text="Название" Margin="0,00,0,0"/>
+        <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Row="0" Margin="5,00,5,0" Grid.Column="1" Grid.ColumnSpan="3">
+            <TextBox.Text>
+                <Binding Path="Speciality.Title" UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules >
+                        <DataErrorValidationRule ValidatesOnTargetUpdated="True"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <TextBlock Style="{StaticResource InactiveTextBlock}" Grid.Row="1" Text="Код" Margin="0,20,0,0"/>
+        <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Column="1" Grid.Row="1" Margin="5,20,5,0">
+            <TextBox.Text>
+                <Binding Path="Speciality.Code" UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <DataErrorValidationRule ValidatesOnTargetUpdated="True"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <TextBlock Style="{StaticResource InactiveTextBlock}" Text="Вид" Grid.Row="2" Margin="0,20,0,0"/>
+        <ComboBox Style="{StaticResource UIOutlinedComboBox}" Grid.Column="1" Grid.Row="2" Margin="5,20,5,0" Grid.ColumnSpan="3"
+                  SelectedItem="{Binding Path=Speciality.Species}"/>
+        <TextBlock Style="{StaticResource InactiveTextBlock}" Grid.Row="3" Margin="0,20,0,0" Text="Акроним"/>
+        <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Row="3" Margin="5,20,5,0" Grid.Column="1" Text="{Binding Path=Speciality.Acronym}"/>
+        <materialDesign:PackIcon Style="{StaticResource HelpIcon}" ToolTip="Вид экспертизы согласно перечня родов (видов) судебных экспертиз, выполняемых в федеральных
+                                 бюджетных судебно-экспертных учреждениях Минюста России (утвержден приказом Минюста России от 27.12.2012 № 237, внесены изменения
+                                 приказом Минюста России от 29.10.2013 № 199)" Grid.Row="2" Grid.Column="4" Margin="0,20,0,0"/>
+        <materialDesign:PackIcon Style="{StaticResource HelpIcon}" ToolTip="Сокращенное название специальности (для внутреннего пользования)" Grid.Row="3" Grid.Column="3"
+                                 Margin="0,20,0,0"/>
+        <TextBlock Grid.Row="4" Grid.ColumnSpan="6" Margin="5,40,5,10" Text="Макс. количество часов по категориям" HorizontalAlignment="Center" Style="{StaticResource CaptionTextBlock}"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.ColumnSpan="6" Margin="5,10,5,0" HorizontalAlignment="Center">
+            <TextBlock Style="{StaticResource InactiveTextBlock}" Text="1 кат."/>
+            <TextBox Style="{StaticResource UINumericOutlinedTextBox}" Margin="5,0,5,0" Name="cat1"
+                     Text="{Binding Path=Speciality.Category_1,UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, Converter={StaticResource NByteToStringConv}}"/>
+            <TextBlock  Style="{StaticResource InactiveTextBlock}" Text="2 кат." Margin="15,0,0,0"/>
+            <TextBox Style="{StaticResource UINumericOutlinedTextBox}" Margin="5,0,5,0" Name="cat2"
+                     Text="{Binding Path=Speciality.Category_2,UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, Converter={StaticResource NByteToStringConv}}"/>
+            <TextBlock  Style="{StaticResource InactiveTextBlock}" Text="3 кат." Margin="15,0,0,0"/>
+            <TextBox Style="{StaticResource UINumericOutlinedTextBox}" Grid.Column="1" Margin="5,0,5,0" Name="cat3"
+                     Text="{Binding Path=Speciality.Category_3,UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, Converter={StaticResource NByteToStringConv}}"/>
+        </StackPanel>
+        <CheckBox Style="{StaticResource MaterialDesignAccentCheckBox}" Grid.Column="4" Grid.Row="0" Content="Действует" TextBlock.FontSize="{StaticResource MediumFontSize}"
+                  materialDesign:CheckBoxAssist.CheckBoxSize="30" IsChecked="{Binding Path=Speciality.IsValid}"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.ColumnSpan="6" HorizontalAlignment="Center" Margin="0,60,0,5">
+            <Button Style="{StaticResource SaveButtonFlat}" />
+            <Button Style="{StaticResource CancelButtonFlat}" Command="{Binding Path=SendMessage}"/>
+        </StackPanel>
+    </Grid>
+</Page>

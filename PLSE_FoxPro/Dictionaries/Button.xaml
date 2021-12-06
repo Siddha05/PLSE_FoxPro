@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="SaveButtonFlat" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
+        <Setter Property="Foreground" Value="{StaticResource AcceptGreenBrush}"/>
+        <Setter Property="FontWeight" Value="DemiBold"/>
+        <Setter Property="Content" Value="СОХРАНИТЬ"/>
+    </Style>
+    <Style x:Key="CancelButtonFlat" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
+        <Setter Property="Foreground" Value="{StaticResource RejectRedBrush}"/>
+        <Setter Property="Content" Value="ОТМЕНА"/>
+    </Style>
+</ResourceDictionary>
