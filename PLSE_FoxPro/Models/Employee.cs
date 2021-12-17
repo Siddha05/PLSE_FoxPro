@@ -1,12 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-
+using System.ComponentModel.DataAnnotations;
+public enum UploadResult
+{
+    UnPerform = 0,
+    Performing,
+    Sucsess,
+    Error
+}
 namespace PLSE_FoxPro.Models
 {
-    class Employee : Person, ICloneable
+    public class Employee : Person, ICloneable
     {
         #region Fields
         private string _inneroffice;
@@ -19,77 +23,44 @@ namespace PLSE_FoxPro.Models
         private Lazy<Employee_SlightPart> _slightpart;
         #endregion
         #region Properties
+        [Required(ErrorMessage = "обязательное поле")]
         public string Inneroffice
         {
             get => _inneroffice;
-            set
-            {
-                if (_inneroffice == value) return;
-                _inneroffice = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _inneroffice, value, true);
         }
         public UploadResult UploadStatus
         {
             get => _upload;
-            set
-            {
-                _upload = value;
-                OnPropertyChanged(suppressverchanging: true);
-            }
+            set => SetProperty(ref _upload, value);
         }
+        [Required(ErrorMessage = "обязательное поле")]
         public Departament Departament
         {
             get => _departament;
-            set
-            {
-                if (_departament == value) return;
-                _departament = value;
-                OnPropertyChanged("Departament");
-            }
+            set => SetProperty(ref _departament, value, true);
         }
+        [Required(ErrorMessage = "обязательное поле")]
         public string EmployeeStatus
         {
             get => _employeeStaus;
-            set
-            {
-                if (_employeeStaus == value) return;
-                _employeeStaus = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _employeeStaus, value, true);
         }
+        [Required(ErrorMessage = "обязательное поле")]
         public PermissionProfile Profile
         {
             get => _profile;
-            set
-            {
-                if (value != _profile)
-                {
-                    _profile = value;
-                    OnPropertyChanged();
-                }
-            }
+            set => SetProperty(ref _profile, value, true);
         }
         public string Password
         {
             get => _password;
-            set
-            {
-                if (value != _password)
-                {
-                    _password = value;
-                    OnPropertyChanged(suppressverchanging: true);
-                }
-            }
+            set => SetProperty(ref _password, value);
         }
         public Byte[] Foto
         {
             get => _foto;
-            set
-            {
-                _foto = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _foto, value);
         }
         public Employee_SlightPart Employee_SlightPart
         {
@@ -104,28 +75,8 @@ namespace PLSE_FoxPro.Models
                 }
             }
         }
-        //public BitmapImage Image
-        //{
-        //    get
-        //    {
-        //        BitmapImage image = new BitmapImage();
-        //        if (_foto != null)
-        //        {
-        //            image.BeginInit();
-        //            image.StreamSource = new MemoryStream(_foto);
-        //            image.EndInit();
-        //        }
-        //        else
-        //        {
-        //            image.BeginInit();
-        //            image.UriSource = new Uri(@"pack://application:,,,/Resources/Unknown.jpg");
-        //            image.EndInit();
-        //        }
-        //        return image;
-        //    }
-        //}
         public static Employee New => new Employee() { Version = Version.New };
-       
+
         #endregion
         #region Metods
         public bool IsOperate()
@@ -151,9 +102,9 @@ namespace PLSE_FoxPro.Models
         }
         public Employee Clone()
         {
-            return new Employee(id: _id, departament: _departament, office: _inneroffice, firstname: _fname, middlename: _mname, secondname: _sname, gender: _gender,
+            return new Employee(id: ID, departament: _departament, office: _inneroffice, firstname: _fname, middlename: _mname, secondname: _sname, gender: _gender,
                                 declinated: _declinated, emplstatus: _employeeStaus, profile: _profile, password: _password, uploadstatus: _upload,
-                                vr: Version, updatedate: ModificationDate, slightPart: _slightpart.Value.Clone(), foto: _foto);
+                                vr: Version, updatedate: DBModifyDate, slightPart: _slightpart.Value.Clone(), foto: _foto);
         }
         object ICloneable.Clone() => Clone();
         #endregion
@@ -178,20 +129,25 @@ namespace PLSE_FoxPro.Models
         }
         private Employee_SlightPart FetchSlight()
         {
+            UploadStatus = UploadResult.Performing;
             Employee_SlightPart res = null;
             try
             {
-                res = App.PLSE_Storage.EmployeeAccessService.DownloadEmployeeSligth(this);
+                //res = App.PLSE_Storage.EmployeeAccessService.DownloadEmployeeSligth(this);
+                res = new Employee_SlightPart(null, null, null, null, null, null, null, null, null, null, false);
+                UploadStatus = UploadResult.Sucsess;
             }
             catch (Exception)
             {
+                UploadStatus = UploadResult.Error;
             }
             return res;
         }
         private Employee(int id, Departament departament, string office, string firstname, string middlename, string secondname, bool? gender, bool declinated,
-                         string emplstatus, PermissionProfile profile, string password, byte[] foto, Employee_SlightPart slightPart, UploadResult uploadstatus, Version vr, DateTime updatedate)
-            : this(id: id, firstname: firstname, middlename: middlename, secondname: secondname, gender: gender, declinated: declinated, vr: vr, updatedate: updatedate,
-                  departament: departament, office: office, emplstatus: emplstatus, profile: profile, password: password, foto: foto)
+                         string emplstatus, PermissionProfile profile, string password, byte[] foto, Employee_SlightPart slightPart, UploadResult uploadstatus,
+                         Version vr, DateTime updatedate)
+                    : this(id: id, firstname: firstname, middlename: middlename, secondname: secondname, gender: gender, declinated: declinated, vr: vr, updatedate: updatedate,
+                            departament: departament, office: office, emplstatus: emplstatus, profile: profile, password: password, foto: foto)
         {
             _slightpart = new Lazy<Employee_SlightPart>(() => slightPart);
             _upload = uploadstatus;
@@ -209,40 +165,36 @@ namespace PLSE_FoxPro.Models
         private string _mobilephone;
         private string _workphone;
         private string _email;
-        private Adress _adress;
+        private Adress _adress = new Adress();
         private bool _is_hide_personal;
         #endregion Fields
         #region Properties
-        public Adress Adress
-        {
-            get => _adress;
-            set => SetProperty(ref _adress, value);
-        }
-        [MaxLength(250, ErrorMessage ="превышел лимит символов")]
+        public Adress Adress => _adress;
+        [MaxLength(250, ErrorMessage = "превышен лимит символов")]
         public string Education1
         {
             get => _education1;
             set => SetProperty(ref _education1, value, true);
         }
-        [MaxLength(250, ErrorMessage = "превышел лимит символов")]
+        [MaxLength(250, ErrorMessage = "превышен лимит символов")]
         public string Education2
         {
             get => _education2;
-            set => SetProperty(ref _education2, value,true);
+            set => SetProperty(ref _education2, value, true);
         }
-        [MaxLength(250, ErrorMessage = "превышел лимит символов")]
+        [MaxLength(250, ErrorMessage = "превышен лимит символов")]
         public string Education3
         {
             get => _education3;
             set => SetProperty(ref _education3, value, true);
         }
-        [MaxLength(250, ErrorMessage = "превышел лимит символов")]
+        [MaxLength(250, ErrorMessage = "превышен лимит символов")]
         public string Sciencedegree
         {
             get => _sciencedegree;
             set => SetProperty(ref _sciencedegree, value, true);
         }
-        [RegularExpression(@"^[1-9]\d{9}$", ErrorMessage = "неверный формат")]
+        [Number(ValidationNumberType.MobilePhone)]
         public string Mobilephone
         {
             get => _mobilephone;
@@ -254,7 +206,7 @@ namespace PLSE_FoxPro.Models
             get => _email;
             set => SetProperty(ref _email, value, true);
         }
-        [RegularExpression(@"^[1-9]\d{3,6}$", ErrorMessage = "неверный формат")]
+        [Number(ValidationNumberType.WorkPhone)]
         public string Workphone
         {
             get => _workphone;
@@ -276,7 +228,7 @@ namespace PLSE_FoxPro.Models
             set => SetProperty(ref _is_hide_personal, value);
         }
         #endregion
-        
+
         public Employee_SlightPart(DateTime? hiredate, DateTime? birthdate, string mobilephone, string workphone, string email, Adress adress,
                                   string education1, string education2, string education3, string sciencedegree, bool hidepersonal)
         {
@@ -290,12 +242,8 @@ namespace PLSE_FoxPro.Models
             _workphone = workphone;
             _email = email;
             _is_hide_personal = hidepersonal;
-            if (adress != null)
-            {
-                _adress = adress;
-                _adress.PropertyChanged += _adress_PropertyChanged;
-            }
-            else _adress = new Adress();
+            adress?.Copy(_adress);
+            _adress.PropertyChanged += _adress_PropertyChanged;
         }
         private void _adress_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -309,17 +257,13 @@ namespace PLSE_FoxPro.Models
                         education2: _education2,
                         education3: _education3,
                         sciencedegree: _sciencedegree,
-                        adress: _adress?.Clone(),
+                        adress: _adress,
                         mobilephone: _mobilephone,
                         workphone: _workphone,
                         email: _email,
                         hiredate: _hiredate,
                         birthdate: _birthdate,
                         hidepersonal: _is_hide_personal);
-        }
-        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            base.OnPropertyChanged(e);
         }
     }
 }

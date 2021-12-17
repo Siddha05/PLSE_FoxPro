@@ -3,24 +3,340 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PLSE_FoxPro"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:PLSE_MD.Model"
         mc:Ignorable="d"
-        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:vm="clr-namespace:PLSE_FoxPro.ViewModels"
-        Title="MainWindow" Height="450" Width="800">
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:viewmodels="clr-namespace:PLSE_FoxPro.ViewModels"
+        xmlns:converters="clr-namespace:PLSE_FoxPro.Converters" xmlns:templateselectors="clr-namespace:PLSE_MD.TemplateSelectors"
+        xmlns:model="clr-namespace:PLSE_FoxPro.Models"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular" TextElement.FontSize="13" TextOptions.TextFormattingMode="Ideal" TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}" FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="MainWindow" Height="850" Width="1400" WindowState="Maximized" WindowStyle="None" Name="mainwindow">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding Path=WindowLoaded}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Window.DataContext>
-        <vm:MainVM/>
+        <viewmodels:MainVM/>
     </Window.DataContext>
+    <Window.Resources>
+        <converters:MessageToImageConverter x:Key="MsgToImageConv"/>
+        <converters:IntToVisibleConverter Threshold = "0" x:Key="IntToVisibleConv"/>
+        <converters:MessageToColorConverter x:Key="MsgToColorConv"/>
+        <converters:InvertedBoolToVisibleConverter x:Key="InvBoolToVisibleConv"/>
+        <DataTemplate x:Key="SimpleCnlTemplate" DataType="{x:Type model:SimpleCnl}">
+            <materialDesign:Card Height="auto">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <materialDesign:PackIcon Grid.Column="0" Grid.RowSpan="2" Kind="Alarm" Foreground="Blue"  Margin="2,2,5,2" Height="40" Width="40" VerticalAlignment="Center"/>
+                    <Button Grid.Column="1" HorizontalAlignment="Right" Style="{StaticResource CrosshairButton}" Margin="3"
+                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.EventClose}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=Content}"/>
+                    <TextBlock Text="{Binding Path=Data}" Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" FontSize="{StaticResource MediumFontSize}" FontWeight="DemiBold" Margin="2,1,3,1"/>
+                    <Button Style="{StaticResource MaterialDesignFlatButton}" Grid.Row="2"
+                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=Content.Cancel}"
+                            Visibility="{Binding Path=IsFinished, Converter={StaticResource InvBoolToVisibleConv}}">
+                        Cancel
+                    </Button>
+                </Grid>
+            </materialDesign:Card>
+        </DataTemplate>
+        <DataTemplate x:Key="MessageTemp" DataType="{x:Type model:Message}">
+            <materialDesign:Card Height="120" Background="{StaticResource MessageDarkBrush}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding Path=Source, Mode=OneTime}" Foreground="White" VerticalAlignment="Center" Margin="5,0,35,0" FontSize="{StaticResource LargeFontSize}"
+                           FontFamily="MV Boli" Grid.ColumnSpan="2"/>
+                    <Button Grid.Column="1" HorizontalAlignment="Right" Style="{StaticResource CrosshairButton}" Margin="3,4"
+                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.EventClose}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=Content}"/>
+                    <Viewbox Grid.Row="1" Margin="2" Height="75" Width="85" Stretch="Fill">
+                        <Image Source="{Binding Path=ImageSource, Mode=OneTime}"/>
+                    </Viewbox>
+                    <TextBlock Grid.Row="1" TextWrapping="Wrap" FontSize="{StaticResource MediumFontSize}" Text="{Binding Path=Msg, Mode=OneTime}" Foreground="White"
+                            FontWeight="DemiBold" Margin="5,10,5,3" TextTrimming="CharacterEllipsis" Grid.Column="1" />
+                </Grid>
+            </materialDesign:Card>
+        </DataTemplate>
+        <DataTemplate x:Key="ExpertiseTemp" DataType="{x:Type model:ExpertisesInWorkOverview}">
+            <materialDesign:Card Height="240" Background="{StaticResource MessageDarkBrush}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Column="6" HorizontalAlignment="Right" Style="{StaticResource CrosshairButton}" Margin="3,4"
+                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.EventClose}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=Content}"/>
+                    <TextBlock Text="Экспертизы в работе" Foreground="White" FontWeight="DemiBold" VerticalAlignment="Center" Margin="5,0,0,0" FontSize="{StaticResource MediumFontSize}"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Visibility="{Binding Path=ExpertiseCount, Mode=OneTime, Converter={StaticResource IntToVisibleConv}, ConverterParameter='Visible'}">
+                        <materialDesign:PackIcon Kind="EmoticonHappyOutline" Foreground="LawnGreen" Height="45" Width="45" VerticalAlignment="Center"/>
+                        <TextBlock Text="Экспертизы в работе отсутствуют" Margin="5,0,0,0" FontSize="{StaticResource LargeFontSize}" Foreground="White" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <Grid VerticalAlignment="Stretch" Grid.Row="1" Panel.ZIndex="1">
+                        <TextBlock Text="{Binding Path=ExpertiseCount}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" 
+                                   FontSize="42" Margin="0,0,0,20" Visibility="{Binding ElementName=piechart, Path=Visibility}"/>
+                        <lvc:PieChart Hoverable="False" DataTooltip="{x:Null}" LegendLocation="Bottom" InnerRadius="45" Series="{Binding Path=ExpertiseSeries}" Name="piechart"
+                                      Visibility="{Binding Path=ExpertiseCount, Mode=OneTime, Converter={StaticResource IntToVisibleConv}, ConverterParameter='Hidden'}">
+                            <lvc:PieChart.ChartLegend>
+                                <lvc:DefaultLegend BulletSize="10" Foreground="White" FontSize="{StaticResource SmallFontSize}"/>
+                            </lvc:PieChart.ChartLegend>
+                        </lvc:PieChart>
+                    </Grid>
+                    <TextBlock Foreground="White" Grid.Column="1" Grid.Row="1" Margin="4" Visibility="{Binding ElementName=piechart, Path=Visibility}"
+                               Panel.ZIndex="1" FontSize="13">
+                    <Run Text="{Binding Path=BillsCount, Mode=OneTime, StringFormat='Количество счетов: {0}'}"/>
+                    <LineBreak/>
+                    <Run Text="{Binding Path=TotalMoney, Mode=OneTime, StringFormat= '   - на сумму {0:c}', ConverterCulture='ru-RU'}"/>
+                    <LineBreak/>
+                    <Run Text="{Binding Path=PaidBillsCount, Mode=OneTime, StringFormat='Оплачено счетов: {0}'}"/>
+                    <Run Text="{Binding Path=PaidBillPercent, Mode=OneTime, StringFormat='({0:p})'}"/>
+                    <LineBreak/>
+                    <Run Text="{Binding Path=PaidMoney, Mode=OneTime, StringFormat='   - на сумму {0:c}', ConverterCulture='ru-RU'}"/>
+                    <Run Text="{Binding Path=PaidMoneyPercent, Mode=OneTime, StringFormat='({0:p})'}"/>
+                    <LineBreak/>
+                    <LineBreak/>
+                    <Run Text="{Binding Path=PaidOutFactor, Mode=OneTime, StringFormat='{}{0:p} конверсия'}"/>
+                    <LineBreak/>
+                    <Run Text="{Binding Path=TotalMoneyPaidOutConv, Mode=OneTime, ConverterCulture='ru-RU', StringFormat='   - все счета: {0:c}'}"/>
+                    <LineBreak/>
+                    <Run Text="{Binding Path=PaidMoneyPaidOutConv, Mode=OneTime, StringFormat='   - оплаченные: {0:c}', ConverterCulture='ru-RU'}"/>
+                    <LineBreak/>
+                    <LineBreak/>
+                    <Run Text="{Binding Path=NonPerformBillCount, Mode=OneTime, StringFormat='Не выставленных счетов: {0}'}"/>
+                    <LineBreak/>
+                    <Run Text="{Binding Path=PartialPaidBillsCount, Mode=OneTime, StringFormat='Частично оплаченых счетов: {0}'}"/>
+                    </TextBlock>
+                </Grid>
+            </materialDesign:Card>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Vertical" Grid.Column="2" Margin="5,10">
-            <Button Style="{StaticResource MaterialDesignRaisedButton}" Content="Speciality" Command="{Binding Path=ShowSpecialityCommand}" Margin="10"/>
-            <Button Style="{StaticResource MaterialDesignRaisedButton}" Content="MainVM" Command="{Binding Path=MainCommand}" Margin="10"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="35"/>
+        </Grid.RowDefinitions>
+        <materialDesign:ColorZone Mode="Inverted" Padding="6">
+            <DockPanel>
+                <TextBlock Style="{DynamicResource MaterialDesignOverlineTextBlock}" Text="{Binding Path=LoginEmployee.Fio}" FontSize="{StaticResource LargeFontSize}"
+                       DockPanel.Dock="Right" Foreground="White" Height="auto" VerticalAlignment="Center" Margin="2,0,15,0"/>
+                <materialDesign:ColorZone Mode="Standard" VerticalAlignment="Center" Margin="60,0,30,0" DockPanel.Dock="Right" CornerRadius="2">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{DynamicResource MaterialDesignToolButton}">
+                            <materialDesign:PackIcon Kind="Magnify" Opacity=".56" />
+                        </Button>
+                        <TextBox Margin="8 0 8 0" materialDesign:HintAssist.Hint="Поиск" materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                BorderThickness="0" MinWidth="200" VerticalAlignment="Center" />
+                    </StackPanel>
+                </materialDesign:ColorZone>
+                <Menu IsMainMenu="True" Background="Black" Foreground="White" Name="menu" DockPanel.Dock="Left" Grid.ColumnSpan="2">
+                    <MenuItem Header="ПЛСЭ">
+                        <MenuItem Header="Специальности" Command="{Binding Path=OpenSpeciality}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="BriefcaseOutline"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Сотрудники" Command="{Binding Path=OpenEmployees}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="HumanQueue"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator/>
+                        <MenuItem Header="О лаборатории" Command="{Binding Path=OpenAboutPLSE}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="InformationOutline"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="Экспертизы">
+                        <MenuItem Header="Добавить" Command="{Binding Path=OpenResolutionAdd}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="BriefcaseAdd"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Просмотр" Command="{Binding Path=OpenExpertises}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="Eye"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="Отчеты">
+                        <MenuItem Header="Экспертизы">
+                            <MenuItem Header="В работе" Command="{Binding Path=ExpertiseSummaryCmd}"/>
+                            <MenuItem Header="За год" IsEnabled="False"/>
+                            <MenuItem Header="За весь период" IsEnabled="False"/>
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="Выход" Command="{Binding Path=Exit}" CommandParameter="{Binding ElementName=mainwindow}"/>
+                </Menu>
+            </DockPanel>
+        </materialDesign:ColorZone>
+        <Rectangle Grid.Column="2" Fill="Black"/>
+        <StackPanel Orientation="Vertical"  Grid.Column="2" Grid.RowSpan="2" Margin="5,0,5,0">
+            <Ellipse Width="70" Height="70" VerticalAlignment="Top" Panel.ZIndex="3" Margin="2, 10,2,2" Stroke="{StaticResource MaterialDesignDarkBackground }">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="{Binding Path=LoginEmployee.Foto, Mode=OneWay, TargetNullValue='pack://application:,,,/Resources/Unknown.jpg',
+                        FallbackValue='pack://application:,,,/Resources/Unknown.jpg'}" Stretch="UniformToFill"/>
+                </Ellipse.Fill>
+                <Ellipse.ToolTip>
+                    <ToolTip Style="{DynamicResource MaterialDesignToolTip}" Content="Открыть профиль"/>
+                </Ellipse.ToolTip>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseLeftButtonUp">
+                        <i:InvokeCommandAction Command="{Binding Path=OpenProfile}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Ellipse>
+            <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Black"  ToolTip="Стартовая" Margin="0,10,0,0"
+                    Command="{Binding Path=Home}" CommandParameter="{Binding ElementName=mainwindow}">
+                <materialDesign:PackIcon Kind="Home" Width="26" Height="26"/>
+            </Button>
+            <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Black"  ToolTip="Профиль" Margin="0,10,0,0"
+                    Command="{Binding Path=OpenProfile}">
+                <materialDesign:PackIcon Kind="Account" Height="26" Width="26"/>
+            </Button>
+            <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Black"  ToolTip="Настройки" Margin="0,10,0,0"
+                    Command="{Binding Path=OpenSettings}">
+                <materialDesign:PackIcon Kind="Cog" Height="26" Width="26"/>
+            </Button>
+            <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" Background="Black"  ToolTip="Выход" Margin="0,10,0,0"
+                    Command="{Binding Path=Exit}" CommandParameter="{Binding ElementName=mainwindow}">
+                <materialDesign:PackIcon Kind="LocationExit" Height="24" Width="24"/>
+            </Button>
         </StackPanel>
-        <Frame Grid.ColumnSpan="2" Margin="5" Content="{Binding Path=FrameContent}" NavigationUIVisibility="Hidden"/>
+        <Frame Panel.ZIndex="3" Grid.Row="1" Background="White" Content="{Binding Path=CurrentPage}" NavigationUIVisibility="Hidden" Visibility="{Binding Path=FrameVisibility}">
+
+        </Frame>
+        <Grid Grid.Row="1" Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="270"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Viewbox Margin="40,40" HorizontalAlignment="Center" Grid.ColumnSpan="2" Grid.RowSpan="2" Opacity="0.44">
+                <Image Source="Resources/МинЮстЛого.jpg"/>
+            </Viewbox>
+            <TextBlock Grid.Row="1" Margin="10" HorizontalAlignment="Center" FontSize="{StaticResource MediumFontSize}" FontFamily="Castellar"
+                       Text="{Binding Path=Aphorism, Mode=OneTime}" TextWrapping="Wrap" FontStyle="Oblique" TextAlignment="Center"/>
+            <ListBox Grid.Column="1" Grid.RowSpan="2" ItemsSource="{Binding Path=EventsList}" HorizontalContentAlignment="Stretch" Width="420"
+                                HorizontalAlignment="Right" Margin="15" Panel.ZIndex="2">
+                <ListBox.Resources>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="OverridesDefaultStyle" Value="True"/>
+                        <Setter Property="Margin" Value="1,3,2,3"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <ContentPresenter/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.Resources>
+                <ListBox.ItemTemplateSelector>
+                    <templateselectors:EventTypeSelector MessageTemplate="{StaticResource MessageTemp}" ExpertiseTemplate="{StaticResource ExpertiseTemp}"
+                                                         SimpleCnlTemplate="{StaticResource SimpleCnlTemplate}"/>
+                </ListBox.ItemTemplateSelector>
+            </ListBox>
+        </Grid>
+        <ListBox Grid.Row="1" BorderBrush="Black" Height="auto" MinHeight="1" Width="400" HorizontalAlignment="Left" Margin="2,0,0,5" VerticalAlignment="Bottom"
+                 Panel.ZIndex="5" BorderThickness="0" FontSize="{StaticResource SmallFontSize}" ItemsSource="{Binding Path=Messages.StackQuery}"
+                 HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="Transparent" Style="{x:Null}">
+            <ListBox.Resources>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="OverridesDefaultStyle" Value="True"/>
+                    <Setter Property="Margin" Value="1,3,2,3"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.Resources>
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="Message">
+                    <materialDesign:Card Height="80" UniformCornerRadius="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Kind="{Binding Path=Type, Converter={StaticResource MsgToImageConv}}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="70" Width="70"
+                                                     Foreground="{Binding Path=Type, Converter={StaticResource MsgToColorConv}}"/>
+                            <Line Stroke="Black" Width="1" X1="0" Y1="0" X2="0" Y2="70" Grid.Column="1" Margin="0,5,0,5"/>
+                            <TextBlock Grid.Column="2" Text="{Binding Path=Msg}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="5,0,0,0" FontSize="{StaticResource MediumFontSize}"/>
+                        </Grid>
+                        <materialDesign:Card.RenderTransform>
+                            <TranslateTransform X="-420" x:Name="trsl"/>
+                        </materialDesign:Card.RenderTransform>
+                    </materialDesign:Card>
+                    <DataTemplate.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Duration="0:0:0.3" To="0" Storyboard.TargetName="trsl" Storyboard.TargetProperty="X">
+                                        <DoubleAnimation.EasingFunction>
+                                            <PowerEase Power="4" EasingMode="EaseOut"/>
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <!--<EventTrigger RoutedEvent="Unloaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Duration="0:0:0.3" To="-420" Storyboard.TargetName="trsl" Storyboard.TargetProperty="X">
+                                        <DoubleAnimation.EasingFunction>
+                                            <PowerEase Power="4" EasingMode="EaseIn"/>
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>-->
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Fill="Black"/>
+        <TextBlock Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,0,20,0" Text="{Binding Path=Date}" Panel.ZIndex="2"
+                   VerticalAlignment="Center" FontSize="{StaticResource LargeFontSize}" Foreground="White"/>
+        <TextBlock Grid.Row="2" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Panel.ZIndex="2" Foreground="White"
+                   FontSize="{StaticResource LargeFontSize}" Text="{Binding Path=Status}"/>
     </Grid>
 </Window>
+

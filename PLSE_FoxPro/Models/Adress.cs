@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PLSE_FoxPro.Models
 {
-    public class Adress : ObservableValidator, ICloneable
+    public class Adress : ObservableValidator, ICloneable //TODO: rework to struct
     {
         #region Fields
         private Settlement _settlement;
@@ -109,5 +109,20 @@ namespace PLSE_FoxPro.Models
             return Clone();
         }
         public Adress Clone() => new Adress(_settlement?.Clone(), _streetprefix, _street, _housing, _flat, _corpus, _structure);
+        /// <summary>
+        /// Копирует состояние объекта в <paramref name="adress"/>
+        /// </summary>
+        /// <param name="adress"></param>
+        public void Copy(Adress adress)
+        {
+            if (adress == null) return;
+            adress.Corpus = _corpus;
+            adress.Flat = _flat;
+            adress.Housing = _housing;
+            adress.Street = _street;
+            adress.StreetPrefix = _streetprefix;
+            adress.Structure = _structure;
+            adress.Settlement = _settlement;
+        }
     }
 }

@@ -44,6 +44,7 @@ namespace PLSE_FoxPro.Models
             Debug.WriteLine($"Property {e.PropertyName} changed to {_version}", "VersionBase");
         }
         public void Validate() => ValidateAllProperties();
+        public void ValidateProperty() => ValidateProperty();
         #endregion
 
         public VersionBase(int id, Version version)

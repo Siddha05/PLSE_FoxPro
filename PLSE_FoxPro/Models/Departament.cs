@@ -23,13 +23,13 @@ namespace PLSE_FoxPro.Models
         /// <summary>
         /// Цифровой код отдела
         /// </summary>
-        [Required][MaxLength(10)]
+        [Required(ErrorMessage = "обязательное поле")][MaxLength(10, ErrorMessage = "превышен лимит символов")]
         public string DigitalCode
         {
             get => _digitalcode;
             set => SetProperty(ref _digitalcode, value, true);
         }
-        [Required][StringLength(10)]
+        [Required(ErrorMessage = "обязательное поле")][StringLength(10, ErrorMessage = "превышен лимит символов")]
         public string Title
         {
             get => _title;
@@ -38,7 +38,7 @@ namespace PLSE_FoxPro.Models
         /// <summary>
         /// Сокращенное название отдела
         /// </summary>
-        [Required][MaxLength(10)]
+        [Required(ErrorMessage = "обязательное поле")][MaxLength(10, ErrorMessage = "превышен лимит символов")]
         public string Acronym
         {
             get => _acronym;
