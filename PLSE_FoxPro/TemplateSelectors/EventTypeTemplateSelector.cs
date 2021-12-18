@@ -11,25 +11,16 @@ namespace PLSE_FoxPro.TemplateSelectors
     {
         public DataTemplate MessageTemplate { get; set; }
         public DataTemplate ExpertiseInWorkOverviewTemplate { get; set; }
+        public DataTemplate AnnualDatesOverview { get; set; }
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             return item switch
             {
                 Message m => MessageTemplate,
                 ExpertisesInWorkOverview e => ExpertiseInWorkOverviewTemplate,
-                _ => throw new NotImplementedException("Unknown type of parameter name")
+                AnnualDatesOverview a => AnnualDatesOverview,
+                _ => throw new NotImplementedException("Unknown type of parameter item")
             };
-            //switch (item)
-            //{
-            //    case Message _:
-            //        return MessageTemplate;
-            //    case ExpertisesInWorkOverview _:
-            //        return ExpertiseTemplate;
-            //    case SimpleCnl _:
-            //        return SimpleCnlTemplate;
-            //    default:
-            //        throw new ArgumentException($"Type {item.GetType().Name} not supported");
-            //}
         }
     }
 }

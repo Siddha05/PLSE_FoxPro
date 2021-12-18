@@ -242,4 +242,9 @@ namespace PLSE_FoxPro.Models
             BillsCount = bill_cnt;
         }
     }
+
+    public class AnnualDatesOverview : Event
+    {
+        //TODO: implement
+    }
 }

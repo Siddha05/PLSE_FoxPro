@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PLSE_FoxPro.Models
 {
-    class Speciality : VersionBase, ICloneable
+    public class Speciality : VersionBase, ICloneable
     {
 
         #region Fields

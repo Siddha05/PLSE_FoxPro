@@ -215,14 +215,6 @@ namespace PLSE_FoxPro.Models
         /// <summary>
         /// Является ли экспертиза платной
         /// </summary>
-        public bool? Payable
-        {
-            get
-            {
-                if (_resolution == null) return null;
-                else return _resolution.IsPaying();
-            }
-        }
         public static Expertise New => new Expertise() { _startdate = DateTime.Now, _timelimit = 30, _type = ExpertiseTypes.Unknown };
         #endregion
 
