@@ -20,7 +20,7 @@ namespace PLSE_FoxPro.Models
         private string _password;
         public Byte[] _foto;
         private UploadResult _upload;
-        private Lazy<Employee_SlightPart> _slightpart;
+        private Employee_SlightPart _slightpart;
         #endregion
         #region Properties
         [Required(ErrorMessage = "обязательное поле")]
@@ -64,20 +64,16 @@ namespace PLSE_FoxPro.Models
         }
         public Employee_SlightPart Employee_SlightPart
         {
-            get => _slightpart.Value;
+            get => System.Threading.LazyInitializer.EnsureInitialized(ref _slightpart, () => FetchSlight() );
             set
             {
-                if (value != null)
-                {
-                    _slightpart = new Lazy<Employee_SlightPart>(() => value);
-                    _slightpart.Value.PropertyChanged += _slightpart_PropertyChanged;
-                    OnPropertyChanged();
-                }
+                SetProperty(ref _slightpart, value);
+                _slightpart.PropertyChanged += _slightpart_PropertyChanged;
             }
         }
         public static Employee New => new Employee() { Version = Version.New };
-
         #endregion
+
         #region Metods
         public bool IsOperate()
         {
@@ -104,12 +100,12 @@ namespace PLSE_FoxPro.Models
         {
             return new Employee(id: ID, departament: _departament, office: _inneroffice, firstname: _fname, middlename: _mname, secondname: _sname, gender: _gender,
                                 declinated: _declinated, emplstatus: _employeeStaus, profile: _profile, password: _password, uploadstatus: _upload,
-                                vr: Version, updatedate: DBModifyDate, slightPart: _slightpart.Value.Clone(), foto: _foto);
+                                vr: Version, updatedate: DBModifyDate, slightPart: _slightpart.Clone(), foto: _foto);
         }
         object ICloneable.Clone() => Clone();
         #endregion
 
-        private Employee() : base() { _slightpart = new Lazy<Employee_SlightPart>(() => FetchSlight()); }
+        private Employee() : base() { }
         public Employee(int id, Departament departament, string office, string firstname, string middlename, string secondname, bool? gender, string emplstatus,
                          PermissionProfile profile, string password, bool declinated, byte[] foto, Version vr, DateTime updatedate)
             : base(id: id, firstname: firstname, middlename: middlename, secondname: secondname, gender: gender, declinated: declinated, vr: vr, updatedate: updatedate)
@@ -121,7 +117,17 @@ namespace PLSE_FoxPro.Models
             _inneroffice = office;
             _foto = foto;
             _last_modify_date = updatedate;
-            _slightpart = new Lazy<Employee_SlightPart>(() => FetchSlight());
+            
+        }
+        private Employee(int id, Departament departament, string office, string firstname, string middlename, string secondname, bool? gender, bool declinated,
+                         string emplstatus, PermissionProfile profile, string password, byte[] foto, Employee_SlightPart slightPart, UploadResult uploadstatus,
+                         Version vr, DateTime updatedate)
+                    : this(id: id, firstname: firstname, middlename: middlename, secondname: secondname, gender: gender, declinated: declinated, vr: vr, updatedate: updatedate,
+                            departament: departament, office: office, emplstatus: emplstatus, profile: profile, password: password, foto: foto)
+        {
+
+            _slightpart = slightPart;
+            _upload = uploadstatus;
         }
         private void _slightpart_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -143,15 +149,7 @@ namespace PLSE_FoxPro.Models
             }
             return res;
         }
-        private Employee(int id, Departament departament, string office, string firstname, string middlename, string secondname, bool? gender, bool declinated,
-                         string emplstatus, PermissionProfile profile, string password, byte[] foto, Employee_SlightPart slightPart, UploadResult uploadstatus,
-                         Version vr, DateTime updatedate)
-                    : this(id: id, firstname: firstname, middlename: middlename, secondname: secondname, gender: gender, declinated: declinated, vr: vr, updatedate: updatedate,
-                            departament: departament, office: office, emplstatus: emplstatus, profile: profile, password: password, foto: foto)
-        {
-            _slightpart = new Lazy<Employee_SlightPart>(() => slightPart);
-            _upload = uploadstatus;
-        }
+        
     }
     public class Employee_SlightPart : VersionBase, ICloneable
     {

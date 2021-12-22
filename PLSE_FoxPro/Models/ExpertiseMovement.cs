@@ -1,14 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PLSE_FoxPro.Models
 {
+    public struct MovementInfo : IEquatable<MovementInfo>
+    {
+        public int ID { get;}
+        public string Name { get;}
+        public string Description { get;}
+
+        public bool Equals([AllowNull] MovementInfo other)
+        {
+            return this.ID == other.ID;
+        }
+        public override int GetHashCode() => ID.GetHashCode();
+        public override bool Equals(object obj) => Equals((MovementInfo)obj);
+        public static bool operator ==(MovementInfo first, MovementInfo second)
+        {
+            return first.Equals(second);
+        }
+        public static bool operator !=(MovementInfo first, MovementInfo second)
+        {
+            return !first.Equals(second);
+        }
+    }
     public abstract class ExpertiseMovement : VersionBase
     {
         #region Fields
         DateTime? _create;
         DateTime _register;
+        Expertise _from;
         #endregion
         #region Properties
         public virtual DateTime? CreationDate 
@@ -21,9 +44,19 @@ namespace PLSE_FoxPro.Models
             get => _register; 
             set => SetProperty(ref _register, value);
         }
+        public Expertise FromExpertise => _from;
         #endregion
 
-        public ExpertiseMovement(int id, DateTime? create, DateTime register, Version version) : base(id, version)
+        public int GetMovementTypeID() => this switch
+        { 
+            Request r => 1,
+            Response r => 2,
+            Report r => 3,
+            IncomingLetter l => 5,
+            OutcomingLetter l => 4,
+            _ => throw new NotImplementedException(),
+        };
+    public ExpertiseMovement(int id, Expertise from, DateTime? create, DateTime register, Version version) : base(id, version)
         {
             _create = create;
             _register = register;
@@ -57,8 +90,8 @@ namespace PLSE_FoxPro.Models
         }
         #endregion
 
-        public Response(int id, DateTime? create, DateTime register, string content, int refer, bool resume, Version version) 
-            : base(id, create, register, version)
+        public Response(int id, Expertise from, DateTime? create, DateTime register, string content, int refer, bool resume, Version version) 
+            : base(id, from, create, register, version)
         {
             _content = content;
             _refer_to = refer;
@@ -86,8 +119,9 @@ namespace PLSE_FoxPro.Models
             set => SetProperty(ref _suspend, value);
         }
         #endregion
-        public Request(int id, DateTime? create, DateTime register, string content, bool suspend, Version version)
-            : base(id, create, register, version)
+
+        public Request(int id, Expertise from, DateTime? create, DateTime register, string content, bool suspend, Version version)
+            : base(id, from, create, register, version)
         {
             _content = content;
             _suspend = suspend;
@@ -121,8 +155,8 @@ namespace PLSE_FoxPro.Models
         }
         #endregion
 
-        public Report(int id, DateTime? create, DateTime register, string reason, DateTime delay, Version version)
-            : base(id, create, register, version)
+        public Report(int id, Expertise from, DateTime? create, DateTime register, string reason, DateTime delay, Version version)
+            : base(id, from, create, register, version)
         {
             _delay = delay;
             _reason = reason;
@@ -131,7 +165,7 @@ namespace PLSE_FoxPro.Models
 
     public sealed class IncomingLetter : ExpertiseMovement //TODO: implement
     {
-        public IncomingLetter(int id, DateTime? create, DateTime register, Version version) : base(id, create, register, version)
+        public IncomingLetter(int id, Expertise from, DateTime? create, DateTime register, Version version) : base(id, from, create, register, version)
         {
 
         }
@@ -139,7 +173,7 @@ namespace PLSE_FoxPro.Models
 
     public class OutcomingLetter : ExpertiseMovement //TODO: implement
     {
-        public OutcomingLetter(int id, DateTime? create, DateTime register, Version version) : base(id, create, register, version)
+        public OutcomingLetter(int id, Expertise from, DateTime? create, DateTime register, Version version) : base(id, from, create, register, version)
         {
 
         }

@@ -1,14 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PLSE_FoxPro.Models
 {
     public static class ResolutionHelper
     {
-        public static void UnwrapDBStringToCollection(string obj, ICollection<NumerableContentWrapper> collection)
+        public static void UnwrapDBStringToCollection(string s, ICollection<NumerableContentWrapper> collection, char delimeter = '|')
         {
-
+            if (String.IsNullOrEmpty(s)) return;
+            var ar = s.Split(new char[] { delimeter }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var item in ar)
+            {
+                collection.Add(new NumerableContentWrapper(item));
+            }
+        }
+        /// <summary>
+        /// Создает стороку с разделителями <paramref name="delimeter"/> из коллекции для хранения в базе данных
+        /// </summary>
+        /// <param name="coll">коллекция строк</param>
+        /// <param name="delimeter">символ разделитель</param>
+        /// <returns></returns>
+        public static string WrapCollectionToDBString(this IEnumerable<NumerableContentWrapper> coll, char delimeter = '|')
+        {
+            if (coll == null && coll.Count() < 1) return null;
+            var scol = coll.Select(n => n.Content);
+            return String.Join(delimeter.ToString(), scol);
         }
         /// <summary>
         /// Входит ли постановление в перечень выполняемых на платной основе
@@ -41,7 +59,6 @@ namespace PLSE_FoxPro.Models
                 CaseType { Type: "проверка КУCП" } => "57 УПК РФ",
                 CaseType { Type: "административное правонарушение" } => "25.9 КоАП РФ",
                 _ => null,
-
             };
         }
         /// <summary>

@@ -54,6 +54,7 @@ namespace PLSE_FoxPro.Models
         private ObservableCollection<EquipmentUsage> _equipmentusage = new ObservableCollection<EquipmentUsage>();
         private UploadResult _upload;
         #endregion
+
         #region Properties        
         public short? SpendHours
         {
@@ -324,6 +325,27 @@ namespace PLSE_FoxPro.Models
             if (d.HasValue) return DateTime.UtcNow.AddDays(d.Value);
             return null;
         }
+        object ICloneable.Clone() => Clone();
+        public Expertise Clone() //TODO: deep copy of _movements, _bills, _equipmentusage
+        {
+            return new Expertise(ID, _number, _expert, _resolution, _result, _startdate, _enddate, _timelimit, _type, _prevexp, _spendhours, _nobj,
+                                _ncat, _nver, _nalt, _nnmet, _nnmat, _nncom, _nnother, _comment, _eval, _movements, _bills, _equipmentusage, Version);
+        }
+        /// <summary>
+        /// Возвращает дату в промежутке времени пребывания экспертизы в работе
+        /// </summary>
+        /// <returns></returns>
+        public DateTime FitInWorkdays()
+        {
+            int period;
+            if (EndDate.HasValue)
+            {
+                period = (_enddate.Value - _startdate).Days;
+            }
+            else period = (DateTime.Now - _startdate).Days;
+            Random r = new Random();
+            return _startdate.AddDays(r.Next(0, period));
+        }
         #endregion
 
         private Expertise() : base() { }
@@ -379,26 +401,6 @@ namespace PLSE_FoxPro.Models
             }
         }
 
-        object ICloneable.Clone() => Clone();
-        public Expertise Clone()
-        {
-            return new Expertise(ID, _number, _expert, _resolution, _result, _startdate, _enddate, _timelimit, _type, _prevexp, _spendhours, _nobj,
-                                _ncat, _nver, _nalt, _nnmet, _nnmat, _nncom, _nnother, _comment, _eval, _movements, _bills, _equipmentusage, Version);
-        }
-        /// <summary>
-        /// Возвращает дату в промежутке времени пребывания экспертизы в работе
-        /// </summary>
-        /// <returns></returns>
-        public DateTime FitInWorkdays()
-        {
-            int period;
-            if (EndDate.HasValue)
-            {
-                period = (_enddate.Value - _startdate).Days;
-            }
-            else period = (DateTime.Now - _startdate).Days;
-            Random r = new Random();
-            return _startdate.AddDays(r.Next(0, period));
-        }
+       
     }
 }

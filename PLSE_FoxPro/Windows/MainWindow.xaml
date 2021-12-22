@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:viewmodels="clr-namespace:PLSE_FoxPro.ViewModels"
-        xmlns:converters="clr-namespace:PLSE_FoxPro.Converters;assembly=PLSE_FoxPro"
-        xmlns:templateselectors="clr-namespace:PLSE_FoxPro.TemplateSelectors;assembly=PLSE_FoxPro"
-        xmlns:model="clr-namespace:PLSE_FoxPro.Models;assembly=PLSE_FoxPro"
+        xmlns:converters="clr-namespace:PLSE_FoxPro.Converters"
+        xmlns:templateselectors="clr-namespace:PLSE_FoxPro.TemplateSelectors"
+        xmlns:model="clr-namespace:PLSE_FoxPro.Models"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular" TextElement.FontSize="13" TextOptions.TextFormattingMode="Ideal" TextOptions.TextRenderingMode="Auto"        
@@ -26,10 +26,9 @@
     <Window.Resources>
         <converters:MessageToImageConverter x:Key="MsgToImageConv"/>
         <converters:IntToVisibleConverter x:Key="IntToVisibleConv"/>
-
         <converters:MessageToColorConverter x:Key="MsgToColorConv"/>
         <!--<converters:InvertedBoolToVisibleConverter x:Key="InvBoolToVisibleConv"/>-->
-        <!--<DataTemplate x:Key="MessageTemp" DataType="{x:Type model:Message}">
+        <DataTemplate x:Key="MessageTemp" DataType="{x:Type model:Message}">
             <materialDesign:Card Height="120" Background="{StaticResource MessageDarkBrush}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -109,7 +108,7 @@
                     </TextBlock>
                 </Grid>
             </materialDesign:Card>
-        </DataTemplate>-->
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -178,7 +177,7 @@
         </materialDesign:ColorZone>
         <Rectangle Grid.Column="2" Fill="Black"/>
         <StackPanel Orientation="Vertical"  Grid.Column="2" Grid.RowSpan="2" Margin="5,0,5,0">
-            <Ellipse Width="70" Height="70" VerticalAlignment="Top" Panel.ZIndex="3" Margin="2, 10,2,2" Stroke="{StaticResource MaterialDesignDarkBackground }">
+            <Ellipse Width="70" Height="70" VerticalAlignment="Top" Panel.ZIndex="3" Margin="2, 10,2,2" Stroke="White">
                 <Ellipse.Fill>
                     <ImageBrush ImageSource="{Binding Path=LoginEmployee.Foto, Mode=OneWay, TargetNullValue='pack://application:,,,/Resources/Unknown.jpg',
                         FallbackValue='pack://application:,,,/Resources/Unknown.jpg'}" Stretch="UniformToFill"/>
@@ -209,9 +208,8 @@
                 <materialDesign:PackIcon Kind="LocationExit" Height="24" Width="24"/>
             </Button>
         </StackPanel>
-        <Frame Panel.ZIndex="3" Grid.Row="1" Background="White" Content="{Binding Path=CurrentPage}" NavigationUIVisibility="Hidden" Visibility="{Binding Path=FrameVisibility}">
-
-        </Frame>
+        <Frame Panel.ZIndex="3" Grid.Row="1" Background="White" Content="{Binding Path=CurrentPage}" NavigationUIVisibility="Hidden"
+               Visibility="{Binding Path=FrameVisibility}"/>
         <Grid Grid.Row="1" Background="White">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="270"/>
@@ -309,7 +307,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Fill="Black"/>
-        <TextBlock Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,0,20,0" Text="{Binding Path=Date}" Panel.ZIndex="2"
+        <TextBlock Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,0,20,0" Text="{Binding Path=Date, StringFormat={}{0:d}}" Panel.ZIndex="2"
                    VerticalAlignment="Center" FontSize="{StaticResource LargeFontSize}" Foreground="White"/>
         <TextBlock Grid.Row="2" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Panel.ZIndex="2" Foreground="White"
                    FontSize="{StaticResource LargeFontSize}" Text="{Binding Path=Status}"/>

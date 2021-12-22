@@ -5,8 +5,38 @@
         <Setter Property="FontWeight" Value="DemiBold"/>
         <Setter Property="Content" Value="СОХРАНИТЬ"/>
     </Style>
+    
     <Style x:Key="CancelButtonFlat" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
         <Setter Property="Foreground" Value="{StaticResource RejectRedBrush}"/>
         <Setter Property="Content" Value="ОТМЕНА"/>
+    </Style>
+
+    <Style x:Key="UIBaseButton" TargetType="{x:Type Button}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Width" Value="18"/>
+        <Setter Property="Height" Value="18"/>
+        <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource UIBaseButton}" x:Key="CrosshairButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" Background="Transparent">
+                        <Line X1="0" Y1="0" X2="10" Y2="10" Stroke="Red" Name="l1" StrokeThickness="2" StrokeDashCap="Triangle" Stretch="Fill"/>
+                        <Line X1="10" Y1="0" X2="0" Y2="10" Stroke="Red" Name="l2" StrokeThickness="2" StrokeDashCap="Triangle" Stretch="Fill"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="l2" Property="Stroke" Value="Gray" />
+                            <Setter TargetName="l1" Property="Stroke" Value="Gray"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

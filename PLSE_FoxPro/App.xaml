@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PLSE_FoxPro"
              StartupUri="Windows/Login.xaml"
+             ShutdownMode="OnMainWindowClose"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <!--"Windows/MainWindow.xaml"-->
     <!--"Pages/AddEditSpeciality.xaml"-->

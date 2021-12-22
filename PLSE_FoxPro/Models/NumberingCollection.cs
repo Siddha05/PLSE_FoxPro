@@ -8,6 +8,9 @@ using System.Text;
 
 namespace PLSE_FoxPro.Models
 {
+    /// <summary>
+    /// Класс обертка для нумерованных строк
+    /// </summary>
     public class NumerableContentWrapper : INotifyPropertyChanged //TODO: rework in struct?
     {
         #region Fields

@@ -53,6 +53,8 @@ namespace PLSE_FoxPro.Models
         /// </summary>
         /// <returns></returns>
         public bool IsExpired() => (DateTime.UtcNow - CreateTime) > _lifetime;
+
+        public static implicit operator Message (string content) => new Message(content);
         #endregion
 
         /// <summary>

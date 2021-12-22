@@ -10,7 +10,9 @@ namespace PLSE_FoxPro.Models
         private DateTime? _usagedate;
         private byte _duration = 1;
         private Equipment _equip;
+        private Expertise _from;
         #endregion
+
         #region Properties
         [Required(ErrorMessage = "обязательное поле")]
         public Equipment UsedEquipment
@@ -30,6 +32,7 @@ namespace PLSE_FoxPro.Models
             get => _usagedate; 
             set => SetProperty(ref _usagedate, value, true);
         }
+        public Expertise FromExpertise => _from;
         #endregion
 
         public override string ToString()
@@ -48,12 +51,13 @@ namespace PLSE_FoxPro.Models
         }
         public static EquipmentUsage New => new EquipmentUsage() { Version = Version.New};
         private EquipmentUsage() { }
-        public EquipmentUsage(int id, DateTime usagedate, byte duration, Equipment equipment, Version version) : base(id, version)
+        public EquipmentUsage(int id, Expertise from, DateTime usagedate, byte duration, Equipment equipment, Version version) : base(id, version)
         {
             _usagedate = usagedate;
             _duration = duration;
             _equip = equipment;
             Version = version;
+            _from = from;
         }     
     }
 }

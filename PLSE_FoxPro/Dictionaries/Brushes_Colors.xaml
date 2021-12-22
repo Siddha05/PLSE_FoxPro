@@ -4,4 +4,10 @@
     <SolidColorBrush x:Key="RejectRedBrush" Color="Red"/>
 
     <SolidColorBrush x:Key="InactiveText" Color="Gray"/>
+
+    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" x:Key="MessageDarkBrush">
+        <GradientStop Color="#FF646464" Offset="0.2"/>
+        <GradientStop Color="#FF585858" Offset="0.5"/>
+        <GradientStop Color="#FF424242" Offset="1"/>
+    </LinearGradientBrush>
 </ResourceDictionary>

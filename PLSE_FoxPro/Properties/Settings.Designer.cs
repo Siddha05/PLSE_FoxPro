@@ -58,5 +58,41 @@ namespace PLSE_FoxPro.Properties {
                 this["WarnDaysOnRequestTreshold"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsExpertSpecialityScan {
+            get {
+                return ((bool)(this["IsExpertSpecialityScan"]));
+            }
+            set {
+                this["IsExpertSpecialityScan"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsExpertiseScan {
+            get {
+                return ((bool)(this["IsExpertiseScan"]));
+            }
+            set {
+                this["IsExpertiseScan"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsShowNotification {
+            get {
+                return ((bool)(this["IsShowNotification"]));
+            }
+            set {
+                this["IsShowNotification"] = value;
+            }
+        }
     }
 }

@@ -18,26 +18,26 @@ namespace PLSE_FoxPro.Models
         /// Отображает статус инициализации хранилища
         /// </summary>
         InitializationStatus InitializationStatus { get; }
-        //IErrorLogger ErrorReporter { get; }
+        IErrorLogger ErrorReporter { get; }
         SqlConnection DBConnection { get; }
-        //IReadOnlyList<Expertise> ExpertisesInWork { get; }
-        //LaboratoryDataAccess LaboratoryAccessService { get; }
-        //SpecialityDataAccess SpecialityAccessService { get; }
-        //OrganizationsDataAccess OrganizationAccessService { get; }
+        IReadOnlyList<Expertise> ExpertisesInWork { get; }
+        LaboratoryDataAccess LaboratoryAccessService { get; }
+        SpecialityDataAccess SpecialityAccessService { get; }
+        OrganizationsDataAccess OrganizationAccessService { get; }
         SettlementsDataAccess SettlementAccessService { get; }
-        //EmployeeDataAccess EmployeeAccessService { get; }
-        //ExpertDataAccess ExpertAccessService { get; }
-        //EquipmentDataAccess EquipmentAccessService { get; }
-        //EquipmentUsageDataAccess EquipmentUsageAccessService { get; }
-        //DepartamentDataAccess DepartamentsAccessService { get; }
-        //CustomerDataAccess CustomerAccessService { get; }
-        //ResolutionDataAccess ResolutionAccessService { get; }
-        //ExpertiseDataAccess ExpertiseAccessService { get; }
-        //BillDataAccess BillAccessService { get; }
-        //MovementDataAccess ExpertiseMovementAccessService { get; }
+        EmployeeDataAccess EmployeeAccessService { get; }
+        ExpertDataAccess ExpertAccessService { get; }
+        EquipmentDataAccess EquipmentAccessService { get; }
+        EquipmentUsageDataAccess EquipmentUsageAccessService { get; }
+        DepartamentDataAccess DepartamentsAccessService { get; }
+        CustomerDataAccess CustomerAccessService { get; }
+        ResolutionDataAccess ResolutionAccessService { get; }
+        ExpertiseDataAccess ExpertiseAccessService { get; }
+        BillDataAccess BillAccessService { get; }
+        MovementDataAccess ExpertiseMovementAccessService { get; }
         IReadOnlyList<string> InnerOffices { get; }
         IReadOnlyList<string> EmployeeStatus { get; }
-        IReadOnlyDictionary<string, string> CaseTypes { get; }
+        IReadOnlyList<CaseType> CaseTypes { get; }
         IReadOnlyList<string> OuterOffices { get; }
         IReadOnlyList<string> Ranks { get; }
         IReadOnlyList<string> StreetTypes { get; }
@@ -46,6 +46,7 @@ namespace PLSE_FoxPro.Models
         IReadOnlyList<string> ResolutionStatuses { get; }
         IReadOnlyList<string> Genders { get; }
         IReadOnlyList<string> SpecialityKinds { get; }
+        IReadOnlyList<MovementInfo> ExpertiseMovements { get; }
         //IReadOnlyDictionary<ExpertiseTypes, string> ExpertiseTypesMap { get; }
         //IReadOnlyDictionary<ResolutionTypes, string> ResolutionTypesMap { get; }
         //IReadOnlyDictionary<string, ExpertiseResults> ExpertiseResultsMap { get; }

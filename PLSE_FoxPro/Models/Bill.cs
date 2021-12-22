@@ -15,7 +15,9 @@ namespace PLSE_FoxPro.Models
         private byte _hours;
         private decimal _hourprice;
         private decimal _paid;
+        private Expertise _from;
         #endregion
+
         #region Properties
         /// <summary>
         /// Номер счета
@@ -63,16 +65,17 @@ namespace PLSE_FoxPro.Models
             get => _paid;
             set => SetProperty(ref _paid, value);
         }
+        public Expertise FromExpertise => _from;
         public decimal Price => _hours * _hourprice;
         public decimal Balance => _paid - _hours * _hourprice;
         public static Bill New => new Bill() { Version = Version.New, BillDate = DateTime.Now, HourPrice = App.Me.Laboratory.HourPrice };
         #endregion
 
         private Bill() : base() { }
-        public Bill(int id, string number, DateTime billdate, DateTime? paiddate, string payer, byte hours, decimal hourprice, decimal paid, Version vr)
+        public Bill(int id, Expertise from, string number, DateTime billdate, DateTime? paiddate, string payer, byte hours, decimal hourprice, decimal paid, Version vr)
                         : base(id, vr)
         {
-            _number = number;
+            _number = number; _from = from;
             _billdate = billdate; _paiddate = paiddate; _payer = payer;
             _hours = hours; _hourprice = hourprice; _paid = paid;
         }

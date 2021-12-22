@@ -11,5 +11,14 @@
     <Setting Name="WarnDaysOnRequestTreshold" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">27</Value>
     </Setting>
+    <Setting Name="IsExpertSpecialityScan" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="IsExpertiseScan" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="IsShowNotification" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
