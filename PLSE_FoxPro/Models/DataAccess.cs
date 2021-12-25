@@ -3754,35 +3754,123 @@ namespace PLSE_FoxPro.Models
         }
         private void AddReport(Report report, SqlConnection connection, SqlTransaction tran = null)
         {
-
+            SqlCommand cmd = connection.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "Activity.prAddExpertiseMovementEntity";
+            cmd.Transaction = tran;
+            cmd.Parameters.Add("@ExpertiseID", SqlDbType.Int).Value = report.FromExpertise.ID;
+            cmd.Parameters.Add("@EntityType", SqlDbType.TinyInt).Value = report.GetMovementTypeID();
+            cmd.Parameters.Add("@EntityDate", SqlDbType.Date).Value = ConvertToDBNull(report.CreationDate);
+            cmd.Parameters.Add("@RegistrationDate", SqlDbType.Date).Value = report.RegistrationDate;
+            cmd.Parameters.Add("@DelayDate", SqlDbType.Date).Value = report.DelayDate;
+            cmd.Parameters.Add("@ReferTo", SqlDbType.Int).Value = DBNull.Value;
+            cmd.Parameters.Add("@Content", SqlDbType.NVarChar, 1000).Value = ConvertToDBNull(report.Reason);
+            cmd.Parameters.Add("@Suspend", SqlDbType.Bit).Value = DBNull.Value;
+            cmd.Parameters.Add("@Resume", SqlDbType.Bit).Value = DBNull.Value;
+            var par = cmd.Parameters.Add("@InsertedID", SqlDbType.Int);
+            par.Direction = ParameterDirection.Output;
+            try
+            {
+                cmd.ExecuteNonQuery();
+                report.ID = (int)cmd.Parameters["@InsertedID"].Value;
+                report.Version = Version.Original;
+            }
+            catch (Exception ex)
+            {
+                _storage.ErrorReporter.LogError(ex.Message);
+                throw;
+            }
         }
         private void AddOutComingLetter(OutcomingLetter letter, SqlConnection connection, SqlTransaction tran = null)
         {
-
+            _storage.ErrorReporter.LogError($"Invoked function {nameof(AddOutComingLetter)} not realize");
         }
         private void AddIncomingLetter(IncomingLetter letter, SqlConnection connection, SqlTransaction tran = null)
         {
-
+            _storage.ErrorReporter.LogError($"Invoked function {nameof(AddIncomingLetter)} don't realize");
         }
         private void EditRequest(Request request, SqlConnection connection, SqlTransaction tran = null)
         {
-
+            SqlCommand cmd = connection.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "Activity.prEditExpertiseMovementEntity";
+            cmd.Transaction = tran;
+            cmd.Parameters.Add("@EntityDate", SqlDbType.Date).Value = ConvertToDBNull(request.CreationDate);
+            cmd.Parameters.Add("@RegistrationDate", SqlDbType.Date).Value = request.RegistrationDate;
+            cmd.Parameters.Add("@DelayDate", SqlDbType.Date).Value = DBNull.Value;
+            cmd.Parameters.Add("@ReferTo", SqlDbType.Int).Value = DBNull.Value;
+            cmd.Parameters.Add("@Content", SqlDbType.NVarChar, 1000).Value = ConvertToDBNull(request.Content);
+            cmd.Parameters.Add("@Suspend", SqlDbType.Bit).Value = request.SuspendExecution;
+            cmd.Parameters.Add("@Resume", SqlDbType.Bit).Value = DBNull.Value;
+            cmd.Parameters.Add("@EntityID", SqlDbType.Int).Value = request.ID;
+            try
+            {
+                cmd.ExecuteNonQuery();
+                request.Version = Version.Original;
+            }
+            catch (Exception ex)
+            {
+                _storage.ErrorReporter.LogError(ex.Message);
+                throw;
+            }
         }
         private void EditResponse(Response response, SqlConnection connection, SqlTransaction tran = null)
         {
-
+            SqlCommand cmd = connection.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "Activity.prEditExpertiseMovementEntity";
+            cmd.Transaction = tran;
+            cmd.Parameters.Add("@EntityDate", SqlDbType.Date).Value = ConvertToDBNull(response.CreationDate);
+            cmd.Parameters.Add("@RegistrationDate", SqlDbType.Date).Value = response.RegistrationDate;
+            cmd.Parameters.Add("@DelayDate", SqlDbType.Date).Value = DBNull.Value;
+            cmd.Parameters.Add("@ReferTo", SqlDbType.Int).Value = DBNull.Value;
+            cmd.Parameters.Add("@Content", SqlDbType.NVarChar, 1000).Value = ConvertToDBNull(response.Content);
+            cmd.Parameters.Add("@Suspend", SqlDbType.Bit).Value = DBNull.Value;
+            cmd.Parameters.Add("@Resume", SqlDbType.Bit).Value = response.ResumeExecution;
+            cmd.Parameters.Add("@EntityID", SqlDbType.Int).Value = response.ID;
+            try
+            {
+                cmd.ExecuteNonQuery();
+                response.Version = Version.Original;
+            }
+            catch (Exception ex)
+            {
+                _storage.ErrorReporter.LogError(ex.Message);
+                throw;
+            }
         }
         private void EditReport(Report report, SqlConnection connection, SqlTransaction tran = null)
         {
-
+            SqlCommand cmd = connection.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "Activity.prEditExpertiseMovementEntity";
+            cmd.Transaction = tran;
+            cmd.Parameters.Add("@EntityDate", SqlDbType.Date).Value = ConvertToDBNull(report.CreationDate);
+            cmd.Parameters.Add("@RegistrationDate", SqlDbType.Date).Value = report.RegistrationDate;
+            cmd.Parameters.Add("@DelayDate", SqlDbType.Date).Value = report.DelayDate;
+            cmd.Parameters.Add("@ReferTo", SqlDbType.Int).Value = DBNull.Value;
+            cmd.Parameters.Add("@Content", SqlDbType.NVarChar, 1000).Value = ConvertToDBNull(report.Reason);
+            cmd.Parameters.Add("@Suspend", SqlDbType.Bit).Value = DBNull.Value;
+            cmd.Parameters.Add("@Resume", SqlDbType.Bit).Value = DBNull.Value;
+            cmd.Parameters.Add("@EntityID", SqlDbType.Int).Value = report.ID;
+            try
+            {
+                cmd.ExecuteNonQuery();
+                report.Version = Version.Original;
+            }
+            catch (Exception ex)
+            {
+                _storage.ErrorReporter.LogError(ex.Message);
+                throw;
+            }
         }
         private void EditOutComingLetter(OutcomingLetter letter, SqlConnection connection, SqlTransaction tran = null)
         {
-
+            _storage.ErrorReporter.LogError($"Invoked function {nameof(EditOutComingLetter)} don't realize");
         }
         private void EditIncomingLetter(IncomingLetter letter, SqlConnection connection, SqlTransaction tran = null)
         {
-
+            _storage.ErrorReporter.LogError($"Invoked function {nameof(EditIncomingLetter)} don't realize");
         }
         public MovementDataAccess(ILocalStorage storage) : base(storage) { }
     }

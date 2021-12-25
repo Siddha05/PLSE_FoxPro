@@ -32,15 +32,13 @@ namespace PLSE_FoxPro
         #endregion
 
         #region Functions
-        public void RemovePage()
-        {
-            MainViewModel.FrameContent = null;
-        }
+        public void RemovePage() => MainViewModel.RemovePage();
         
         #endregion
         public App()
         {
-            
+            Storage = new Storage_Cached();
+            Laboratory = Storage.LaboratoryAccessService.GetItemByID(1);
         }
     }
 }
