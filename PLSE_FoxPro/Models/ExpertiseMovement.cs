@@ -56,7 +56,7 @@ namespace PLSE_FoxPro.Models
             OutcomingLetter l => 4,
             _ => throw new NotImplementedException(),
         };
-    public ExpertiseMovement(int id, Expertise from, DateTime? create, DateTime register, Version version) : base(id, version)
+        public ExpertiseMovement(int id, Expertise from, DateTime? create, DateTime register, Version version) : base(id, version)
         {
             _create = create;
             _register = register;

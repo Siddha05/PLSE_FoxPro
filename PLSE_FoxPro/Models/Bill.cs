@@ -68,7 +68,7 @@ namespace PLSE_FoxPro.Models
         public Expertise FromExpertise => _from;
         public decimal Price => _hours * _hourprice;
         public decimal Balance => _paid - _hours * _hourprice;
-        public static Bill New => new Bill() { Version = Version.New, BillDate = DateTime.Now, HourPrice = App.Me.Laboratory.HourPrice };
+        public static Bill New => new Bill() { Version = Version.New, BillDate = DateTime.Now, HourPrice = App.MainViewModel.Laboratory.HourPrice };
         #endregion
 
         private Bill() : base() { }

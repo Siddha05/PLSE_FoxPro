@@ -47,7 +47,7 @@
                     <Viewbox Grid.Row="1" Margin="2" Height="75" Width="85" Stretch="Fill">
                         <Image Source="{Binding Path=ImageSource, Mode=OneTime}"/>
                     </Viewbox>
-                    <TextBlock Grid.Row="1" TextWrapping="Wrap" FontSize="{StaticResource MediumFontSize}" Text="{Binding Path=Msg, Mode=OneTime}" Foreground="White"
+                    <TextBlock Grid.Row="1" TextWrapping="Wrap" FontSize="{StaticResource MediumFontSize}" Text="{Binding Path=Content, Mode=OneTime}" Foreground="White"
                             FontWeight="DemiBold" Margin="5,10,5,3" TextTrimming="CharacterEllipsis" Grid.Column="1" />
                 </Grid>
             </materialDesign:Card>
@@ -220,7 +220,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Viewbox Margin="40,40" HorizontalAlignment="Center" Grid.ColumnSpan="2" Grid.RowSpan="2" Opacity="0.44">
-                <Image Source="pack://application:,,,/Resources/Минюст_лого.png"/>
+                <Image Source="pack://application:,,,/Resources/МинЮст_лого.jpg"/>
             </Viewbox>
             <TextBlock Grid.Row="1" Margin="10" HorizontalAlignment="Center" FontSize="{StaticResource MediumFontSize}" FontFamily="Castellar"
                        Text="{Binding Path=Aphorism, Mode=OneTime}" TextWrapping="Wrap" FontStyle="Oblique" TextAlignment="Center"/>
@@ -307,7 +307,8 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Fill="Black"/>
-        <TextBlock Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,0,20,0" Text="{Binding Path=Date, StringFormat={}{0:d}}" Panel.ZIndex="2"
+        <TextBlock Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,0,20,0" Panel.ZIndex="2"
+                   Text="{Binding Path=Date, StringFormat={}{0:d}, ConverterCulture='ru-RU'}" 
                    VerticalAlignment="Center" FontSize="{StaticResource LargeFontSize}" Foreground="White"/>
         <TextBlock Grid.Row="2" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Panel.ZIndex="2" Foreground="White"
                    FontSize="{StaticResource LargeFontSize}" Text="{Binding Path=Status}"/>

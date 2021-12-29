@@ -24,8 +24,8 @@ namespace PLSE_FoxPro.Models
         public Event(string source = null, string image_path = null)
         {
             CreateTime = DateTime.UtcNow;
-            Source = source ?? App.Me.AppName;
-            ImagePath = image_path ?? App.Me.AppImagePath;
+            Source = source ?? App.AppName;
+            ImagePath = image_path ?? App.AppImagePath;
         }
     }
 
@@ -210,7 +210,7 @@ namespace PLSE_FoxPro.Models
         #endregion
         public ExpertisesInWorkOverview(IEnumerable<Expertise> expertises)
         {
-            PaidOutFactor = App.Me.Laboratory.PaidOutPersent;
+            PaidOutFactor = App.MainViewModel.Laboratory.PaidOutPersent;
             _max_left_days_factor = Properties.Settings.Default.WarnLeftDaysExpTreshold;
             int bill_cnt = 0, nonperform_bill_cnt = 0, paid_bill_cnt = 0, partial_paid_bill_cnt = 0;
             int overdue_cnt = 0, suspend_cnt = 0, xdaysleft_cnt = 0;

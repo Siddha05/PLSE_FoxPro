@@ -17,28 +17,27 @@ namespace PLSE_FoxPro
     {
 
         #region Fields
-        string _app_name;
-        Employee _log_employee;
+        static string _app_name;
         #endregion
 
         #region Properties
         public static App Me => (App)Application.Current;
-        public ViewModels.MainVM MainViewModel => Me.MainWindow.DataContext as ViewModels.MainVM;
-        public ILocalStorage Storage { get; }
-        public Laboratory Laboratory { get; }
-        public Employee LoggedEmployee => _log_employee;
-        public string AppName => _app_name == null ? _app_name = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>().Product : _app_name;
-        public string AppImagePath => "pack://application:,,,/Resources/FoxLogo.png";
+        public static ViewModels.MainVM MainViewModel => Me.MainWindow.DataContext as ViewModels.MainVM;
+        public static ILocalStorage Storage { get; }
+        public static IErrorLogger ErrorLogger { get; }
+        public static string AppName => _app_name ??= Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>().Product;
+        public static string AppImagePath => "pack://application:,,,/Resources/FoxLogo.png";
         #endregion
 
         #region Functions
         public void RemovePage() => MainViewModel.RemovePage();
         
         #endregion
-        public App()
+
+        static App()
         {
             Storage = new Storage_Cached();
-            Laboratory = Storage.LaboratoryAccessService.GetItemByID(1);
+            ErrorLogger = new ConsoleErrorLogger();
         }
     }
 }

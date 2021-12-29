@@ -73,9 +73,19 @@ namespace PLSE_FoxPro.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] Минюст_лого {
+        internal static byte[] Unknown {
             get {
-                object obj = ResourceManager.GetObject("Минюст_лого", resourceCulture);
+                object obj = ResourceManager.GetObject("Unknown", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] МинЮст_лого1 {
+            get {
+                object obj = ResourceManager.GetObject("МинЮст_лого1", resourceCulture);
                 return ((byte[])(obj));
             }
         }

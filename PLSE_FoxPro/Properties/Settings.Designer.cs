@@ -94,5 +94,29 @@ namespace PLSE_FoxPro.Properties {
                 this["IsShowNotification"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsLastLoginSave {
+            get {
+                return ((bool)(this["IsLastLoginSave"]));
+            }
+            set {
+                this["IsLastLoginSave"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastLogin {
+            get {
+                return ((string)(this["LastLogin"]));
+            }
+            set {
+                this["LastLogin"] = value;
+            }
+        }
     }
 }

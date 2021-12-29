@@ -852,7 +852,7 @@ namespace PLSE_FoxPro.Models
                     while (rd.Read())
                     {
                         list.Add(new Employee(id: rd.GetInt32(colEmployeeID),
-                                            departament: App.Me.Storage.DepartamentsAccessService.GetItemByID(rd.GetByte(colDepartament)),
+                                            departament: App.Storage.DepartamentsAccessService.GetItemByID(rd.GetByte(colDepartament)),
                                             office: rd.GetString(colInnerOffice),
                                             firstname: rd.GetString(colFirstName),
                                             middlename: rd.GetString(colMiddleName),
@@ -1062,7 +1062,7 @@ namespace PLSE_FoxPro.Models
                 if (rd.HasRows)
                 {
                     rd.Read();
-                    Adress adress = new Adress(settlement: rd.IsDBNull(7) ? null : App.Me.Storage.SettlementAccessService.GetItemByID(rd.GetInt32(7)),
+                    Adress adress = new Adress(settlement: rd.IsDBNull(7) ? null : App.Storage.SettlementAccessService.GetItemByID(rd.GetInt32(7)),
                                                 streetprefix: rd.IsDBNull(9) ? null : rd.GetString(9),
                                                 street: rd.IsDBNull(8) ? null : rd.GetString(8),
                                                 housing: rd.IsDBNull(5) ? null : rd.GetString(5),
@@ -1132,7 +1132,7 @@ namespace PLSE_FoxPro.Models
                     while (rd.Read())
                     {
                         empl = new Employee(id: rd.GetInt32(colEmployeeID),
-                                            departament: App.Me.Storage.DepartamentsAccessService.GetItemByID(rd.GetByte(colDepartament)),
+                                            departament: App.Storage.DepartamentsAccessService.GetItemByID(rd.GetByte(colDepartament)),
                                             office: rd.GetString(colInnerOffice),
                                             firstname: rd.GetString(colFirstName),
                                             middlename: rd.GetString(colMiddleName),
@@ -1237,7 +1237,7 @@ namespace PLSE_FoxPro.Models
                             if (!_cache.ContainsKey(rd.GetInt32(colEmployeeID)))
                             {
                                 var e = new Employee(id: rd.GetInt32(colEmployeeID),
-                                                departament: App.Me.Storage.DepartamentsAccessService.GetItemByID(rd.GetByte(colDepartament)),
+                                                departament: App.Storage.DepartamentsAccessService.GetItemByID(rd.GetByte(colDepartament)),
                                                 office: rd.GetString(colInnerOffice),
                                                 firstname: rd.GetString(colFirstName),
                                                 middlename: rd.GetString(colMiddleName),
@@ -1309,8 +1309,8 @@ namespace PLSE_FoxPro.Models
                     while (rd.Read())
                     {
                         list.Add(new Expert(id: rd.GetInt32(colExpertID),
-                                            speciality: App.Me.Storage.SpecialityAccessService.GetItemByID(rd.GetInt16(colSpecialityID)),
-                                            employee: App.Me.Storage.EmployeeAccessService.GetItemByID(rd.GetInt32(colEmployeeID)),
+                                            speciality: App.Storage.SpecialityAccessService.GetItemByID(rd.GetInt16(colSpecialityID)),
+                                            employee: App.Storage.EmployeeAccessService.GetItemByID(rd.GetInt32(colEmployeeID)),
                                             receiptdate: rd.GetDateTime(colExperience),
                                             lastattestationdate: rd.IsDBNull(colLastAtt) ? null : new DateTime?(rd.GetDateTime(colLastAtt)),
                                             closed: rd.GetBoolean(colClosed),
@@ -1457,8 +1457,8 @@ namespace PLSE_FoxPro.Models
                     while (rd.Read())
                     {
                         expert = new Expert(id: rd.GetInt32(colExpertID),
-                                            speciality: App.Me.Storage.SpecialityAccessService.GetItemByID(rd.GetInt16(colSpecialityID)),
-                                            employee: App.Me.Storage.EmployeeAccessService.GetItemByID(rd.GetInt32(colEmployeeID)),
+                                            speciality: App.Storage.SpecialityAccessService.GetItemByID(rd.GetInt16(colSpecialityID)),
+                                            employee: App.Storage.EmployeeAccessService.GetItemByID(rd.GetInt32(colEmployeeID)),
                                             receiptdate: rd.GetDateTime(colExperience),
                                             lastattestationdate: rd.IsDBNull(colLastAtt) ? null : new DateTime?(rd.GetDateTime(colLastAtt)),
                                             closed: rd.GetBoolean(colClosed),
@@ -1500,7 +1500,7 @@ namespace PLSE_FoxPro.Models
                     while (rd.Read())
                     {
                         list.Add(new Expert(id: rd.GetInt32(colExpertID),
-                                            speciality: App.Me.Storage.SpecialityAccessService.GetItemByID(rd.GetInt16(colSpecialityID)),
+                                            speciality: App.Storage.SpecialityAccessService.GetItemByID(rd.GetInt16(colSpecialityID)),
                                             employee: employee,
                                             receiptdate: rd.GetDateTime(colExperience),
                                             lastattestationdate: rd.IsDBNull(colLastAtt) ? null : new DateTime?(rd.GetDateTime(colLastAtt)),
@@ -1687,7 +1687,7 @@ namespace PLSE_FoxPro.Models
                     int colUpdateDate = rd.GetOrdinal("UpdateDate");
                     while (rd.Read())
                     {
-                        Adress adr = new Adress(settlement: rd.IsDBNull(colSettlement) ? null : App.Me.Storage.SettlementAccessService.GetItemByID(rd.GetInt32(colSettlement)),
+                        Adress adr = new Adress(settlement: rd.IsDBNull(colSettlement) ? null : App.Storage.SettlementAccessService.GetItemByID(rd.GetInt32(colSettlement)),
                                                 streetprefix: rd[colStreetPrefix] == DBNull.Value ? null : rd.GetString(colStreetPrefix),
                                                 street: rd[colStreet] == DBNull.Value ? null : rd.GetString(colStreet),
                                                 housing: rd[colHousing] == DBNull.Value ? null : rd.GetString(colHousing),
@@ -1755,7 +1755,7 @@ namespace PLSE_FoxPro.Models
                     int colUpdateDate = rd.GetOrdinal("UpdateDate");
                     while (rd.Read())
                     {
-                        Adress adr = new Adress(settlement: rd.IsDBNull(colSettlement) ? null : App.Me.Storage.SettlementAccessService.GetItemByID(rd.GetInt32(colSettlement)),
+                        Adress adr = new Adress(settlement: rd.IsDBNull(colSettlement) ? null : App.Storage.SettlementAccessService.GetItemByID(rd.GetInt32(colSettlement)),
                                                 streetprefix: rd[colStreetPrefix] == DBNull.Value ? null : rd.GetString(colStreetPrefix),
                                                 street: rd[colStreet] == DBNull.Value ? null : rd.GetString(colStreet),
                                                 housing: rd[colHousing] == DBNull.Value ? null : rd.GetString(colHousing),
@@ -1840,7 +1840,7 @@ namespace PLSE_FoxPro.Models
                     int colPaidoutPercent = rd.GetOrdinal("PaidoutPercent");
                     while (rd.Read())
                     {
-                        Adress _add = new Adress(settlement: App.Me.Storage.SettlementAccessService.GetItemByID(rd.GetInt32(colSettlementID)),
+                        Adress _add = new Adress(settlement: App.Storage.SettlementAccessService.GetItemByID(rd.GetInt32(colSettlementID)),
                                                  streetprefix: rd.GetString(colStreetPrefix),
                                                  street: rd.GetString(colStreet),
                                                  housing: rd.GetString(colHousing),
@@ -1931,7 +1931,7 @@ namespace PLSE_FoxPro.Models
                     int colPaidoutPercent = rd.GetOrdinal("PaidoutPercent");
                     while (rd.Read())
                     {
-                        Adress _add = new Adress(settlement: App.Me.Storage.SettlementAccessService.GetItemByID(rd.GetInt32(colSettlementID)),
+                        Adress _add = new Adress(settlement: App.Storage.SettlementAccessService.GetItemByID(rd.GetInt32(colSettlementID)),
                                                  streetprefix: rd.GetString(colStreetPrefix),
                                                  street: rd.GetString(colStreet),
                                                  housing: rd.GetString(colHousing),
@@ -2352,7 +2352,7 @@ namespace PLSE_FoxPro.Models
                                                 casenumber: rd.IsDBNull(10) ? null : rd.GetString(10),
                                                 respondent: rd.IsDBNull(14) ? null : rd.GetString(14),
                                                 plaintiff: rd.IsDBNull(15) ? null : rd.GetString(15),
-                                                typecase: App.Me.Storage.CaseTypes.First(n => n.Code.Equals(rd.GetString(13), StringComparison.Ordinal)),
+                                                typecase: App.Storage.CaseTypes.First(n => n.Code.Equals(rd.GetString(13), StringComparison.Ordinal)),
                                                 annotate: rd.IsDBNull(12) ? null : rd.GetString(12),
                                                 comment: rd.IsDBNull(16) ? null : rd.GetString(16),
                                                 vr: Version.Original
@@ -2577,12 +2577,12 @@ namespace PLSE_FoxPro.Models
                                                 registrationdate: rd.GetDateTime(colRegDate),
                                                 resolutiondate: rd.IsDBNull(colResolDate) ? null : new DateTime?(rd.GetDateTime(colResolDate)),
                                                 resolutiontype: (ResolutionTypes)rd.GetByte(colResolutionType),
-                                                customer: App.Me.Storage.CustomerAccessService.GetItemByID(rd.GetInt32(colCustomerID)),
+                                                customer: App.Storage.CustomerAccessService.GetItemByID(rd.GetInt32(colCustomerID)),
                                                 obj: rd.IsDBNull(colObjects) ? null : rd.GetString(colObjects),
                                                 quest: rd.IsDBNull(colQuestions) ? null : rd.GetString(colQuestions),
                                                 nativenumeration: rd.GetBoolean(colNativeQuestions),
                                                 status: rd.GetString(colResolutionStatus),
-                                                typecase: App.Me.Storage.CaseTypes.First(n => n.Code.Equals(rd.GetString(colCaseType), StringComparison.Ordinal)),
+                                                typecase: App.Storage.CaseTypes.First(n => n.Code.Equals(rd.GetString(colCaseType), StringComparison.Ordinal)),
                                                 uidcase: rd.IsDBNull(colUIDCase) ? null : rd.GetString(colUIDCase),
                                                 respondent: rd.IsDBNull(colRespondent) ? null : rd.GetString(colRespondent),
                                                 plaintiff: rd.IsDBNull(colPlaintiff) ? null : rd.GetString(colPlaintiff),
@@ -2598,7 +2598,7 @@ namespace PLSE_FoxPro.Models
                             expid = rd.GetInt32(colExpertiseID);
                             _expertise = new Expertise(id: expid,
                                                         number: rd.GetString(colNumber),
-                                                        expert: App.Me.Storage.ExpertAccessService.GetItemByID(rd.GetInt32(colExpertID)),
+                                                        expert: App.Storage.ExpertAccessService.GetItemByID(rd.GetInt32(colExpertID)),
                                                         result: rd.IsDBNull(colExpertiseResult) ? ExpertiseResults.Unknown : (ExpertiseResults)rd.GetByte(colExpertiseResult),
                                                         start: rd.GetDateTime(colStartDate),
                                                         end: rd.IsDBNull(colExecutionDate) ? null : new DateTime?(rd.GetDateTime(colExecutionDate)),
@@ -2661,7 +2661,7 @@ namespace PLSE_FoxPro.Models
                                     _expertise.Movements.Add(il);
                                     break;
                                 default:
-                                    _storage.ErrorReporter.LogError("Unknown type of expertise movement. Movement not created");
+                                    App.ErrorLogger.LogError("Unknown type of expertise movement. Movement not created");
                                     break;
                             }
                         }
@@ -2671,7 +2671,7 @@ namespace PLSE_FoxPro.Models
             }
             catch (Exception ex)
             {
-                _storage.ErrorReporter.LogError(ex.Message);
+                App.ErrorLogger.LogError(ex.Message);
                 throw;
             }
             finally
@@ -2750,12 +2750,12 @@ namespace PLSE_FoxPro.Models
                                                 registrationdate: rd.GetDateTime(colRegDate),
                                                 resolutiondate: rd.IsDBNull(colResolDate) ? null : new DateTime?(rd.GetDateTime(colResolDate)),
                                                 resolutiontype: (ResolutionTypes)rd.GetByte(colResolutionType),
-                                                customer: App.Me.Storage.CustomerAccessService.GetItemByID(rd.GetInt32(colCustomerID)),
+                                                customer: App.Storage.CustomerAccessService.GetItemByID(rd.GetInt32(colCustomerID)),
                                                 obj: rd.IsDBNull(colObjects) ? null : rd.GetString(colObjects),
                                                 quest: rd.IsDBNull(colQuestions) ? null : rd.GetString(colQuestions),
                                                 nativenumeration: rd.GetBoolean(colNativeQuestions),
                                                 status: rd.GetString(colResolutionStatus),
-                                                typecase: App.Me.Storage.CaseTypes.First(n => n.Code.Equals(rd.GetString(colCaseType), StringComparison.Ordinal)),
+                                                typecase: App.Storage.CaseTypes.First(n => n.Code.Equals(rd.GetString(colCaseType), StringComparison.Ordinal)),
                                                 uidcase: rd.IsDBNull(colUIDCase) ? null : rd.GetString(colUIDCase),
                                                 respondent: rd.IsDBNull(colRespondent) ? null : rd.GetString(colRespondent),
                                                 plaintiff: rd.IsDBNull(colPlaintiff) ? null : rd.GetString(colPlaintiff),
@@ -2771,7 +2771,7 @@ namespace PLSE_FoxPro.Models
                             exid = rd.GetInt32(colExpertiseID);
                             _expertise = new Expertise(id: exid,
                                                         number: rd.GetString(colNumber),
-                                                        expert: App.Me.Storage.ExpertAccessService.GetItemByID(rd.GetInt32(colExpertID)),
+                                                        expert: App.Storage.ExpertAccessService.GetItemByID(rd.GetInt32(colExpertID)),
                                                         result: rd.IsDBNull(colExpertiseResult) ? ExpertiseResults.Unknown : (ExpertiseResults)rd.GetByte(colExpertiseResult),
                                                         start: rd.GetDateTime(colStartDate),
                                                         end: rd.IsDBNull(colExecutionDate) ? null : new DateTime?(rd.GetDateTime(colExecutionDate)),
@@ -2834,7 +2834,7 @@ namespace PLSE_FoxPro.Models
                                     _expertise.Movements.Add(il);
                                     break;
                                 default:
-                                    _storage.ErrorReporter.LogError("Unknown type of expertise movement. Movement not created");
+                                    App.ErrorLogger.LogError("Unknown type of expertise movement. Movement not created");
                                     break;
                             }
                         }
@@ -3348,7 +3348,7 @@ namespace PLSE_FoxPro.Models
                                                                         from: item,
                                                                         usagedate: rd.GetDateTime(2),
                                                                         duration: rd.GetByte(3),
-                                                                        equipment: App.Me.Storage.EquipmentAccessService.GetItemByID(rd.GetInt16(1)),
+                                                                        equipment: App.Storage.EquipmentAccessService.GetItemByID(rd.GetInt16(1)),
                                                                         version: Version.Original
                                                                         );
                             item.EquipmentUsages.Add(usage);
@@ -3501,7 +3501,7 @@ namespace PLSE_FoxPro.Models
                                         _exp.Movements.Add(il);
                                         break;
                                     default:
-                                        _storage.ErrorReporter.LogError("Unknown type of expertise movement. Movement not created");
+                                        App.ErrorLogger.LogError("Unknown type of expertise movement. Movement not created");
                                         break;
                                 }
                             }
@@ -3625,7 +3625,7 @@ namespace PLSE_FoxPro.Models
                     AddOutComingLetter(l, connection, tran);
                     break;
                 default:
-                    _storage.ErrorReporter.LogError("Unknown type of ExpertiseMovement");
+                    App.ErrorLogger.LogError("Unknown type of ExpertiseMovement");
                     break;
             }
         }
@@ -3649,7 +3649,7 @@ namespace PLSE_FoxPro.Models
                     EditOutComingLetter(l, connection, tran);
                     break;
                 default:
-                    _storage.ErrorReporter.LogError("Unknown type of ExpertiseMovement");
+                    App.ErrorLogger.LogError("Unknown type of ExpertiseMovement");
                     break;
             }
             //SqlCommand cmd = connection.CreateCommand();
@@ -3719,7 +3719,7 @@ namespace PLSE_FoxPro.Models
             }
             catch (Exception ex)
             {
-                _storage.ErrorReporter.LogError(ex.Message);
+                App.ErrorLogger.LogError(ex.Message);
                 throw;
             }
         }
@@ -3748,7 +3748,7 @@ namespace PLSE_FoxPro.Models
             }
             catch (Exception ex)
             {
-                _storage.ErrorReporter.LogError(ex.Message);
+                App.ErrorLogger.LogError(ex.Message);
                 throw;
             }
         }
@@ -3777,17 +3777,17 @@ namespace PLSE_FoxPro.Models
             }
             catch (Exception ex)
             {
-                _storage.ErrorReporter.LogError(ex.Message);
+                App.ErrorLogger.LogError(ex.Message);
                 throw;
             }
         }
         private void AddOutComingLetter(OutcomingLetter letter, SqlConnection connection, SqlTransaction tran = null)
         {
-            _storage.ErrorReporter.LogError($"Invoked function {nameof(AddOutComingLetter)} not realize");
+            App.ErrorLogger.LogError($"Invoked function {nameof(AddOutComingLetter)} not realize");
         }
         private void AddIncomingLetter(IncomingLetter letter, SqlConnection connection, SqlTransaction tran = null)
         {
-            _storage.ErrorReporter.LogError($"Invoked function {nameof(AddIncomingLetter)} don't realize");
+            App.ErrorLogger.LogError($"Invoked function {nameof(AddIncomingLetter)} don't realize");
         }
         private void EditRequest(Request request, SqlConnection connection, SqlTransaction tran = null)
         {
@@ -3810,7 +3810,7 @@ namespace PLSE_FoxPro.Models
             }
             catch (Exception ex)
             {
-                _storage.ErrorReporter.LogError(ex.Message);
+                App.ErrorLogger.LogError(ex.Message);
                 throw;
             }
         }
@@ -3835,7 +3835,7 @@ namespace PLSE_FoxPro.Models
             }
             catch (Exception ex)
             {
-                _storage.ErrorReporter.LogError(ex.Message);
+                App.ErrorLogger.LogError(ex.Message);
                 throw;
             }
         }
@@ -3860,17 +3860,17 @@ namespace PLSE_FoxPro.Models
             }
             catch (Exception ex)
             {
-                _storage.ErrorReporter.LogError(ex.Message);
+                App.ErrorLogger.LogError(ex.Message);
                 throw;
             }
         }
         private void EditOutComingLetter(OutcomingLetter letter, SqlConnection connection, SqlTransaction tran = null)
         {
-            _storage.ErrorReporter.LogError($"Invoked function {nameof(EditOutComingLetter)} don't realize");
+            App.ErrorLogger.LogError($"Invoked function {nameof(EditOutComingLetter)} don't realize");
         }
         private void EditIncomingLetter(IncomingLetter letter, SqlConnection connection, SqlTransaction tran = null)
         {
-            _storage.ErrorReporter.LogError($"Invoked function {nameof(EditIncomingLetter)} don't realize");
+            App.ErrorLogger.LogError($"Invoked function {nameof(EditIncomingLetter)} don't realize");
         }
         public MovementDataAccess(ILocalStorage storage) : base(storage) { }
     }

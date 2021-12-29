@@ -4,16 +4,17 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <AssemblyVersion>0.2.1.2</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Resources\FoxLogo.png" />
-    <None Remove="Resources\Минюст_лого.png" />
+    <None Remove="Resources\Unknown.jpg" />
+    <None Remove="Resources\МинЮст_лого.jpg" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="LiveCharts" Version="0.9.7" />
-    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <PackageReference Include="LiveCharts.Wpf.Core" Version="0.9.8" />
     <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
@@ -22,7 +23,8 @@
 
   <ItemGroup>
     <Resource Include="Resources\FoxLogo.png" />
-    <Resource Include="Resources\Минюст_лого.png" />
+    <Resource Include="Resources\Unknown.jpg" />
+    <Resource Include="Resources\МинЮст_лого.jpg" />
   </ItemGroup>
 
   <ItemGroup>

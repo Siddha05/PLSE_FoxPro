@@ -20,6 +20,8 @@ namespace PLSE_FoxPro.ViewModels
         #region Fields
         private DateTime _curent_date;
         private string _status_messge;
+        private Employee _logged_employee;
+        private Laboratory _laboratory;
         private Visibility _frame_visibility = Visibility.Hidden;
         private DispatcherTimer timer;
         private Progress<Event> informer;
@@ -43,7 +45,16 @@ namespace PLSE_FoxPro.ViewModels
             get => _curent_date;
             set => SetProperty(ref _curent_date, value);
         }
-        public Employee LoginEmployee => App.Me.LoggedEmployee;
+        public Laboratory Laboratory 
+        {
+            get => _laboratory;
+            set => SetProperty(ref _laboratory, value); 
+        }
+        public Employee LoginEmployee
+        {
+            get => _logged_employee;
+            set => SetProperty(ref _logged_employee, value);
+        }
         public Page CurrentPage
         {
             get => _current_page;
@@ -77,11 +88,11 @@ namespace PLSE_FoxPro.ViewModels
         public RelayCommand OpenSpeciality => new RelayCommand(() => MessageBox.Show("Invoke OpenSpeciality")); 
         public RelayCommand OpenResolutionAdd => new RelayCommand(() => MessageBox.Show("Invoke OpenResolutionAdd"));
         public RelayCommand OpenEmployees => new RelayCommand(() => MessageBox.Show("Invoke OpenEmployee"));
-        public RelayCommand OpenProfile => new RelayCommand(() => MessageBox.Show("Invoke OpenPrifile"));
+        public RelayCommand OpenProfile => new RelayCommand(() => LoginEmployee = App.Storage.EmployeeAccessService.GetItemByID(4));
         public RelayCommand OpenExpertises => new RelayCommand(() => MessageBox.Show("Invoke OpenExpertise"));
         public RelayCommand WindowLoaded { get; }
         public RelayCommand OpenAboutPLSE => new RelayCommand(() => MessageBox.Show("Invoke OpenAbout"));
-        public RelayCommand OpenSettings => new RelayCommand(() => MessageBox.Show("Invoke OpenSettings"));
+        public RelayCommand OpenSettings => new RelayCommand(() => MessageBox.Show(LoginEmployee.Fio));
         public RelayCommand Home => new RelayCommand(() => MessageBox.Show("Invoke Home"));
         public RelayCommand<Event> EventClose
         {
@@ -141,7 +152,7 @@ namespace PLSE_FoxPro.ViewModels
         {
             _page_stack.Clear();
         }
-        private void Timer_Tick(object sender, EventArgs e) => _curent_date = DateTime.UtcNow;
+        private void Timer_Tick(object sender, EventArgs e) => Date = DateTime.UtcNow;
         public void Greeting()
         {
             string s = DateTime.UtcNow switch
@@ -196,10 +207,10 @@ namespace PLSE_FoxPro.ViewModels
 
         public async void ScanAnnualDate()
         {
-            var l = await App.PLSE_Storage.EmployeeAccessService.LoadEmployeesDatesAsync();
+            var l = await App.Storage.EmployeeAccessService.LoadAnnualDatesAsync(DateTime.UtcNow);
             foreach (var item in l)
             {
-                EventsList.Add(new Message(item.fio + " празднует день рождения !!!", MsgType.Congratulation));
+                EventsList.Add(new Message(item + " празднует день рождения !!!", MessageType.Congratulation));//TODO: make FIO
             }
         }
         public async void ScanExpiredSpeciality()
@@ -225,7 +236,7 @@ namespace PLSE_FoxPro.ViewModels
         {
             try
             {
-                var res = await App.PLSE_Storage.ExpertiseAccessService.GetExpertiseInWorkAsync(LoginEmployee);
+                var res = await App.Storage.ExpertiseAccessService.LoadExpertiseInWorkAsync(LoginEmployee);
                 EventsList.Add(new ExpertisesInWorkOverview(res.Item1));
             }
             catch (Exception)
@@ -235,10 +246,10 @@ namespace PLSE_FoxPro.ViewModels
         }
         private Task<List<Expert>> GetExpiredExperts(Employee employee)
         {
-            return Task.Run(() =>
+            return Task.Run(async () =>
             {
                 List<Expert> expired = new List<Expert>();
-                var l = App.Me.Laboratory.ExpertAccessService.GetExperts(employee);
+                var l = await App.Storage.ExpertAccessService.LoadExpertSpecialitiesAsync(LoginEmployee);
                 foreach (var item in l)
                 {
                     if (!item.IsValidAttestation)
@@ -248,13 +259,12 @@ namespace PLSE_FoxPro.ViewModels
                 }
                 return expired;
             });
-        }
-        
+        }    
         public async void UploadEmployee()
         {
             if (LoginEmployee.UploadStatus == UploadResult.UnPerform || LoginEmployee.UploadStatus == UploadResult.Error)
             {
-                App.GetLoginEmployee().Employee_SlightPart = await App.PLSE_Storage.EmployeeAccessService.FinishDownLoadAsync(App.GetLoginEmployee());
+                LoginEmployee.Employee_SlightPart = await App.Storage.EmployeeAccessService.LoadSlightPartAsync(LoginEmployee);
             }
         }
         
