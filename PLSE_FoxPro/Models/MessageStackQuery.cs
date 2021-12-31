@@ -21,7 +21,7 @@ namespace PLSE_FoxPro.Models
         /// </summary>
         public int MaxStack => _maxstack;
         /// <summary>
-        /// Видимаю очередь сообщений
+        /// Видимая очередь сообщений
         /// </summary>
         public ObservableCollection<Message> StackQuery { get; }
         #endregion

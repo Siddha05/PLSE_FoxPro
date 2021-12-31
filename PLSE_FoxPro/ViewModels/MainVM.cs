@@ -58,7 +58,12 @@ namespace PLSE_FoxPro.ViewModels
         public Page CurrentPage
         {
             get => _current_page;
-            private set => SetProperty(ref _current_page, value);
+            private set
+            {
+                SetProperty(ref _current_page, value);
+                if (value != null) FrameVisibility = Visibility.Visible;
+                else FrameVisibility = Visibility.Hidden;
+            }
         }
         public string StatusMessage
         {
@@ -80,11 +85,11 @@ namespace PLSE_FoxPro.ViewModels
                 return list[rnd.Next(list.Length)];
             }
         }
-        public MessageStackQuery Messages => _messages;
+        public MessageStackQuery StackMessages => _messages;
         #endregion Properties
 
         #region Commands
-        public RelayCommand<Window> Exit => new RelayCommand<Window>(o => o.Close());
+        public RelayCommand<Window> Exit => new RelayCommand<Window>(w => w.Close());
         public RelayCommand OpenSpeciality => new RelayCommand(() => MessageBox.Show("Invoke OpenSpeciality")); 
         public RelayCommand OpenResolutionAdd => new RelayCommand(() => MessageBox.Show("Invoke OpenResolutionAdd"));
         public RelayCommand OpenEmployees => new RelayCommand(() => MessageBox.Show("Invoke OpenEmployee"));
@@ -92,7 +97,7 @@ namespace PLSE_FoxPro.ViewModels
         public RelayCommand OpenExpertises => new RelayCommand(() => MessageBox.Show("Invoke OpenExpertise"));
         public RelayCommand WindowLoaded { get; }
         public RelayCommand OpenAboutPLSE => new RelayCommand(() => MessageBox.Show("Invoke OpenAbout"));
-        public RelayCommand OpenSettings => new RelayCommand(() => MessageBox.Show(LoginEmployee.Fio));
+        public RelayCommand OpenSettings => new RelayCommand(() => AddPage(new Pages.Settings()));
         public RelayCommand Home => new RelayCommand(() => MessageBox.Show("Invoke Home"));
         public RelayCommand<Event> EventClose
         {
@@ -148,10 +153,7 @@ namespace PLSE_FoxPro.ViewModels
             if (_page_stack.Count > 0) CurrentPage = _page_stack.Peek();
             else CurrentPage = null;
         }
-        public void RemoveAllPages()
-        {
-            _page_stack.Clear();
-        }
+        public void AddStackMessage(Message message) => StackMessages.Add(message);
         private void Timer_Tick(object sender, EventArgs e) => Date = DateTime.UtcNow;
         public void Greeting()
         {

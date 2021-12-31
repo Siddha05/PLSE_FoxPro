@@ -25,7 +25,7 @@ namespace PLSE_FoxPro.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\FoxPro")]
         public string InicalFolderPath {
             get {
                 return ((string)(this["InicalFolderPath"]));
@@ -116,6 +116,18 @@ namespace PLSE_FoxPro.Properties {
             }
             set {
                 this["LastLogin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsShowNearEvent {
+            get {
+                return ((bool)(this["IsShowNearEvent"]));
+            }
+            set {
+                this["IsShowNearEvent"] = value;
             }
         }
     }

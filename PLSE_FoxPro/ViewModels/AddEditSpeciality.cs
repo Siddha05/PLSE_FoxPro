@@ -14,7 +14,7 @@ namespace PLSE_FoxPro.ViewModels
         public RelayCommand SendMessage => new RelayCommand(() =>
         {
             WeakReferenceMessenger.Default.Send(Speciality);
-            App.Me.RemovePage();
+            App.RemovePage();
         });
         public AddEditSpeciality() 
         {

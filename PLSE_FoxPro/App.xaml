@@ -19,6 +19,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/TextBox.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/ComboBox.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/Icon.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Dictionaries/CheckBox.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

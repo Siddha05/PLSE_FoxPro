@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="InicalFolderPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">C:\FoxPro</Value>
     </Setting>
     <Setting Name="WarnLeftDaysExpTreshold" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3</Value>
@@ -25,6 +25,9 @@
     </Setting>
     <Setting Name="LastLogin" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="IsShowNearEvent" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using PLSE_FoxPro.Models;
 
 namespace PLSE_FoxPro
@@ -22,7 +23,7 @@ namespace PLSE_FoxPro
 
         #region Properties
         public static App Me => (App)Application.Current;
-        public static ViewModels.MainVM MainViewModel => Me.MainWindow.DataContext as ViewModels.MainVM;
+        public static ViewModels.MainVM MainViewModel => App.Current.MainWindow.DataContext as ViewModels.MainVM;
         public static ILocalStorage Storage { get; }
         public static IErrorLogger ErrorLogger { get; }
         public static string AppName => _app_name ??= Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>().Product;
@@ -30,8 +31,9 @@ namespace PLSE_FoxPro
         #endregion
 
         #region Functions
-        public void RemovePage() => MainViewModel.RemovePage();
-        
+        public static void RemovePage() => MainViewModel.RemovePage();
+        public static void AddPage(Page p) => MainViewModel.AddPage(p);
+        public static void SendMessage(Message message) => MainViewModel.AddStackMessage(message);
         #endregion
 
         static App()

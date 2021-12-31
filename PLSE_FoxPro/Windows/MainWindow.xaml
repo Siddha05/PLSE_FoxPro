@@ -39,12 +39,12 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="{Binding Path=Source, Mode=OneTime}" Foreground="White" VerticalAlignment="Center" Margin="5,0,35,0" FontSize="{StaticResource LargeFontSize}"
+                    <TextBlock Text="{Binding Path=Source, Mode=OneTime}" Foreground="White" VerticalAlignment="Center" Margin="5,0,35,0" FontSize="{StaticResource MediumFontSize}"
                            FontFamily="MV Boli" Grid.ColumnSpan="2"/>
                     <Button Grid.Column="1" HorizontalAlignment="Right" Style="{StaticResource CrosshairButton}" Margin="3,4"
                             Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.EventClose}"
                             CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=Content}"/>
-                    <Viewbox Grid.Row="1" Margin="2" Height="75" Width="85" Stretch="Fill">
+                    <Viewbox Grid.Row="1" Margin="2" Height="auto" Width="auto" Stretch="Fill">
                         <Image Source="{Binding Path=ImageSource, Mode=OneTime}"/>
                     </Viewbox>
                     <TextBlock Grid.Row="1" TextWrapping="Wrap" FontSize="{StaticResource MediumFontSize}" Text="{Binding Path=Content, Mode=OneTime}" Foreground="White"
@@ -208,7 +208,7 @@
                 <materialDesign:PackIcon Kind="LocationExit" Height="24" Width="24"/>
             </Button>
         </StackPanel>
-        <Frame Panel.ZIndex="3" Grid.Row="1" Background="White" Content="{Binding Path=CurrentPage}" NavigationUIVisibility="Hidden"
+        <Frame Panel.ZIndex="3" Grid.Row="1" Background="Transparent" Content="{Binding Path=CurrentPage}" NavigationUIVisibility="Hidden"
                Visibility="{Binding Path=FrameVisibility}"/>
         <Grid Grid.Row="1" Background="White">
             <Grid.ColumnDefinitions>
