@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Style x:Key="SaveButtonFlat" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
         <Setter Property="Foreground" Value="{StaticResource AcceptGreenBrush}"/>
         <Setter Property="FontWeight" Value="DemiBold"/>
@@ -38,5 +39,27 @@
         <Style.Triggers>
 
         </Style.Triggers>
+    </Style>
+
+    <Style TargetType="{x:Type Button}" x:Key="AddGreenButton" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+        <Setter Property="Height" Value="26"/>
+        <Setter Property="Width" Value="26"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <materialDesign:PackIcon Kind="PlusThick" Height="24" Width="24" Foreground="White"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type Button}" x:Key="DeleteRedButton" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+        <Setter Property="Height" Value="26"/>
+        <Setter Property="Width" Value="26"/>
+        <Setter Property="Background" Value="Red"/>
+        <Setter Property="BorderBrush" Value="Red"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <materialDesign:PackIcon Kind="DeleteEmpty" Height="24" Width="24" Foreground="White"/>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

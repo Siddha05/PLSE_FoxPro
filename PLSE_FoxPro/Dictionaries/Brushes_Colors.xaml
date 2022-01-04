@@ -5,6 +5,11 @@
 
     <SolidColorBrush x:Key="InactiveText" Color="Gray"/>
 
+    <SolidColorBrush x:Key="HighlightedTextBlue" Color="DarkBlue"/>
+
+    <SolidColorBrush x:Key="SelectedItemBrush" Color="#FF4E0789"/>
+    <SolidColorBrush x:Key="MouseOverBrush" Color="#FFEBF5F9"/>
+
     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" x:Key="MessageDarkBrush">
         <GradientStop Color="#FF646464" Offset="0.2"/>
         <GradientStop Color="#FF585858" Offset="0.5"/>

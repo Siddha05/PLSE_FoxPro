@@ -22,6 +22,7 @@ namespace PLSE_FoxPro.Models
         private UploadResult _upload;
         private Employee_SlightPart _slightpart;
         #endregion
+
         #region Properties
         [Required(ErrorMessage = "обязательное поле")]
         public string Inneroffice
@@ -166,6 +167,7 @@ namespace PLSE_FoxPro.Models
         private Adress _adress = new Adress();
         private bool _is_hide_personal;
         #endregion Fields
+
         #region Properties
         public Adress Adress => _adress;
         [MaxLength(250, ErrorMessage = "превышен лимит символов")]
@@ -192,7 +194,7 @@ namespace PLSE_FoxPro.Models
             get => _sciencedegree;
             set => SetProperty(ref _sciencedegree, value, true);
         }
-        [Number(ValidationNumberType.MobilePhone)]
+        [Number(ValidationNumberType.MobilePhone, AllowEmpty = false)]
         public string Mobilephone
         {
             get => _mobilephone;

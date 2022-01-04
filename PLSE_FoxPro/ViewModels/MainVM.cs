@@ -93,7 +93,12 @@ namespace PLSE_FoxPro.ViewModels
         public RelayCommand OpenSpeciality => new RelayCommand(() => MessageBox.Show("Invoke OpenSpeciality")); 
         public RelayCommand OpenResolutionAdd => new RelayCommand(() => MessageBox.Show("Invoke OpenResolutionAdd"));
         public RelayCommand OpenEmployees => new RelayCommand(() => MessageBox.Show("Invoke OpenEmployee"));
-        public RelayCommand OpenProfile => new RelayCommand(() => LoginEmployee = App.Storage.EmployeeAccessService.GetItemByID(4));
+        public RelayCommand OpenProfile => new RelayCommand(() => 
+                                                                {
+                                                                    Page p = new Pages.Profile();
+                                                                    p.DataContext = new ProfileVM(LoginEmployee);
+                                                                    AddPage(p);
+                                                                });
         public RelayCommand OpenExpertises => new RelayCommand(() => MessageBox.Show("Invoke OpenExpertise"));
         public RelayCommand WindowLoaded { get; }
         public RelayCommand OpenAboutPLSE => new RelayCommand(() => MessageBox.Show("Invoke OpenAbout"));

@@ -20,6 +20,10 @@
                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/ComboBox.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/Icon.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/CheckBox.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Dictionaries/DatePicker.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Dictionaries/ListBoxItem.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Dictionaries/DataGrid.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Dictionaries/VariousControls.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

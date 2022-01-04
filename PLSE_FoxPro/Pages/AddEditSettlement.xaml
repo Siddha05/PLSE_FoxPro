@@ -1,0 +1,101 @@
+﻿<Page x:Class="PLSE_FoxPro.Pages.AddEditSettlement"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PLSE_FoxPro.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AddEditSettlement" Background="White">
+    <Grid HorizontalAlignment="Left">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="270"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Margin="10,20,0,0" Style="{StaticResource InactiveTextBlock}" Text="Название"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Margin="5,20,10,0" Style="{StaticResource UIOutlinedTextBox}">
+            <TextBox.Text>
+                <Binding Path="Settlement.Title" UpdateSourceTrigger="LostFocus">
+                    <Binding.ValidationRules>
+                        <!--<validators:BlanklessField ValidatesOnTargetUpdated="True"/>-->
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <TextBlock Grid.Row="0" Grid.Column="2" Margin="10,20,0,0" Style="{StaticResource InactiveTextBlock}" Text="Тип"/>
+        <ComboBox Style="{StaticResource UIOutlinedComboBox}" Grid.Column="3" Grid.Row="0" ItemsSource="{Binding Path=SettlementType}"
+                   Margin="5,20,10,0">
+            <ComboBox.SelectedItem>
+                <Binding Path="Settlement.Settlementtype">
+                    <Binding.ValidationRules>
+                        <!--<validators:RequiredField ValidatesOnTargetUpdated="True"/>-->
+                    </Binding.ValidationRules>
+                </Binding>
+            </ComboBox.SelectedItem>
+        </ComboBox>
+        <TextBlock Grid.Row="1" Grid.Column="2" Margin="10,20,0,0" Style="{StaticResource InactiveTextBlock}" Text="Значимость"/>
+        <ComboBox Style="{StaticResource UIOutlinedComboBox}" ItemsSource="{Binding Path=SettlementSignificance}"
+                   Margin="5,20,10,0" Grid.Column="3" Grid.Row="1">
+            <ComboBox.SelectedItem>
+                <Binding Path="Settlement.Significance">
+                    <Binding.ValidationRules>
+                        <!--<validators:RequiredField ValidatesOnTargetUpdated="True"/>-->
+                    </Binding.ValidationRules>
+                </Binding>
+            </ComboBox.SelectedItem>
+        </ComboBox>
+        <materialDesign:PackIcon Style="{StaticResource HelpIcon}" Grid.Row="1" Grid.Column="4" Margin="0,20,10,0">
+            <materialDesign:PackIcon.ToolTip>
+                <TextBlock FontSize="{StaticResource SmallFontSize}" TextWrapping="Wrap" Text="Значение населенного пункта в реестре РФ, отражающий отношение подчинения в иерархии субъектов РФ"/>
+            </materialDesign:PackIcon.ToolTip>
+        </materialDesign:PackIcon>
+        <TextBlock Grid.Row="1" Margin="10,20,0,0" Style="{StaticResource InactiveTextBlock}" Text="Индекс"/>
+        <TextBox Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,10,0" Grid.Column="1" Grid.Row="1"
+                 materialDesign:HintAssist.Hint="Например, 442000">
+            <TextBox.Text>
+                <Binding Path="Settlement.Postcode" UpdateSourceTrigger="LostFocus" >
+                    <Binding.ValidationRules>
+                        <ExceptionValidationRule ValidatesOnTargetUpdated="True"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <TextBlock Grid.Row="2" Margin="10,20,0,0" Style="{StaticResource InactiveTextBlock}" Text="Тел. код"/>
+        <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Row="2" Grid.Column="1" Margin="5,20,10,0"
+                     materialDesign:HintAssist.Hint = "Например, 85412">
+            <TextBox.Text>
+                <Binding Path="Settlement.Telephonecode" UpdateSourceTrigger="LostFocus">
+                    <Binding.ValidationRules>
+                        <ExceptionValidationRule ValidatesOnTargetUpdated="True"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <TextBlock Style="{StaticResource InactiveTextBlock}" Text="Фед. суб." Grid.Row="3" Margin="0,20,0,0"/>
+        <TextBox Style="{StaticResource UIOutlinedTextBox}" Text="{Binding Path=Settlement.Federallocation}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
+                  materialDesign:HintAssist.Hint="Например, Саратовская обл." Margin="5,20,5,0"/>
+        <materialDesign:PackIcon Style="{StaticResource HelpIcon}" ToolTip="Принадлежность федеральному субъекту РФ (область, край и т.п.)"
+                                 Grid.Row="3" Grid.Column="4" Margin="0,20,0,0"/>
+        <TextBlock  Style="{StaticResource InactiveTextBlock}" Text="Тер. суб." Grid.Row="4" Margin="0,20,0,0"/>
+        <TextBox Style="{StaticResource UIOutlinedTextBox}" materialDesign:HintAssist.Hint="Например, Кузнецкий р-н" 
+                     Text="{Binding Path=Settlement.Territorylocation}" Margin="5,20,5,0" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3"/>
+        <materialDesign:PackIcon Style="{StaticResource HelpIcon}" ToolTip="Принадлежность территориальному субъекту РФ (район, округ)" Margin="0,20,0,0" Grid.Column="4" Grid.Row="4"/>
+        <StackPanel Orientation="Horizontal" Grid.Column="3" Grid.Row="5" Margin="0,40,10,10" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.ColumnSpan="3">
+            <Button Style="{StaticResource CancelButtonFlat}" Command="{Binding Path=CancelCmd}"/>
+            <Button Style="{StaticResource SaveButtonFlat}" Command="{Binding Path=SaveCmd}" CommandParameter="{Binding ElementName=mw}"/>
+        </StackPanel>
+    </Grid>
+</Page>

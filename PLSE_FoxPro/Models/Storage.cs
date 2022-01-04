@@ -102,11 +102,11 @@ namespace PLSE_FoxPro.Models
         public SqlConnection DBConnection => new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["PLSE"].ConnectionString);
         public IReadOnlyList<Expertise> ExpertisesInWork => throw new NotImplementedException();
         public LaboratoryDataAccess LaboratoryAccessService => _lab_da;
-        public SpecialityDataAccess SpecialityAccessService => throw new NotImplementedException();
+        public SpecialityDataAccess SpecialityAccessService => _speciality_da ??= new SpecialityDataAccessCached(this);
         public OrganizationsDataAccess OrganizationAccessService => throw new NotImplementedException();
         public SettlementsDataAccess SettlementAccessService => _settlement_da;
         public EmployeeDataAccess EmployeeAccessService => _employee_da;
-        public ExpertDataAccess ExpertAccessService => throw new NotImplementedException();
+        public ExpertDataAccess ExpertAccessService => _expert_da ??= new ExpertDataAccess(this);
         public EquipmentDataAccess EquipmentAccessService => throw new NotImplementedException();
         public EquipmentUsageDataAccess EquipmentUsageAccessService => throw new NotImplementedException();
         public DepartamentDataAccess DepartamentsAccessService => _departament;
@@ -135,8 +135,7 @@ namespace PLSE_FoxPro.Models
             SetStatusAndRaiseEvent(this, InitializationStatus.Perfoming);
             try
             {
-
-                
+                LoadDomainTables();
                 SetStatusAndRaiseEvent(this, InitializationStatus.Succsess);
             }
             catch (Exception ex)
@@ -149,6 +148,107 @@ namespace PLSE_FoxPro.Models
         {
             _status = status;
             StatusChanged?.Invoke(this, status);
+        }
+        private void LoadDomainTables()
+        {
+            SqlCommand cmd = DBConnection.CreateCommand();
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.CommandText = "InnResources.prLoadDomainTables";
+            try
+            {
+                cmd.Connection.Open();
+                var rd = cmd.ExecuteReader();
+                //StreetType
+                if (rd.HasRows)
+                {
+                    List<string> streettype = new List<string>();
+                    while (rd.Read())
+                    {
+                        streettype.Add(rd.GetString(0));
+                    }
+                    _streettypes = streettype;
+                }
+                //InnerOffice
+                if (rd.NextResult())
+                {
+                    List<string> lInnerOffice = new List<string>();
+                    while (rd.Read())
+                    {
+                        lInnerOffice.Add(rd.GetString(0));
+                    }
+                    _inneroffices = lInnerOffice;
+                }
+                //EmployeeStatus
+                if (rd.NextResult())
+                {
+                    List<string> lEmployeeStatus = new List<string>();
+                    while (rd.Read())
+                    {
+                        lEmployeeStatus.Add(rd.GetString(0));
+                    }
+                    _employeestatus = lEmployeeStatus;
+                }
+                //SettlementPrefix
+                if (rd.NextResult())
+                {
+                    List<string> lSettlementPrefixes = new List<string>();
+                    while (rd.Read())
+                    {
+                        lSettlementPrefixes.Add(rd.GetString(0));
+                    }
+                    _settlementprefixs = lSettlementPrefixes;
+                }
+                //SettlementSign
+                if (rd.NextResult())
+                {
+                    List<string> lSettlementSignificances = new List<string>();
+                    while (rd.Read())
+                    {
+                        lSettlementSignificances.Add(rd.GetString(0));
+                    }
+                    _settlementsigns = lSettlementSignificances;
+                }            
+                //TypeCase
+                if (rd.NextResult())
+                {
+                    List<CaseType> lTypeCase = new List<CaseType>();
+                    while (rd.Read())
+                    {
+                        lTypeCase.Add(new CaseType(rd.GetString(0), rd.GetString(1)));
+                    }
+                    _casetypes = lTypeCase;
+                }
+                //ResolutionStatus
+                if (rd.NextResult())
+                {
+                    List<string> lResolutionStatus = new List<string>();
+                    while (rd.Read())
+                    {
+                        lResolutionStatus.Add(rd.GetString(0));
+                    }
+                    _resolutionstatus = lResolutionStatus;
+                }
+                //Ranks
+                if (rd.NextResult())
+                {
+                    var ranks = new List<string>(80);
+                    while (rd.Read())
+                    {
+                        ranks.Add(rd.GetString(0));
+                    }
+                    _ranks = ranks;
+                }
+                rd.Close();
+            }
+            catch (Exception ex)
+            {
+                App.ErrorLogger.LogError(ex.Message);
+                throw;
+            }
+            finally
+            {
+                cmd.Connection.Close();
+            }
         }
         #endregion
 

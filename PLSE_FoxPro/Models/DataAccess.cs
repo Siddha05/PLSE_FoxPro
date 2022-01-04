@@ -607,7 +607,7 @@ namespace PLSE_FoxPro.Models
                         int colIsValid = rd.GetOrdinal("IsValid");
                         while (rd.Read())
                         {
-                            if (_cache.ContainsKey(rd.GetInt16(colID)))
+                            if (!_cache.ContainsKey(rd.GetInt16(colID)))
                             {
                                 var s = new Speciality(updatedate: rd.GetDateTime(colUpdateDate),
                                                     id: rd.GetInt16(colID),
@@ -1477,7 +1477,7 @@ namespace PLSE_FoxPro.Models
             }
             return expert;
         }
-        private List<Expert> LoadExpertSpecialities(Employee employee)
+        public List<Expert> LoadExpertSpecialities(Employee employee)
         {
             SqlCommand cmd = _storage.DBConnection.CreateCommand();
             cmd.CommandText = "InnResources.prGetExpertsByEmployeeID";

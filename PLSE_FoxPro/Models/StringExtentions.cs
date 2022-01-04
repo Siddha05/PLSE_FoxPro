@@ -55,12 +55,48 @@ namespace PLSE_FoxPro.Models
             if (source == null) return false;
             return source.IndexOf(str, comparison) >= 0;
         }
-        
+
         /// <summary>
         /// Возвращает только цифровые символы из исходной строки
         /// </summary>
-        /// <returns>Строка, содержащая только цифры или пустая строка</returns>
-        public static string OnlyDigits(this string s) => new string(s?.Where(n => Char.IsDigit(n)).ToArray());
+        /// <returns>Строка, содержащая только цифры, пустая строка или null если параметр <paramref name="s"/> null</returns>
+        public static string OnlyDigits(this string s) => s == null ? null : new string(s.Where(n => Char.IsDigit(n)).ToArray());
+        /// <summary>
+        /// Форматирует переданную строку <paramref name="phone"/> как рабочий телефон. Не делает проверок параметра!
+        /// </summary>
+        /// <remarks>Работает корректно для строк длинной от 4 до 7</remarks>
+        /// <param name="phone"></param>
+        /// <returns></returns>
+        /// <example>43-32-12 или 43-12</example>
+        public static string FormatWorkPhone(this string phone)
+        {
+            var s = phone.Insert(phone.Length - 2, "-");
+            return phone.Length > 4 ? s.Insert(s.Length - 5, "-") : s;
+        }
+        /// <summary>
+        /// Форматирует переданную строку <paramref name="phone"/> как мобильный телефон. Не делает проверок параметра!
+        /// </summary>
+        /// <remarks>Работает корректно для строк длинной 10</remarks>
+        /// <param name="phone"></param>
+        /// <returns></returns>
+        /// <example>43-32-12 или 43-12</example>
+        public static string FormatMobilePhone(this string phone)
+        {
+            char[] m = new char[16];
+            Span<char> span = new Span<char>(m);
+            span[0] = '+'; span[1] = '7'; span[2] = span[6] = ' '; span[10] = span[13] = '-';
+            int k = 3, i = 0;
+            while (i < phone.Length)
+            {
+                if (k == 6 || k == 10 || k == 13)
+                {
+                    k++;
+                    continue;
+                }
+                span[k++] = phone[i++];
+            }
+            return new string(m);
+        }
         /// <summary>
         /// Убирает все пробелы из исходной строки
         /// </summary>

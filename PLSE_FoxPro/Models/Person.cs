@@ -17,6 +17,7 @@ namespace PLSE_FoxPro.Models
         protected bool? _gender;
         protected DateTime _last_modify_date;
         #endregion
+
         #region Properties
         [RegularExpression(@"^\p{IsCyrillic}{2,25}$|^\p{IsCyrillic}\.$", ErrorMessage ="неверный формат имени")]
         public string Fname
