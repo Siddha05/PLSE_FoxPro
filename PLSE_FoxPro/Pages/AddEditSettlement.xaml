@@ -7,7 +7,7 @@
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="AddEditSettlement" Background="White">
+      Title="AddEditSettlement" Background="White" Name="mw">
     <Grid HorizontalAlignment="Left">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -36,11 +36,11 @@
             </TextBox.Text>
         </TextBox>
         <TextBlock Grid.Row="0" Grid.Column="2" Margin="10,20,0,0" Style="{StaticResource InactiveTextBlock}" Text="Тип"/>
-        <ComboBox Style="{StaticResource UIOutlinedComboBox}" Grid.Column="3" Grid.Row="0" ItemsSource="{Binding Path=SettlementType}"
-                   Margin="5,20,10,0">
+        <ComboBox Style="{StaticResource UIOutlinedComboBox}" Grid.Column="3" ItemsSource="{Binding Path=SettlementType}" Margin="5,20,10,0">
             <ComboBox.SelectedItem>
-                <Binding Path="Settlement.Settlementtype">
+                <Binding Path="Settlement.SettlementType">
                     <Binding.ValidationRules>
+                        <!--<DataErrorValidationRule/>-->
                         <!--<validators:RequiredField ValidatesOnTargetUpdated="True"/>-->
                     </Binding.ValidationRules>
                 </Binding>

@@ -8,7 +8,7 @@
       xmlns:viewmodels="clr-namespace:PLSE_FoxPro.ViewModels"
       xmlns:local="clr-namespace:PLSE_FoxPro.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="650" d:DesignWidth="900"
+      d:DesignHeight="650" d:DesignWidth="900" Background="White" Name="mv"
       Title="AddEditSpeciality">
     <Page.Resources>
         <converters:NullableByteToStringConverter x:Key="NByteToStringConv"/>
@@ -16,7 +16,7 @@
     <Grid HorizontalAlignment="Left" Margin="40,20,0,0" VerticalAlignment="Top" Width="800">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="120"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition />
             <ColumnDefinition Width="auto"/>
@@ -34,7 +34,8 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <TextBlock Style="{StaticResource InactiveTextBlock}" Grid.Row="0" Text="Название" Margin="0,00,0,0"/>
-        <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Row="0" Margin="5,00,5,0" Grid.Column="1" Grid.ColumnSpan="3">
+        <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Row="0" Margin="5,00,5,0" Grid.Column="1" Grid.ColumnSpan="3"
+                 MaxLines="2" MinLines="2" TextWrapping="Wrap">
             <TextBox.Text>
                 <Binding Path="Speciality.Title" UpdateSourceTrigger="PropertyChanged">
                     <Binding.ValidationRules >
@@ -43,8 +44,8 @@
                 </Binding>
             </TextBox.Text>
         </TextBox>
-        <TextBlock Style="{StaticResource InactiveTextBlock}" Grid.Row="1" Text="Код" Margin="0,20,0,0"/>
-        <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Column="1" Grid.Row="1" Margin="5,20,5,0">
+        <TextBlock Style="{StaticResource InactiveTextBlock}" Grid.Row="2" Text="Код" Margin="0,20,0,0"/>
+        <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Column="1" Grid.Row="2" Margin="5,20,5,0">
             <TextBox.Text>
                 <Binding Path="Speciality.Code" UpdateSourceTrigger="PropertyChanged">
                     <Binding.ValidationRules>
@@ -53,18 +54,16 @@
                 </Binding>
             </TextBox.Text>
         </TextBox>
-        <TextBlock Style="{StaticResource InactiveTextBlock}" Text="Вид" Grid.Row="2" Margin="0,20,0,0"/>
-        <ComboBox Style="{StaticResource UIOutlinedComboBox}" Grid.Column="1" Grid.Row="2" Margin="5,20,5,0" Grid.ColumnSpan="3"
-                  SelectedItem="{Binding Path=Speciality.Species}"/>
+        <TextBlock Style="{StaticResource InactiveTextBlock}" Text="Вид" Grid.Row="1" Margin="0,20,0,0"/>
+        <ComboBox Style="{StaticResource UIOutlinedComboBox}" Grid.Column="1" Grid.Row="1" Margin="5,20,5,0" Grid.ColumnSpan="3"
+                  SelectedItem="{Binding Path=Speciality.Species}" ItemsSource="{Binding Path=SpecialityKinds}"/>
         <TextBlock Style="{StaticResource InactiveTextBlock}" Grid.Row="3" Margin="0,20,0,0" Text="Акроним"/>
         <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Row="3" Margin="5,20,5,0" Grid.Column="1" Text="{Binding Path=Speciality.Acronym}"/>
-        <materialDesign:PackIcon Style="{StaticResource HelpIcon}" ToolTip="Вид экспертизы согласно перечня родов (видов) судебных экспертиз, выполняемых в федеральных
-                                 бюджетных судебно-экспертных учреждениях Минюста России (утвержден приказом Минюста России от 27.12.2012 № 237, внесены изменения
-                                 приказом Минюста России от 29.10.2013 № 199)" Grid.Row="2" Grid.Column="4" Margin="0,20,0,0"/>
+        <materialDesign:PackIcon Style="{StaticResource HelpIcon}" ToolTip="Вид экспертизы согласно перечня родов (видов) судебных экспертиз, выполняемых в федеральных бюджетных судебно-экспертных&#10;учреждениях Минюста России (утвержден приказом Минюста России от 27.12.2012 № 237, внесены изменения&#10;приказом Минюста России от 29.10.2013 № 199)" Grid.Row="1" Grid.Column="4" Margin="0,20,0,0"/>
         <materialDesign:PackIcon Style="{StaticResource HelpIcon}" ToolTip="Сокращенное название специальности (для внутреннего пользования)" Grid.Row="3" Grid.Column="3"
                                  Margin="0,20,0,0"/>
-        <TextBlock Grid.Row="4" Grid.ColumnSpan="6" Margin="5,40,5,10" Text="Макс. количество часов по категориям" HorizontalAlignment="Center" Style="{StaticResource CaptionTextBlock}"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.ColumnSpan="6" Margin="5,10,5,0" HorizontalAlignment="Center">
+        <TextBlock Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Margin="65,40,5,0" Text="Макс. количество часов по категориям" HorizontalAlignment="Center" Style="{StaticResource CaptionTextBlock}"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="45,20,5,0" HorizontalAlignment="Center">
             <TextBlock Style="{StaticResource InactiveTextBlock}" Text="1 кат."/>
             <TextBox Style="{StaticResource UINumericOutlinedTextBox}" Margin="5,0,5,0" Name="cat1"
                      Text="{Binding Path=Speciality.Category_1,UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, Converter={StaticResource NByteToStringConv}}"/>
@@ -77,9 +76,9 @@
         </StackPanel>
         <CheckBox Style="{StaticResource MaterialDesignAccentCheckBox}" Grid.Column="4" Grid.Row="0" Content="Действует" TextBlock.FontSize="{StaticResource MediumFontSize}"
                   materialDesign:CheckBoxAssist.CheckBoxSize="30" IsChecked="{Binding Path=Speciality.IsValid}"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.ColumnSpan="6" HorizontalAlignment="Center" Margin="0,60,0,5">
-            <Button Style="{StaticResource SaveButtonFlat}" />
-            <Button Style="{StaticResource CancelButtonFlat}" Command="{Binding Path=SendMessage}"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.Column="3" HorizontalAlignment="Right" Margin="0,60,0,5">
+            <Button Style="{StaticResource SaveButtonFlat}" Command="{Binding Path=SaveCmd}" CommandParameter="{Binding ElementName=mv}"/>
+            <Button Style="{StaticResource CancelButtonFlat}" Command="{Binding Path=CancelCmd}"/>
         </StackPanel>
     </Grid>
 </Page>

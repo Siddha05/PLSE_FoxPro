@@ -30,7 +30,7 @@ namespace PLSE_FoxPro.Models
         /// <summary>
         /// Переводит в верхний регистр первую букву русского алфавита. Если первый символ не русская буква, вернет неизменную строку.
         /// </summary>
-        /// <remarks>В пять раз выделяет меньше памяти чем вариант Remove.Insert,Substring.ToUpper</remarks>
+        /// <remarks>В пять раз выделяет меньше памяти чем вариант Remove.Insert.Substring.ToUpper</remarks>
         /// <param name="s1"></param>
         /// <returns></returns>
         static public string ToUpperFirstRu(this string s1)

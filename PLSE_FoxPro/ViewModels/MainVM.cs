@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Toolkit.Mvvm.Messaging;
 using Microsoft.Toolkit.Mvvm.Messaging.Messages;
 using PLSE_FoxPro.Models;
@@ -90,29 +91,30 @@ namespace PLSE_FoxPro.ViewModels
 
         #region Commands
         public RelayCommand<Window> Exit => new RelayCommand<Window>(w => w.Close());
-        public RelayCommand OpenSpeciality => new RelayCommand(() => MessageBox.Show("Invoke OpenSpeciality")); 
+        public RelayCommand OpenSpeciality => new RelayCommand(() =>
+                                                                    {
+                                                                        Page p = new Pages.Specialities();
+                                                                        p.DataContext = new SpecialitiesVM();
+                                                                        AddPage(p, true);
+                                                                    }); 
         public RelayCommand OpenResolutionAdd => new RelayCommand(() => MessageBox.Show("Invoke OpenResolutionAdd"));
         public RelayCommand OpenEmployees => new RelayCommand(() => MessageBox.Show("Invoke OpenEmployee"));
         public RelayCommand OpenProfile => new RelayCommand(() => 
-                                                                {
-                                                                    Page p = new Pages.Profile();
-                                                                    p.DataContext = new ProfileVM(LoginEmployee);
-                                                                    AddPage(p);
-                                                                });
+                                                                    {
+                                                                        Page p = new Pages.Profile();
+                                                                        p.DataContext = new ProfileVM(LoginEmployee);
+                                                                        AddPage(p, true);
+                                                                    });
         public RelayCommand OpenExpertises => new RelayCommand(() => MessageBox.Show("Invoke OpenExpertise"));
         public RelayCommand WindowLoaded { get; }
         public RelayCommand OpenAboutPLSE => new RelayCommand(() => MessageBox.Show("Invoke OpenAbout"));
-        public RelayCommand OpenSettings => new RelayCommand(() => AddPage(new Pages.Settings()));
-        public RelayCommand Home => new RelayCommand(() => MessageBox.Show("Invoke Home"));
+        public RelayCommand OpenSettings => new RelayCommand(() => AddPage(new Pages.Settings(), true));
+        public RelayCommand HomeCmd => new RelayCommand(() => RemoveAllPages());
         public RelayCommand<Event> EventClose
         {
             get
             {
-                return _eventclose != null ? _eventclose : _eventclose = new RelayCommand<Event>(n =>
-                {
-                    var ev = n as Event;
-                    EventsList.Remove(ev);
-                });
+                return _eventclose ??= new RelayCommand<Event>(n => EventsList.Remove(n));
             }
         }
         public RelayCommand ExpertiseSummaryCmd => new RelayCommand(() => MessageBox.Show("Invoke ExpertiseSummaryCmd"));
@@ -147,19 +149,29 @@ namespace PLSE_FoxPro.ViewModels
         }
 
         #region Functions
-        public void AddPage(Page page)
+        public void AddPage(Page page, bool root = false)
         {
+            if (root) RemoveAllPages();
             _page_stack.Push(page);
             CurrentPage = page;
+            StatusMessage = GetStackPagesList();
         }
         public void RemovePage()
         {
             _page_stack.Pop();
             if (_page_stack.Count > 0) CurrentPage = _page_stack.Peek();
             else CurrentPage = null;
+            StatusMessage = GetStackPagesList();
         }
+        public void RemoveAllPages() 
+        {
+            CurrentPage = null;
+            _page_stack.Clear();
+            StatusMessage = GetStackPagesList();
+        }
+        public int PageStackDepth() => _page_stack.Count;
         public void AddStackMessage(Message message) => StackMessages.Add(message);
-        private void Timer_Tick(object sender, EventArgs e) => Date = DateTime.UtcNow;
+        private void Timer_Tick(object sender, EventArgs e) => Date = DateTime.Now;
         public void Greeting()
         {
             string s = DateTime.UtcNow switch
@@ -207,14 +219,10 @@ namespace PLSE_FoxPro.ViewModels
                 "Бисексуальность удваивает ваши шансы найти себе пару в субботу вечером.",
                 "Теория — это когда все известно, но ничего не работает. Практика — это когда все работает, но никто не знает почему. Мы же объединяем теорию и практику: ничего не работает... и никто не знает почему!"
             };
-        }
-        #endregion
-
-
-
+        }     
         public async void ScanAnnualDate()
         {
-            var l = await App.Storage.EmployeeAccessService.LoadAnnualDatesAsync(DateTime.UtcNow);
+            var l = await App.Services.GetService<ILocalStorage>().EmployeeAccessService.LoadAnnualDatesAsync(DateTime.UtcNow);
             foreach (var item in l)
             {
                 EventsList.Add(new Message(item + " празднует день рождения !!!", MessageType.Congratulation));//TODO: make FIO
@@ -243,7 +251,7 @@ namespace PLSE_FoxPro.ViewModels
         {
             try
             {
-                var res = await App.Storage.ExpertiseAccessService.LoadExpertiseInWorkAsync(LoginEmployee);
+                var res = await App.Services.GetService<ILocalStorage>().ExpertiseAccessService.LoadExpertiseInWorkAsync(LoginEmployee);
                 EventsList.Add(new ExpertisesInWorkOverview(res.Item1));
             }
             catch (Exception)
@@ -256,7 +264,7 @@ namespace PLSE_FoxPro.ViewModels
             return Task.Run(async () =>
             {
                 List<Expert> expired = new List<Expert>();
-                var l = await App.Storage.ExpertAccessService.LoadExpertSpecialitiesAsync(LoginEmployee);
+                var l = await App.Services.GetService<ILocalStorage>().ExpertAccessService.LoadExpertSpecialitiesAsync(LoginEmployee);
                 foreach (var item in l)
                 {
                     if (!item.IsValidAttestation)
@@ -267,13 +275,22 @@ namespace PLSE_FoxPro.ViewModels
                 return expired;
             });
         }    
+        private string GetStackPagesList()
+        {
+            string s = "Main";
+            foreach (var item in _page_stack.Reverse())
+            {
+                s += " > " + item.Title;
+            }
+            return s;
+        }
         public async void UploadEmployee()
         {
             if (LoginEmployee.UploadStatus == UploadResult.UnPerform || LoginEmployee.UploadStatus == UploadResult.Error)
             {
-                LoginEmployee.Employee_SlightPart = await App.Storage.EmployeeAccessService.LoadSlightPartAsync(LoginEmployee);
+                LoginEmployee.Employee_SlightPart = await App.Services.GetService<ILocalStorage>().EmployeeAccessService.LoadSlightPartAsync(LoginEmployee);
             }
         }
-        
+        #endregion
     }
 }

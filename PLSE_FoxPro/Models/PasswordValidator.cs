@@ -89,15 +89,15 @@ namespace PLSE_FoxPro.Models
             IsAllValidCharacters = _has_invalid ? false : true;
             HasMinLenght = _pass.Length >= _min_lenght;
             IsEquals = _pass.Equals(_pass_repeat, StringComparison.Ordinal);
-            OnPropertyChanged(nameof(IsValidState));
         }
         public bool IsValid()
         {
-            return _digit_required ? _has_digit : true 
-                    && _upper_required ? _has_upper : true
-                    && _has_all_valid 
-                    && _equals 
-                    && _has_min_lenght;
+            //return _digit_required ? _has_digit : true 
+            //        && _upper_required ? _has_upper : true
+            //        && _has_all_valid 
+            //        && _equals 
+            //        && _has_min_lenght;
+            return _has_min_lenght;
         }
         #endregion
         /// <summary>

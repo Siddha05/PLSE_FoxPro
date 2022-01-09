@@ -13,12 +13,11 @@
                                 <Border Background="White" BorderThickness="0" Name="brd">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseLeftButtonDown">
-                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}},Path=DataContext.SettlementSelect}"
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}},Path=DataContext.SettlementSelectCmd}"
                                                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
-                                    <TextBlock Margin="2" TextWrapping="Wrap" FontSize="{StaticResource MediumFontSize}" FontWeight="Bold"
-                                               Text="{Binding Path=., Mode=OneWay}"/>
+                                    <TextBlock Margin="2" TextWrapping="Wrap" FontSize="{StaticResource MediumFontSize}" Text="{Binding Path=., Mode=OneWay}"/>
                                 </Border>
                                 <DataTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="true">

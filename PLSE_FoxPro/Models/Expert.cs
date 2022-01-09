@@ -15,6 +15,7 @@ namespace PLSE_FoxPro.Models
         private bool _closed;
         private DateTime _last_modify_date;
         #endregion
+
         #region Properties
         [Required(ErrorMessage ="обязательное поле")]
         public Employee Employee

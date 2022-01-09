@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using System.Reflection;
 using PLSE_FoxPro.Models;
@@ -9,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Controls;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PLSE_FoxPro.ViewModels
 {
@@ -55,13 +55,13 @@ namespace PLSE_FoxPro.ViewModels
                     }
                     else 
                     {
-                        var e = App.Storage.EmployeeAccessService.Items().FirstOrDefault(n => n.Password == Password && n.Sname == Login);
+                        var e = App.Services.GetService<ILocalStorage>().EmployeeAccessService.Items().FirstOrDefault(v => v.Password == Password && v.Sname == Login);
                         if (e != null)
                         {
                             var wnd = new MainWindow();
                             App.MainViewModel.LoginEmployee = e;
                             wnd.Show();
-                            (n as Window).Close();
+                            n.Close();
                             if (Properties.Settings.Default.IsLastLoginSave)
                             {
                                 Properties.Settings.Default.LastLogin = Login;
@@ -110,8 +110,8 @@ namespace PLSE_FoxPro.ViewModels
         {
             return Task<InitializationStatus>.Run(() =>
             {
-                App.Storage.StatusChanged += StorageInitStatusChanged;
-                App.Storage.Inicialize();
+                App.Services.GetService<ILocalStorage>().StatusChanged += StorageInitStatusChanged;
+                App.Services.GetService<ILocalStorage>().Inicialize();
             });
         }
     }

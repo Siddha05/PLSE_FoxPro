@@ -1,0 +1,134 @@
+﻿<Page x:Class="PLSE_FoxPro.Pages.Specialities"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PLSE_FoxPro.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="850" d:DesignWidth="1200" Background="White" Tag="root"
+      Title="Specialities">
+    
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45"/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,2,10,2">
+            <Button Command="{Binding Path=NewSpecialityCmd}" Style="{StaticResource AddGreenButton}"/>
+            <Button Command="{Binding Path=EditSpecialityCmd}" CommandParameter="{Binding ElementName=grSpeciality, Path=SelectedItem}" 
+                    Margin="5,0,0,0" Style="{StaticResource EditOrangeButton}"/>
+            <Button Command="{Binding Path=DeleteSpecialityCmd}" Margin="5,0,0,0" Style="{StaticResource DeleteRedButton}" CommandParameter="{Binding ElementName=grSpeciality, Path=SelectedItem}"/>
+        </StackPanel>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Path=Specialities}" CanUserAddRows="False" GridLinesVisibility="None" Name="grSpeciality" Margin="2,5,2,5"
+                  AutoGenerateColumns="False" SelectionMode="Single" CanUserDeleteRows="False" SelectionUnit="FullRow" FontSize="{StaticResource MediumFontSize}"
+                  Background="White" >
+            <DataGrid.Resources>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Code, Mode=OneWay}" Width="75">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Style="{StaticResource GridHeaderTextBlock}" Text="Код"/>
+                    </DataGridTextColumn.Header>
+                    <!--<DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>-->
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Path=Title, Mode=OneWay}" Width="*">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Style="{StaticResource GridHeaderTextBlock}" Text="Специальность"/>
+                    </DataGridTextColumn.Header>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="190" Binding="{Binding Path=Acronym, Mode=OneWay}">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Style="{StaticResource GridHeaderTextBlock}" Text="Акроним"/>
+                    </DataGridTextColumn.Header>
+                    <!--<DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+                            <Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+                            <Setter Property="TextBlock.Height" Value="auto"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>-->
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Width="140" IsReadOnly="True">
+                    <DataGridTemplateColumn.Header>
+                        <TextBlock Style="{StaticResource GridHeaderTextBlock}" Text="Часы"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock VerticalAlignment="Center">
+                                <Run Text="{Binding Path=Category_1, TargetNullValue='?'}"/>
+                                <Run Text="/"/>
+                                <Run Text="{Binding Path=Category_2, TargetNullValue='?'}"/>
+                                <Run Text="/"/>
+                                <Run Text="{Binding Path=Category_3, TargetNullValue='?'}"/>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+            <DataGrid.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock FontSize="{StaticResource LargeFontSize}" FontWeight="DemiBold" HorizontalAlignment="Center"
+                                       Margin="0,20" FontStyle="Italic">
+                                <Run Text="{Binding Path=Name,  TargetNullValue='без категории', Mode=OneWay}"/>
+                                <Run Text="{Binding Path=ItemCount, StringFormat='({0})', Mode=OneWay}"/>
+                            </TextBlock>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+            <DataGrid.RowHeaderStyle>
+                <Style TargetType="{x:Type DataGridRowHeader}">
+                    <Setter Property="Width" Value="10"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Rectangle Fill="{StaticResource GoodState}" Name="rct" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                <ControlTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridRow}}, Path=Item.IsValid}" Value="false">
+                                        <Setter TargetName="rct" Property="Rectangle.Fill" Value="{StaticResource InactiveState}"/>
+                                    </DataTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.RowHeaderStyle>
+            <!--<DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Margin" Value="0,1"/>
+                    <Style.Triggers>
+                        --><!--<DataTrigger Binding="{Binding Path=IsValid}" Value="true">
+                            <Setter Property="Header" Value="Red"/>
+                        </DataTrigger>--><!--
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource MouseOverBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource SelectedItemBrush}"/>
+                            <Setter Property="TextBlock.Foreground" Value="White"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>-->
+        </DataGrid>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding Path=Specialities.Count, Mode=OneWay, StringFormat='Специальности: {0}'}"
+                   FontSize="{StaticResource MediumFontSize}" Margin="10,0,0,0"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Right" Margin="0,5,10,5">
+            <!--<Button Style="{StaticResource SaveButtonFlat}" />-->
+            <Button Style="{StaticResource CancelButtonFlat}" Command="{Binding Path=CancelCmd}"/>
+        </StackPanel>
+    </Grid>
+</Page>

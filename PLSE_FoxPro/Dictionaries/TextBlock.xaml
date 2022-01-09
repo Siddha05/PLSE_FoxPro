@@ -7,6 +7,15 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Right"/>
     </Style>
+
+    <Style TargetType="{x:Type TextBlock}" x:Key="GridHeaderTextBlock">
+        <Setter Property="FontSize" Value="{DynamicResource LargeFontSize}"/>
+        <Setter Property="FontWeight" Value="DemiBold"/>
+        <Setter Property="FontFamily" Value="Tahoma"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+
     <Style TargetType="{x:Type TextBlock}" x:Key="CaptionTextBlock">
         <Setter Property="FontSize" Value="{DynamicResource LargeFontSize}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>

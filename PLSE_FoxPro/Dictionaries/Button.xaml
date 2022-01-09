@@ -41,9 +41,12 @@
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="{x:Type Button}" x:Key="AddGreenButton" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
-        <Setter Property="Height" Value="26"/>
-        <Setter Property="Width" Value="26"/>
+    <Style TargetType="{x:Type Button}" x:Key="RoundUIButton" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+        <Setter Property="Height" Value="28"/>
+        <Setter Property="Width" Value="28"/>
+    </Style>
+
+    <Style TargetType="{x:Type Button}" x:Key="AddGreenButton" BasedOn="{StaticResource RoundUIButton}">
         <Setter Property="Content">
             <Setter.Value>
                 <materialDesign:PackIcon Kind="PlusThick" Height="24" Width="24" Foreground="White"/>
@@ -51,14 +54,22 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type Button}" x:Key="DeleteRedButton" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
-        <Setter Property="Height" Value="26"/>
-        <Setter Property="Width" Value="26"/>
+    <Style TargetType="{x:Type Button}" x:Key="DeleteRedButton" BasedOn="{StaticResource RoundUIButton}">
         <Setter Property="Background" Value="Red"/>
         <Setter Property="BorderBrush" Value="Red"/>
         <Setter Property="Content">
             <Setter.Value>
                 <materialDesign:PackIcon Kind="DeleteEmpty" Height="24" Width="24" Foreground="White"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type Button}" x:Key="EditOrangeButton" BasedOn="{StaticResource RoundUIButton}">
+        <Setter Property="Background" Value="#FFC107"/>
+        <Setter Property="BorderBrush" Value="#FFC107"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <materialDesign:PackIcon Kind="LeadPencil" Height="24" Width="24" Foreground="White"/>
             </Setter.Value>
         </Setter>
     </Style>

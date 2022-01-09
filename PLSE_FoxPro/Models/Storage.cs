@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
@@ -141,7 +142,7 @@ namespace PLSE_FoxPro.Models
             catch (Exception ex)
             {
                 SetStatusAndRaiseEvent(this, InitializationStatus.Faulted);
-                App.ErrorLogger.LogError(ex.Message);
+                App.Services.GetService<IErrorLogger>().LogError(ex.Message);
             }
         }
         private void SetStatusAndRaiseEvent(object sender, InitializationStatus status)
@@ -238,11 +239,21 @@ namespace PLSE_FoxPro.Models
                     }
                     _ranks = ranks;
                 }
+                //Speciality kinds
+                if (rd.NextResult())
+                {
+                    var kinds = new List<string>(30);
+                    while (rd.Read())
+                    {
+                        kinds.Add(rd.GetString(0));
+                    }
+                    _speciality_kinds = kinds;
+                }
                 rd.Close();
             }
             catch (Exception ex)
             {
-                App.ErrorLogger.LogError(ex.Message);
+                App.Services.GetService<IErrorLogger>().LogError(ex.Message);
                 throw;
             }
             finally

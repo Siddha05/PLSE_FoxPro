@@ -18,13 +18,14 @@ namespace PLSE_FoxPro.Models
         private bool _isvalid;
         private DateTime _last_modify_date;
         #endregion Fields
+
         #region Properties
         public bool IsValid
         {
             get { return _isvalid; }
             set => SetProperty(ref _isvalid, value);
         }
-        [Required][MaxLength(40)]
+        [Required(ErrorMessage ="обязательное поле"),MaxLength(40, ErrorMessage = "превышен лимит символов")]
         public string Title
         {
             get => _title;
@@ -33,7 +34,7 @@ namespace PLSE_FoxPro.Models
         /// <summary>
         /// Тип населенного пункта, например город, село, пгт и т.п.
         /// </summary>
-        [Required][MaxLength(20)]
+        [Required(ErrorMessage = "обязательное поле"), MaxLength(20, ErrorMessage = "превышен лимит символов")]
         public string SettlementType
         {
             get => _settlementtype;
@@ -43,7 +44,7 @@ namespace PLSE_FoxPro.Models
         /// Значимость населенного пункта, т.е. тип административной единицы РФ<para>
         /// Например областной, федеральный и т.п.</para>
         /// </summary>
-        [Required][MaxLength(15)]
+        [Required(ErrorMessage = "обязательное поле"), MaxLength(15, ErrorMessage = "превышен лимит символов")]
         public string Significance
         {
             get => _significance;
@@ -55,7 +56,7 @@ namespace PLSE_FoxPro.Models
             get => _telephonecode;
             set => SetProperty(ref _telephonecode, value, true);
         }
-        [RegularExpression(@"^[1-6][0-9]{5}$")] //TODO: regular expression for complex postcode like 233432-233501
+        [RegularExpression(@"^[1-6][0-9]{5}$", ErrorMessage = "неверный формат")] //TODO: regular expression for complex postcode like 233432-233501
         public string Postcode
         {
             get => _postcode;

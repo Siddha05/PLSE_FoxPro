@@ -1,10 +1,11 @@
 ﻿using System;
-using Microsoft.Toolkit.Mvvm.Input;
 using System.Text;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Controls;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using PLSE_FoxPro.Models;
 
 namespace PLSE_FoxPro.ViewModels
 {
@@ -69,12 +70,12 @@ namespace PLSE_FoxPro.ViewModels
                         Properties.Settings.Default.IsShowNearEvent = IsShowNearEvent;
                         Properties.Settings.Default.Save();
                         App.SendMessage("Настройки успешно сохранены");
-                        App.RemovePage();
+                        App.Services.GetService<IPagesService>().RemovePage();
                     }
                 });
             }
         }
-        public RelayCommand Cancel => new RelayCommand(() => App.RemovePage());
+        public RelayCommand Cancel => new RelayCommand(() => App.Services.GetService<IPagesService>().RemovePage());
         #endregion
         
         public SettingsVM()
