@@ -38,7 +38,7 @@ namespace PLSE_FoxPro.Models
             get => _descr;
             set => SetProperty(ref _descr, value, true);
         }
-        [Required(ErrorMessage = "обязательное поле")][MaxLength(100, ErrorMessage = "превышен лимит символов")]
+        [Required(ErrorMessage = "обязательное поле"), MaxLength(100, ErrorMessage = "превышен лимит символов")]
         public string EquipmentName
         {
             get => _eqname;

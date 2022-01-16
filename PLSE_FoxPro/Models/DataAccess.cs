@@ -1048,7 +1048,7 @@ namespace PLSE_FoxPro.Models
                 cmd.Connection.Close();
             }
         }
-        private Employee_SlightPart LoadSligthPart(Employee item)
+        public Employee_SlightPart LoadSligthPart(Employee item)
         {
             var cmd = _storage.DBConnection.CreateCommand();
             SqlDataReader rd = null;
@@ -1095,15 +1095,8 @@ namespace PLSE_FoxPro.Models
             }
             return part;
         }
-        public async Task<Employee_SlightPart> LoadSlightPartAsync(Employee item)
-        {
-            item.UploadStatus = UploadResult.Performing;
-            var task = Task.Run<Employee_SlightPart>(() => LoadSligthPart(item));
-            var result = await task;
-            if (task.IsFaulted) item.UploadStatus = UploadResult.Error;
-            else item.UploadStatus = UploadResult.Sucsess;
-            return result;
-        }
+        public async Task<Employee_SlightPart> LoadSlightPartAsync(Employee item) => await Task.Run<Employee_SlightPart>(() => LoadSligthPart(item));
+       
         public override Employee GetItemByID(int id)
         {
             SqlCommand cmd = _storage.DBConnection.CreateCommand();
@@ -2342,7 +2335,7 @@ namespace PLSE_FoxPro.Models
                     resolution = new Resolution(id: rd.GetInt32(0),
                                                 registrationdate: rd.GetDateTime(1),
                                                 resolutiondate: rd.IsDBNull(2) ? null : new DateTime?(rd.GetDateTime(2)),
-                                                resolutiontype: (ResolutionTypes)rd.GetByte(3),
+                                                resolutiontype: rd.GetString(3),
                                                 customer: _storage.CustomerAccessService.GetItemByID(rd.GetInt32(5)),
                                                 obj: rd.IsDBNull(6) ? null : rd.GetString(6),
                                                 prescribe: rd.IsDBNull(7) ? null : rd.GetString(7),
@@ -2382,7 +2375,7 @@ namespace PLSE_FoxPro.Models
             cmd.Transaction = tran;
             cmd.Parameters.Add("@RegDate", SqlDbType.Date).Value = item.RegistrationDate;
             cmd.Parameters.Add("@ResolDate", SqlDbType.Date).Value = ConvertToDBNull(item.ResolutionDate);
-            cmd.Parameters.Add("@TypeResol", SqlDbType.TinyInt).Value = (int)item.ResolutionType;
+            cmd.Parameters.Add("@TypeResol", SqlDbType.NVarChar,40).Value = ConvertToDBNull(item.ResolutionType);
             cmd.Parameters.Add("@Status", SqlDbType.NVarChar, 30).Value = item.ResolutionStatus;
             cmd.Parameters.Add("@CustID", SqlDbType.Int).Value = item.Customer.ID;
             cmd.Parameters.Add("@TypeCase", SqlDbType.Char, 1).Value = item.TypeCase.Code;
@@ -2417,7 +2410,7 @@ namespace PLSE_FoxPro.Models
             cmd.Transaction = tran;
             cmd.Parameters.Add("@RegDate", SqlDbType.Date).Value = item.RegistrationDate;
             cmd.Parameters.Add("@ResolDate", SqlDbType.Date).Value = ConvertToDBNull(item.ResolutionDate);
-            cmd.Parameters.Add("@TypeResol", SqlDbType.TinyInt).Value = (int)item.ResolutionType;
+            cmd.Parameters.Add("@TypeResol", SqlDbType.NVarChar,40).Value = ConvertToDBNull(item.ResolutionType);
             cmd.Parameters.Add("@Status", SqlDbType.NVarChar, 30).Value = item.ResolutionStatus;
             cmd.Parameters.Add("@CustID", SqlDbType.Int).Value = item.Customer.ID;
             cmd.Parameters.Add("@TypeCase", SqlDbType.Char, 1).Value = item.TypeCase.Code;
@@ -2577,7 +2570,7 @@ namespace PLSE_FoxPro.Models
                                                 id: resid,
                                                 registrationdate: rd.GetDateTime(colRegDate),
                                                 resolutiondate: rd.IsDBNull(colResolDate) ? null : new DateTime?(rd.GetDateTime(colResolDate)),
-                                                resolutiontype: (ResolutionTypes)rd.GetByte(colResolutionType),
+                                                resolutiontype: rd.GetString(colResolutionType),
                                                 customer: App.Services.GetService<ILocalStorage>().CustomerAccessService.GetItemByID(rd.GetInt32(colCustomerID)),
                                                 obj: rd.IsDBNull(colObjects) ? null : rd.GetString(colObjects),
                                                 quest: rd.IsDBNull(colQuestions) ? null : rd.GetString(colQuestions),
@@ -2600,11 +2593,11 @@ namespace PLSE_FoxPro.Models
                             _expertise = new Expertise(id: expid,
                                                         number: rd.GetString(colNumber),
                                                         expert: App.Services.GetService<ILocalStorage>().ExpertAccessService.GetItemByID(rd.GetInt32(colExpertID)),
-                                                        result: rd.IsDBNull(colExpertiseResult) ? ExpertiseResults.Unknown : (ExpertiseResults)rd.GetByte(colExpertiseResult),
+                                                        result: rd.IsDBNull(colExpertiseResult) ? null : rd.GetString(colExpertiseResult),
                                                         start: rd.GetDateTime(colStartDate),
                                                         end: rd.IsDBNull(colExecutionDate) ? null : new DateTime?(rd.GetDateTime(colExecutionDate)),
                                                         timelimit: rd.GetByte(colTimelimit),
-                                                        type: (ExpertiseTypes)rd.GetByte(colExpertiseType),
+                                                        type: rd.GetString(colExpertiseType),
                                                         previous: rd.IsDBNull(colPreviousExpertise) ? null : new Int32?(rd.GetInt32(colPreviousExpertise)),
                                                         spendhours: null,
                                                         vr: Version.Original);
@@ -2750,7 +2743,7 @@ namespace PLSE_FoxPro.Models
                                                 id: resid,
                                                 registrationdate: rd.GetDateTime(colRegDate),
                                                 resolutiondate: rd.IsDBNull(colResolDate) ? null : new DateTime?(rd.GetDateTime(colResolDate)),
-                                                resolutiontype: (ResolutionTypes)rd.GetByte(colResolutionType),
+                                                resolutiontype: rd.GetString(colResolutionType),
                                                 customer: App.Services.GetService<ILocalStorage>().CustomerAccessService.GetItemByID(rd.GetInt32(colCustomerID)),
                                                 obj: rd.IsDBNull(colObjects) ? null : rd.GetString(colObjects),
                                                 quest: rd.IsDBNull(colQuestions) ? null : rd.GetString(colQuestions),
@@ -2773,11 +2766,11 @@ namespace PLSE_FoxPro.Models
                             _expertise = new Expertise(id: exid,
                                                         number: rd.GetString(colNumber),
                                                         expert: App.Services.GetService<ILocalStorage>().ExpertAccessService.GetItemByID(rd.GetInt32(colExpertID)),
-                                                        result: rd.IsDBNull(colExpertiseResult) ? ExpertiseResults.Unknown : (ExpertiseResults)rd.GetByte(colExpertiseResult),
+                                                        result: rd.IsDBNull(colExpertiseResult) ? null : rd.GetString(colExpertiseResult),
                                                         start: rd.GetDateTime(colStartDate),
                                                         end: rd.IsDBNull(colExecutionDate) ? null : new DateTime?(rd.GetDateTime(colExecutionDate)),
                                                         timelimit: rd.GetByte(colTimelimit),
-                                                        type: (ExpertiseTypes)rd.GetByte(colExpertiseType),
+                                                        type: rd.GetString(colExpertiseType),
                                                         previous: rd.IsDBNull(colPreviousExpertise) ? null : new Int32?(rd.GetInt32(colPreviousExpertise)),
                                                         spendhours: null,
                                                         vr: Version.Original);
@@ -3172,13 +3165,12 @@ namespace PLSE_FoxPro.Models
             cmd.Transaction = tran;
             cmd.Parameters.Add("@Num", SqlDbType.VarChar, 5).Value = item.Number;
             cmd.Parameters.Add("@Expert", SqlDbType.Int).Value = item.Expert.ID;
-            if (item.ExpertiseResult == ExpertiseResults.Unknown) cmd.Parameters.Add("@Result", SqlDbType.TinyInt).Value = DBNull.Value;
-            else cmd.Parameters.Add("@Result", SqlDbType.TinyInt).Value = (byte)item.ExpertiseResult;
+            cmd.Parameters.Add("@Result", SqlDbType.TinyInt).Value = ConvertToDBNull(item.ExpertiseResult);
             cmd.Parameters.Add("@StartDate", SqlDbType.Date).Value = item.StartDate;
             cmd.Parameters.Add("@ExDate", SqlDbType.Date).Value = ConvertToDBNull(item.EndDate);
             cmd.Parameters.Add("@Limit", SqlDbType.TinyInt).Value = item.TimeLimit;
             cmd.Parameters.Add("@Resol", SqlDbType.Int).Value = item.FromResolution.ID;
-            cmd.Parameters.Add("@Type", SqlDbType.TinyInt).Value = (byte)item.ExpertiseType;
+            cmd.Parameters.Add("@Type", SqlDbType.TinyInt).Value = ConvertToDBNull(item.ExpertiseType);
             cmd.Parameters.Add("@PreviousResolution", SqlDbType.Int).Value = ConvertToDBNull(item.PreviousExpertise);
             var par = cmd.Parameters.Add("@InsertedID", SqlDbType.Int);
             par.Direction = ParameterDirection.Output;
@@ -3201,13 +3193,12 @@ namespace PLSE_FoxPro.Models
             cmd.Transaction = tran;
             cmd.Parameters.Add("@Num", SqlDbType.VarChar, 5).Value = item.Number;
             cmd.Parameters.Add("@Expert", SqlDbType.Int).Value = item.Expert.ID;
-            if (item.ExpertiseResult == ExpertiseResults.Unknown) cmd.Parameters.Add("@Result", SqlDbType.TinyInt).Value = DBNull.Value;
-            else cmd.Parameters.Add("@Result", SqlDbType.TinyInt).Value = (byte)item.ExpertiseResult;
+            cmd.Parameters.Add("@Result", SqlDbType.TinyInt).Value = ConvertToDBNull(item.ExpertiseResult);
             cmd.Parameters.Add("@StartDate", SqlDbType.Date).Value = item.StartDate;
             cmd.Parameters.Add("@ExDate", SqlDbType.Date).Value = ConvertToDBNull(item.EndDate);
             cmd.Parameters.Add("@Limit", SqlDbType.TinyInt).Value = item.TimeLimit;
             cmd.Parameters.Add("@Resol", SqlDbType.Int).Value = item.FromResolution.ID;
-            cmd.Parameters.Add("@Type", SqlDbType.TinyInt).Value = (byte)item.ExpertiseType;
+            cmd.Parameters.Add("@Type", SqlDbType.NVarChar, 40).Value = item.ExpertiseType;
             cmd.Parameters.Add("@PreviousResolution", SqlDbType.Int).Value = ConvertToDBNull(item.PreviousExpertise);
             cmd.Parameters.Add("@SpendHours", SqlDbType.SmallInt).Value = ConvertToDBNull(item.SpendHours);
             cmd.Parameters.Add("@NObject", SqlDbType.SmallInt).Value = ConvertToDBNull(item.ObjectsCount);
@@ -3424,11 +3415,11 @@ namespace PLSE_FoxPro.Models
                                 _exp = new Expertise(id: curID,
                                                      number: rd.GetString(colNumber),
                                                      expert: _storage.ExpertAccessService.GetItemByID(rd.GetInt32(colExpertID)),
-                                                     result: ExpertiseResults.Unknown,
+                                                     result: null,
                                                      start: rd.GetDateTime(colStartDate),
                                                      end: null,
                                                      timelimit: rd.GetByte(colTimelimit),
-                                                     type: (ExpertiseTypes)rd.GetByte(colExpertiseType),
+                                                     type: rd.GetString(colExpertiseType),
                                                      previous: null,
                                                      spendhours: null,
                                                      vr: Version.Original);

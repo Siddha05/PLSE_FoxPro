@@ -20,7 +20,7 @@ namespace PLSE_FoxPro.Models
             get => _equip;
             set => SetProperty(ref _equip, value, true);
         }
-        [Required(ErrorMessage = "обязательное поле")][Range(1,8, ErrorMessage = "Длительность должна быть в интервале 1-8")]
+        [Required(ErrorMessage = "обязательное поле"),Range(1,8, ErrorMessage = "Длительность должна быть в интервале 1-8")]
         public byte Duration
         {
             get { return _duration; }

@@ -97,14 +97,16 @@ namespace PLSE_FoxPro.ViewModels
                                                                         p.DataContext = new SpecialitiesVM();
                                                                         AddPage(p, true);
                                                                     }); 
-        public RelayCommand OpenResolutionAdd => new RelayCommand(() => MessageBox.Show("Invoke OpenResolutionAdd"));
+        public RelayCommand OpenResolutionAdd => new RelayCommand(() => AddPage(new Pages.AddResolution(), true));
         public RelayCommand OpenEmployees => new RelayCommand(() => MessageBox.Show("Invoke OpenEmployee"));
         public RelayCommand OpenProfile => new RelayCommand(() => 
                                                                     {
                                                                         Page p = new Pages.Profile();
                                                                         p.DataContext = new ProfileVM(LoginEmployee);
                                                                         AddPage(p, true);
-                                                                    });
+                                                                    },
+                                                                        () => true//LoginEmployee.UploadStatus == UploadResult.Sucsess
+                                                                    );
         public RelayCommand OpenExpertises => new RelayCommand(() => MessageBox.Show("Invoke OpenExpertise"));
         public RelayCommand WindowLoaded { get; }
         public RelayCommand OpenAboutPLSE => new RelayCommand(() => MessageBox.Show("Invoke OpenAbout"));
@@ -144,6 +146,7 @@ namespace PLSE_FoxPro.ViewModels
                     ScanAnnualDate();
                 }
             });
+            _laboratory = App.Services.GetService<ILocalStorage>().LaboratoryAccessService.GetItemByID(1); //TODO: async
             timer.Tick += Timer_Tick;
             timer.Start();
         }
@@ -284,12 +287,9 @@ namespace PLSE_FoxPro.ViewModels
             }
             return s;
         }
-        public async void UploadEmployee()
+        public void UploadEmployee()
         {
-            if (LoginEmployee.UploadStatus == UploadResult.UnPerform || LoginEmployee.UploadStatus == UploadResult.Error)
-            {
-                LoginEmployee.Employee_SlightPart = await App.Services.GetService<ILocalStorage>().EmployeeAccessService.LoadSlightPartAsync(LoginEmployee);
-            }
+            var s = LoginEmployee.Employee_SlightPart.Birthdate;
         }
         #endregion
     }

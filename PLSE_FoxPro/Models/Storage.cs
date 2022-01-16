@@ -51,10 +51,9 @@ namespace PLSE_FoxPro.Models
         IReadOnlyList<string> Genders { get; }
         IReadOnlyList<string> SpecialityKinds { get; }
         IReadOnlyList<MovementInfo> ExpertiseMovements { get; }
-        //IReadOnlyDictionary<ExpertiseTypes, string> ExpertiseTypesMap { get; }
-        //IReadOnlyDictionary<ResolutionTypes, string> ResolutionTypesMap { get; }
-        //IReadOnlyDictionary<string, ExpertiseResults> ExpertiseResultsMap { get; }
-        //IReadOnlyDictionary<string, ExpertiseTypes> ExpertiseTypesMapInv { get; }
+        IReadOnlyCollection<string> ExpertiseTypes { get; }
+        IReadOnlyCollection<string> ExpertiseResults { get; }
+        IReadOnlyCollection<string> ResolutionTypes { get; }
         //Employee[] GetAdministration();
         /// <summary>
         /// Инициализирует хранилище и инициирует событие StatusChanged
@@ -82,6 +81,9 @@ namespace PLSE_FoxPro.Models
         IReadOnlyList<string> _speciality_kinds;
         IReadOnlyList<string> _genders;
         IReadOnlyList<MovementInfo> _movements;
+        IReadOnlyCollection<string> _expertise_types;
+        IReadOnlyCollection<string> _expertise_result;
+        IReadOnlyCollection<string> _resolution_types;
         LaboratoryDataAccess _lab_da;
         SpecialityDataAccess _speciality_da;
         OrganizationsDataAccess _organization_da;
@@ -104,14 +106,14 @@ namespace PLSE_FoxPro.Models
         public IReadOnlyList<Expertise> ExpertisesInWork => throw new NotImplementedException();
         public LaboratoryDataAccess LaboratoryAccessService => _lab_da;
         public SpecialityDataAccess SpecialityAccessService => _speciality_da ??= new SpecialityDataAccessCached(this);
-        public OrganizationsDataAccess OrganizationAccessService => throw new NotImplementedException();
+        public OrganizationsDataAccess OrganizationAccessService => _organization_da ??= new OrganizationsDataAccess(this);
         public SettlementsDataAccess SettlementAccessService => _settlement_da;
         public EmployeeDataAccess EmployeeAccessService => _employee_da;
         public ExpertDataAccess ExpertAccessService => _expert_da ??= new ExpertDataAccess(this);
         public EquipmentDataAccess EquipmentAccessService => throw new NotImplementedException();
         public EquipmentUsageDataAccess EquipmentUsageAccessService => throw new NotImplementedException();
         public DepartamentDataAccess DepartamentsAccessService => _departament;
-        public CustomerDataAccess CustomerAccessService => throw new NotImplementedException();
+        public CustomerDataAccess CustomerAccessService => _customer_da ??= new CustomerDataAccess(this);
         public ResolutionDataAccess ResolutionAccessService => throw new NotImplementedException();
         public ExpertiseDataAccess ExpertiseAccessService => throw new NotImplementedException();
         public BillDataAccess BillAccessService => throw new NotImplementedException();
@@ -128,6 +130,9 @@ namespace PLSE_FoxPro.Models
         public IReadOnlyList<string> Genders => _genders;
         public IReadOnlyList<string> SpecialityKinds => _speciality_kinds;
         public IReadOnlyList<MovementInfo> ExpertiseMovements => _movements;
+        public IReadOnlyCollection<string> ExpertiseTypes => _expertise_types;
+        public IReadOnlyCollection<string> ExpertiseResults => _expertise_result;
+        public IReadOnlyCollection<string> ResolutionTypes => _resolution_types;
         #endregion
 
         #region Functions
@@ -249,6 +254,33 @@ namespace PLSE_FoxPro.Models
                     }
                     _speciality_kinds = kinds;
                 }
+                if (rd.NextResult())
+                {
+                    var expt = new List<string>(3);
+                    while (rd.Read())
+                    {
+                        expt.Add(rd.GetString(0));
+                    }
+                    _expertise_types = expt;
+                }
+                if (rd.NextResult())
+                {
+                    var rest = new List<string>(4);
+                    while (rd.Read())
+                    {
+                        rest.Add(rd.GetString(0));
+                    }
+                    _resolution_types = rest;
+                }
+                if(rd.NextResult())
+                {
+                    var expr = new List<string>(2);
+                    while (rd.Read())
+                    {
+                        expr.Add(rd.GetString(0));
+                    }
+                    _expertise_result = expr;
+                }
                 rd.Close();
             }
             catch (Exception ex)
@@ -267,6 +299,7 @@ namespace PLSE_FoxPro.Models
 
         public Storage_Cached()
         {
+            
             _lab_da = new LaboratoryDataAccess(this);
             _settlement_da = new SettlementsDataAccessCached(this);
             _employee_da = new EmployeeDataAccessCached(this);

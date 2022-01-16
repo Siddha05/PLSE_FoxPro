@@ -1,0 +1,73 @@
+﻿<Page x:Class="PLSE_FoxPro.Pages.AddEditBill"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:converters="clr-namespace:PLSE_FoxPro.Converters"
+      xmlns:local="clr-namespace:PLSE_FoxPro.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="650" d:DesignWidth="900" Background="White"
+      Title="AddEditBill">
+    <Grid Margin="10,20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="170"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Style="{StaticResource InactiveTextBlock}" Text="Номер счета"/>
+        <TextBlock Text="Дата счета" Grid.Column="0" Grid.Row="1" Margin="0,20,0,0" Style="{StaticResource InactiveTextBlock}"/>
+        <TextBox Style="{StaticResource UIOutlinedTextBox}" Margin="5,0,5,0" Grid.Column="1" Text="{Binding Path=Bill.Number, ValidatesOnDataErrors=True}"/>
+        <DatePicker Grid.Column="1" Grid.Row="1" Style="{StaticResource UIOutlinedDatePicker}" Margin="5,20,5,0" VerticalAlignment="Center" 
+                    SelectedDate="{Binding Path=Bill.BillDate, ValidatesOnDataErrors=True}"/>
+        <TextBlock Style="{StaticResource InactiveTextBlock}" Text="Плательщик" Grid.Row="2" Margin="0,20,0,0"/>
+        <ComboBox IsEditable="True" Grid.Row="2" Grid.ColumnSpan="4" Grid.Column="1" ItemsSource="{Binding Path=CommonPayers}" SelectedItem="{Binding Path=Bill.Payer}"
+                  Margin="5,20,5,0" Style="{StaticResource UIOutlinedComboBox}" Background="White" Width="400" HorizontalAlignment="Left"
+                  materialDesign:HintAssist.Hint="Выберите или введите"/>
+        <TextBlock Style="{StaticResource InactiveTextBlock}" Text="Цена часа" Grid.Row="3" Margin="0,20,0,0"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,5,0" 
+                 Text="{Binding Path=Bill.HourPrice, StringFormat={}{0:c}, ConverterCulture='ru-Ru'}" />
+        <TextBlock Grid.Row="4" Text="Часов" Grid.Column="0" Style="{StaticResource InactiveTextBlock}" Margin="0,20,0,0"/>
+        <TextBox Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,5,0" Grid.Column="1" Grid.Row="4"
+                 Text="{Binding Path=Bill.Hours, ValidatesOnExceptions=True, ValidatesOnDataErrors=True}"/>
+        <materialDesign:PackIcon Grid.Row="4" Grid.Column="2" Style="{StaticResource HelpIcon}" Margin="0,20,0,0">
+            <materialDesign:PackIcon.ToolTip>
+                <TextBlock Text="Количество часов не должно превышать дапустимыe 3 категорией для данного вида экспертиз" TextWrapping="Wrap"/>
+            </materialDesign:PackIcon.ToolTip>
+        </materialDesign:PackIcon>
+        <TextBlock Grid.Row="3" Grid.Column="3" Grid.RowSpan="2" FontSize="{StaticResource LargeFontSize}"
+                   VerticalAlignment="Center" Margin="10,0,0,0" Foreground="{StaticResource HighlightedTextBlue}" HorizontalAlignment="Left">
+            <TextBlock.Text>
+                <MultiBinding Mode="OneWay" StringFormat="Сумма счета: {0:c}" ConverterCulture="ru-RU" UpdateSourceTrigger="PropertyChanged">
+                    <MultiBinding.Converter>
+                        <converters:BillPriceConverter/>
+                    </MultiBinding.Converter>
+                    <Binding Path="Bill.Hours" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                    <Binding Path="Bill.HourPrice" Mode="OneWay" UpdateSourceTrigger="PropertyChanged"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+        <TextBlock Grid.Row="5" Text="Оплачено" Style="{StaticResource InactiveTextBlock}" Margin="0,20,0,0"/>
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="Дата оплаты" Style="{StaticResource InactiveTextBlock}" Margin="0,20,0,0"/>
+        <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Row="5" Grid.Column="1" Margin="5,20,5,0" 
+                     Text="{Binding Path=Bill.Paid, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, StringFormat={}{0:c}, ConverterCulture='ru-RU'}"/>
+        <DatePicker Style="{StaticResource UIOutlinedDatePicker}" Grid.Row="6" Grid.Column="1" SelectedDate="{Binding Path=Bill.PaidDate, ValidatesOnDataErrors=True}"
+                        Margin="5,20,5,0"/>
+        <materialDesign:PackIcon Grid.Row="6" Grid.Column="2" Style="{StaticResource HelpIcon}" ToolTip="Последняя дата оплаты" Margin="0,20,0,0"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="3" HorizontalAlignment="Left" Margin="10,30,0,0">
+            <Button Style="{StaticResource SaveButtonFlat}" Command="{Binding Path=SaveCmd}"/>
+            <Button Style="{StaticResource CancelButtonFlat}" Command="{Binding Path=CancelCmd}"/>
+        </StackPanel>
+    </Grid>
+</Page>

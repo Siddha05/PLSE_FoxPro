@@ -9,7 +9,7 @@ namespace PLSE_FoxPro.Models
 {
     public enum Version
     {
-        Unlnown = 0,
+        Unknown = 0,
         New,
         Original,
         Edited
@@ -39,9 +39,10 @@ namespace PLSE_FoxPro.Models
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
              base.OnPropertyChanged(e);
-            if (_version == Version.Original || _version == Version.Unlnown) _version = Version.Edited;
+            if (e.PropertyName == nameof(Version)) return;
+            if (_version == Version.Original || _version == Version.Unknown) _version = Version.Edited;
             _object_update = DateTime.Now;
-            Debug.WriteLine($"Property {e.PropertyName} changed to {_version}", "VersionBase");
+            Debug.WriteLine($"Object {this.GetType().Name} changed to version {_version} (init property {e.PropertyName})", "VersionBase");
         }
         public void Validate() => ValidateAllProperties();
         public void ValidateProperty() => ValidateProperty();

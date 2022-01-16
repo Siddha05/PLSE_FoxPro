@@ -35,12 +35,11 @@ namespace PLSE_FoxPro.Models
             _type = type;
         }
         public override string ToString() => _type;
-        public override bool Equals(object obj) => Equals((CaseType)obj);
+        //public override bool Equals(object obj) => Equals((CaseType)obj);
         public override int GetHashCode() => _code.GetHashCode();
         
         public bool Equals([AllowNull] CaseType other) => Type == other.Type && Code == other.Code;
         
-
     }
     
     public sealed class Resolution : VersionBase
@@ -48,7 +47,7 @@ namespace PLSE_FoxPro.Models
         #region Fields
         private DateTime _regdate;
         private DateTime? _resdate;
-        private ResolutionTypes _restype;
+        private string _restype;
         private Customer _customer;
         private readonly NumberingObservableCollection _objects = new NumberingObservableCollection();
         private string _prescribetype;
@@ -99,7 +98,7 @@ namespace PLSE_FoxPro.Models
             get => _customer;
             set => SetProperty(ref _customer, value, true);
         }
-        public ResolutionTypes ResolutionType
+        public string ResolutionType
         {
             get => _restype;
             set => SetProperty(ref _restype, value, true);
@@ -187,7 +186,7 @@ namespace PLSE_FoxPro.Models
             _expertisies.CollectionChanged += ExpertiseListChanged;
         }
         public static Resolution New => new Resolution() { RegistrationDate = DateTime.Now, ResolutionStatus = "рассмотрение" };
-        public Resolution(int id, DateTime registrationdate, DateTime? resolutiondate, ResolutionTypes resolutiontype, Customer customer, string obj, string prescribe,
+        public Resolution(int id, DateTime registrationdate, DateTime? resolutiondate, string resolutiontype, Customer customer, string obj, string prescribe,
                             string quest, bool nativenumeration, string status, string casenumber, string respondent, string plaintiff, string uidcase,
                             CaseType typecase, string annotate, string comment, Version vr) : base(id, vr)
         {

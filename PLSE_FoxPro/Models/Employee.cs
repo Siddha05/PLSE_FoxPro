@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Windows;
 public enum UploadResult
 {
     UnPerform = 0,
@@ -65,11 +68,19 @@ namespace PLSE_FoxPro.Models
         }
         public Employee_SlightPart Employee_SlightPart
         {
-            get => System.Threading.LazyInitializer.EnsureInitialized(ref _slightpart, () => FetchSlight() );
-            set
+            get
             {
-                SetProperty(ref _slightpart, value);
-                _slightpart.PropertyChanged += _slightpart_PropertyChanged;
+                if (_slightpart is null)
+                {
+                    Employee_SlightPart res = FetchSlight();
+                    if (res != null)
+                    {
+                        System.Threading.Interlocked.CompareExchange(ref _slightpart, res, null);
+                        _slightpart.PropertyChanged += _slightpart_PropertyChanged;
+                    }
+                    else throw new InvalidOperationException("FetchSlight returned null");
+                }
+                return _slightpart;
             }
         }
         public static Employee New => new Employee() { Version = Version.New };
@@ -101,7 +112,7 @@ namespace PLSE_FoxPro.Models
         {
             return new Employee(id: ID, departament: _departament, office: _inneroffice, firstname: _fname, middlename: _mname, secondname: _sname, gender: _gender,
                                 declinated: _declinated, emplstatus: _employeeStaus, profile: _profile, password: _password, uploadstatus: _upload,
-                                vr: Version, updatedate: DBModifyDate, slightPart: _slightpart.Clone(), foto: _foto);
+                                vr: Version, updatedate: DBModifyDate, slightPart: _slightpart?.Clone(), foto: _foto);
         }
         object ICloneable.Clone() => Clone();
         #endregion
@@ -130,29 +141,26 @@ namespace PLSE_FoxPro.Models
             _slightpart = slightPart;
             _upload = uploadstatus;
         }
-        private void _slightpart_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            OnPropertyChanged(e.PropertyName);
-        }
+        private void _slightpart_PropertyChanged(object sender, PropertyChangedEventArgs e) => OnPropertyChanged(e);
         private Employee_SlightPart FetchSlight()
         {
+            var version_old = this.Version;
             UploadStatus = UploadResult.Performing;
             Employee_SlightPart res = null;
             try
             {
-                //res = App.PLSE_Storage.EmployeeAccessService.DownloadEmployeeSligth(this);
-                res = new Employee_SlightPart(null, null, null, null, null, null, null, null, null, null, false);
+                res = App.Services.GetService<ILocalStorage>().EmployeeAccessService.LoadSligthPart(this);
                 UploadStatus = UploadResult.Sucsess;
             }
             catch (Exception)
             {
                 UploadStatus = UploadResult.Error;
             }
+            this.Version = version_old;
             return res;
         }
-        
     }
-    public class Employee_SlightPart : VersionBase, ICloneable
+    public class Employee_SlightPart : ObservableValidator, ICloneable
     {
         #region Fields
         private DateTime? _birthdate;
@@ -245,10 +253,7 @@ namespace PLSE_FoxPro.Models
             adress?.Copy(_adress);
             _adress.PropertyChanged += _adress_PropertyChanged;
         }
-        private void _adress_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            OnPropertyChanged(e.PropertyName);
-        }
+        private void _adress_PropertyChanged(object sender, PropertyChangedEventArgs e) => OnPropertyChanged(e.PropertyName);
         object ICloneable.Clone() => Clone();
         public Employee_SlightPart Clone()
         {

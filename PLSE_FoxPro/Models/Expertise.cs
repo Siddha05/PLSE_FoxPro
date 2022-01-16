@@ -32,11 +32,11 @@ namespace PLSE_FoxPro.Models
         private string _number;
         private Expert _expert;
         private Resolution _resolution;
-        private ExpertiseResults _result;
+        private string _result;
         private DateTime _startdate;
         private DateTime? _enddate;
         private byte _timelimit;
-        private ExpertiseTypes _type;
+        private string _type;
         private int? _prevexp;
         private short? _spendhours;
         private short? _nobj;
@@ -66,7 +66,7 @@ namespace PLSE_FoxPro.Models
             get => _prevexp;
             set => SetProperty(ref _prevexp, value);
         }
-        public ExpertiseTypes ExpertiseType
+        public string ExpertiseType
         {
             get => _type;
             set => SetProperty(ref _type, value);
@@ -93,7 +93,7 @@ namespace PLSE_FoxPro.Models
             get => _startdate;
             set => SetProperty(ref _startdate, value, true);
         }
-        public ExpertiseResults ExpertiseResult
+        public string ExpertiseResult
         {
             get => _result;
             set => SetProperty(ref _result, value, true);
@@ -216,7 +216,7 @@ namespace PLSE_FoxPro.Models
         /// <summary>
         /// Является ли экспертиза платной
         /// </summary>
-        public static Expertise New => new Expertise() { _startdate = DateTime.Now, _timelimit = 30, _type = ExpertiseTypes.Unknown };
+        public static Expertise New => new Expertise() { _startdate = DateTime.Now, _timelimit = 30};
         #endregion
 
         #region Function
@@ -349,7 +349,7 @@ namespace PLSE_FoxPro.Models
         #endregion
 
         private Expertise() : base() { }
-        public Expertise(int id, string number, Expert expert, ExpertiseResults result, DateTime start, DateTime? end, byte timelimit, ExpertiseTypes type, int? previous,
+        public Expertise(int id, string number, Expert expert, string result, DateTime start, DateTime? end, byte timelimit, string type, int? previous,
                         short? spendhours, Version vr) : base(id, vr)
         {
             _number = number;
@@ -362,7 +362,7 @@ namespace PLSE_FoxPro.Models
             _prevexp = previous;
             _spendhours = spendhours;
         }
-        private Expertise(int id, string number, Expert expert, Resolution resolution, ExpertiseResults result, DateTime start, DateTime? end, byte timelimit, ExpertiseTypes type, int? previous,
+        private Expertise(int id, string number, Expert expert, Resolution resolution, string result, DateTime start, DateTime? end, byte timelimit, string type, int? previous,
                         short? spendhours, short? nobjects, short? ncatanswers, short? nprobanswers, short? naltanswers, short? nnpvmetodanswers, short? nnpvmeterialanswers, short? nnpvcompanswers,
                         short? nnpvotheranswers, string comment, int? eval, IEnumerable<ExpertiseMovement> movements, IEnumerable<Bill> bills,
                         IEnumerable<EquipmentUsage> equipmentusages, Version vr) : base(id, vr)

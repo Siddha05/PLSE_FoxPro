@@ -104,10 +104,7 @@ namespace PLSE_FoxPro.Models
             return sb.ToString();
         }
         
-        object ICloneable.Clone()
-        {
-            return Clone();
-        }
+        object ICloneable.Clone() => Clone();
         public Adress Clone() => new Adress(_settlement?.Clone(), _streetprefix, _street, _housing, _flat, _corpus, _structure);
         /// <summary>
         /// Копирует состояние объекта в <paramref name="adress"/>
