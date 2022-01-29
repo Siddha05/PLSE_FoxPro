@@ -21,6 +21,7 @@ namespace PLSE_FoxPro.Models
         protected bool _status;
         protected DateTime _last_modify_date;
         #endregion
+
         #region Properties
         public bool IsValid
         {

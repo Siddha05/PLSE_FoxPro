@@ -15,6 +15,7 @@ namespace PLSE_FoxPro.Models
         Expertise,
         Bill
     }
+
     public class GreaterThenAttribute : ValidationAttribute
     {
         public string PropertyName { get; }
@@ -47,7 +48,11 @@ namespace PLSE_FoxPro.Models
                 if (string.IsNullOrWhiteSpace(val)) return true;
                 else return Regex.IsMatch(val, Pattern);
             }
-            return Regex.IsMatch(val, Pattern);
+            else
+            {
+                if (string.IsNullOrWhiteSpace(val)) return false;
+                else return Regex.IsMatch(val, Pattern);
+            }
         }
         public NumberAttribute(ValidationNumberType type)
         {

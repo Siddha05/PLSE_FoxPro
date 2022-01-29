@@ -1,4 +1,159 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:converters="clr-namespace:PLSE_FoxPro.Converters">
+
+    <DataTemplate x:Key="NumerableContentDataTemplate">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock FontSize="{StaticResource LargeFontSize}" VerticalAlignment="Center" Grid.Column="0" Name="tbNum"
+                       Text="{Binding Path=Number, StringFormat='{}{0}.'}" Opacity="1" HorizontalAlignment="Center"
+                       Foreground="Blue" FontWeight="Bold">
+            </TextBlock>
+            <Button Style="{StaticResource CrosshairButton}" Opacity="0" Name="bDel"
+                    Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}}, Path=DataContext.DeleteContentCmd}"
+                    CommandParameter="{Binding}" Panel.ZIndex="2">
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard Storyboard.TargetName="tbNum" Storyboard.TargetProperty="Opacity">
+                                <DoubleAnimation Duration="0:0:0" To="0"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                        <BeginStoryboard>
+                            <Storyboard Storyboard.TargetName="bDel" Storyboard.TargetProperty="Opacity">
+                                <DoubleAnimation Duration="0:0:0" To="1" BeginTime="0:0:0.1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard >
+                            <Storyboard Storyboard.TargetName="tbNum" Storyboard.TargetProperty="Opacity">
+                                <DoubleAnimation Duration="0:0:0" To="1" BeginTime="0:0:0.1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                        <BeginStoryboard>
+                            <Storyboard Storyboard.TargetName="bDel" Storyboard.TargetProperty="Opacity">
+                                <DoubleAnimation Duration="0:0:0" To="0" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Button.Triggers>
+            </Button>
+            <TextBox Text="{Binding Path=Content}" Margin="5,0,0,0" TextWrapping="Wrap" Grid.Column="1"/>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="CustomerPopUpDataTemplate">
+        <Grid>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseRightButtonUp">
+                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}},Path=DataContext.OpenCustomerCmd}"
+                                           CommandParameter="{Binding}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseLeftButtonUp">
+                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}},Path=DataContext.CustomerSelectCmd}"
+                                           CommandParameter="{Binding}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <!--<lvc:Gauge Uses360Mode="True" Value="{Binding Path=Completeness, Mode=OneWay}" To="100" From="0" HorizontalAlignment="Right" Margin="0,5,5,0"
+                                                       Grid.RowSpan="1" HighFontSize="12" Height="41" Width="41">
+                </lvc:Gauge>-->
+            <TextBlock Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,5,2">
+                <TextBlock.Text>
+                    <Binding Path="DBModifyDate" Mode="OneWay">
+                        <Binding.Converter>
+                            <converters:TimeAgoConverter/>
+                        </Binding.Converter>
+                    </Binding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock Grid.ColumnSpan="2" Margin="4,2,50,2" TextTrimming="CharacterEllipsis">
+                    <Run Text="{Binding Path=Office, Mode=OneWay}"/>
+                    <Run Text="{Binding Path=Fio, Mode=OneWay}" FontWeight="DemiBold" FontSize="{StaticResource MediumFontSize}"/>
+                    <Run Text="{Binding Path=Rank, Mode=OneWay, TargetNullValue='', StringFormat=',{0}'}"/>
+                    <LineBreak/>
+                    <Run Text="{Binding Path=Departament, TargetNullValue='', Mode=OneWay, StringFormat='{}{0},'}"/>
+                    <Run Text="{Binding Path=Organization, Mode=OneWay}"/>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="5,5,0,2" HorizontalAlignment="Left">
+                <StackPanel.Resources>
+                    <converters:MobilePhoneStyleConverter x:Key="MobileStyleConv"/>
+                </StackPanel.Resources>
+                <materialDesign:PackIcon Kind="Phone"/>
+                <TextBlock Margin="0,0,10,0" Text="{Binding Path = Mobilephone, Mode=OneWay, TargetNullValue='н/д',
+                           Converter={StaticResource MobileStyleConv}}" VerticalAlignment="Center"/>
+                <materialDesign:PackIcon Kind="Email"/>
+                <TextBlock Margin="0,0,2,0" Text="{Binding Path=Email, Mode=OneWay, TargetNullValue='н/д'}" VerticalAlignment="Center" />
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="OrgamizationPopUpDataTemplate">
+        <Grid>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseRightButtonDown">
+                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}},Path=DataContext.OrganizationOpenCmd}"
+                                           CommandParameter="{Binding}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}},Path=DataContext.OrganizationSelectCmd}"
+                                           CommandParameter="{Binding}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Margin="2" TextWrapping="Wrap">
+                <Run Text="{Binding Path=., Mode=OneWay}" FontSize="{StaticResource MediumFontSize}" FontWeight="DemiBold"/>
+                <LineBreak/>
+                <Run Text="{Binding Path=Adress, Mode=OneWay}"/>
+            </TextBlock>
+            <TextBlock Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,5,2">
+                <TextBlock.Text>
+                    <Binding Path="DBModifyDate" Mode="OneWay">
+                        <Binding.Converter>
+                            <converters:TimeAgoConverter/>
+                        </Binding.Converter>
+                    </Binding>
+                </TextBlock.Text>
+            </TextBlock>
+            <!--<lvc:Gauge Uses360Mode="True" Value="{Binding Path=Completeness, Mode=OneWay}" To="100" From="0" Margin="2,5,5,2"
+                                                               HighFontSize="12" Height="41" Width="41" Grid.Column="1">
+                                                            </lvc:Gauge>-->
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="SettlementPopUpDataTemplate">
+        <TextBlock Margin="2" TextWrapping="Wrap" FontSize="{StaticResource MediumFontSize}" Text="{Binding Path=., Mode=OneWay}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}},Path=DataContext.SettlementSelectCmd}"
+                                           CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseRightButtonDown">
+                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}},Path=DataContext.OpenSettlementCmd}"
+                                           CommandParameter="{Binding}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBlock>
+    </DataTemplate>
+
 </ResourceDictionary>

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PLSE_FoxPro.Models
 {
-    public class Adress : ObservableValidator, ICloneable //TODO: rework to struct
+    public class Adress : ValidatorBase, ICloneable //TODO: rework to struct
     {
         #region Fields
         private Settlement _settlement;
@@ -17,6 +17,7 @@ namespace PLSE_FoxPro.Models
         private string _corpus;
         private string _structure;
         #endregion Fields       
+
         #region Properties
         public string Structure
         {

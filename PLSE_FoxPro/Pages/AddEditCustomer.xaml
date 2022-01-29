@@ -42,7 +42,7 @@
         <TextBox Grid.Column="1" Grid.Row="2" Margin="5,20,5,0" Style="{StaticResource UIOutlinedTextBox}" Text="{Binding Path=Customer.Mname}"/>
         <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource InactiveTextBlock}" Margin="10,20,0,0" Text="Пол"/>
         <ListBox Style="{StaticResource MaterialDesignChoiceChipPrimaryListBox}" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center"
-                 Margin="40,20,0,0" Grid.ColumnSpan="2" ItemsSource="{Binding Path=Genders}" SelectedIndex="2">
+                 Margin="10,20,0,0" Grid.ColumnSpan="2" ItemsSource="{Binding Path=Genders}" SelectedIndex="2">
             <ListBox.SelectedItem>
                 <Binding Path="Customer.Gender">
                     <Binding.Converter>
@@ -61,15 +61,12 @@
         <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,5,0"
                  Text="{Binding Path=Customer.Email, ValidatesOnExceptions=True}"/>
         <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.ColumnSpan="4" HorizontalAlignment="Right" Margin="0,35,20,10">
-            <Button Style="{StaticResource CancelButtonFlat}" Command="{Binding Path=CancelCmd}"/>
             <Button Style="{StaticResource SaveButtonFlat}" Command="{Binding Path=SaveCmd}" CommandParameter="{Binding ElementName=mw}"/>
+            <Button Style="{StaticResource CancelButtonFlat}" Command="{Binding Path=CancelCmd}"/>
         </StackPanel>
 
-        <ListBox Style="{StaticResource MaterialDesignChoiceChipPrimaryListBox}" Grid.Column="4" Grid.Row="0" VerticalAlignment="Center"
-                 HorizontalAlignment="Center"  Grid.ColumnSpan="2" SelectedIndex="2" Grid.RowSpan="1" Margin="60,0,0,0">
-            <ListBoxItem IsSelected="True">частное лицо</ListBoxItem>
-            <ListBoxItem>официальное лицо</ListBoxItem>
-        </ListBox>
+        <CheckBox materialDesign:CheckBoxAssist.CheckBoxSize="30" Grid.Row="0" Grid.Column="4" Margin="140,20,20,0"
+                  IsChecked="{Binding Path=IsIndividualPerson}" Content="Частное лицо"/>
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="4" Grid.RowSpan="5" Margin="40,0,20,20" HorizontalAlignment="Stretch">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -84,13 +81,15 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Style="{StaticResource InactiveTextBlock}" Margin="10,00,0,0" Text="Должность"/>
                 <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource UIOutlinedTextBox}" Margin="5,0,5,0" Grid.ColumnSpan="2"
-                 IsEnabled="{Binding Path=IsEnableOffice, Mode=OneWay}" Text="{Binding Path=Customer.Office}"/>
-                <TextBlock Grid.Row="1" Style="{StaticResource InactiveTextBlock}" Margin="10,20,0,0" Text="Звание"/>
+                         IsEnabled="{Binding Path=IsEnableOffice, Mode=OneWay}" Text="{Binding Path=Customer.Office}"/>
+                <TextBlock Grid.Row="1" Style="{StaticResource InactiveTextBlock}" Margin="10,20,0,0" Text="Звание"
+                           Visibility="{Binding ElementName=tbOrganization, Path=Visibility, Mode=OneWay}"/>
                 <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=Ranks}" Style="{StaticResource UIOutlinedComboBox}" SelectedItem="{Binding Path=Customer.Rank}"
-                  IsEditable="True" Margin="5,20,5,0" Grid.ColumnSpan="2" IsEnabled="{Binding Path=IsEnableOffice, Mode=OneWay}"/>
-                <TextBlock Grid.Row="2" Style="{StaticResource InactiveTextBlock}" Margin="10,20,0,0" Text="Организация"/>
+                          IsEditable="True" Margin="5,20,5,0" Grid.ColumnSpan="2" Visibility="{Binding ElementName=tbOrganization, Path=Visibility, Mode=OneWay}"/>
+                <TextBlock Grid.Row="2" Style="{StaticResource InactiveTextBlock}" Margin="10,20,0,0" Text="Организация"
+                           Visibility="{Binding ElementName=tbOrganization, Path=Visibility, Mode=OneWay}"/>
                 <TextBox Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="1" Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,5,0" Name="tbOrganization"
-                 materialDesign:HintAssist.Hint="Введите название" >
+                         materialDesign:HintAssist.Hint="Введите название" Visibility="{Binding Path=OrganizationVisible, Mode=OneWay}">
                     <TextBox.Text>
                         <Binding Path="Customer.Organization" UpdateSourceTrigger="PropertyChanged" Mode="OneWay">
                             <Binding.ValidationRules>
@@ -99,16 +98,16 @@
                         </Binding>
                     </TextBox.Text>
                     <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="TextChangedCmd">
-                            <i:InvokeCommandAction Command="{Binding Path=OrganizationSearch}" CommandParameter="{Binding ElementName=tbOrganization, Path=Text}"/>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:InvokeCommandAction Command="{Binding Path=OrganizationSearchCmd}" CommandParameter="{Binding ElementName=tbOrganization, Path=Text}"/>
                         </i:EventTrigger>
-                        <i:EventTrigger EventName="LostFocusCmd">
-                            <i:InvokeCommandAction Command="{Binding Path=OrganizationFocusLost}" CommandParameter="{Binding ElementName=tbOrganization}"/>
+                        <i:EventTrigger EventName="LostFocus">
+                            <i:InvokeCommandAction Command="{Binding Path=OrganizationFocusLostCmd}" CommandParameter="{Binding ElementName=tbOrganization}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </TextBox>
                 <Popup Placement="Bottom" Width="{Binding ElementName=tbOrganization, Path=ActualWidth}" PlacementTarget="{Binding ElementName=tbOrganization}" VerticalOffset="3"
-                        IsOpen="{Binding Path=IsOrganizationPopupOpen}" AllowsTransparency="True" PopupAnimation="Scroll" StaysOpen="False" 
+                       IsOpen="{Binding Path=IsOrganizationPopupOpen}" AllowsTransparency="True" PopupAnimation="Scroll" StaysOpen="False" 
                        Grid.Row="6" Grid.Column="1">
                     <Popup.Resources>
                         <Style TargetType="{x:Type ListBoxItem}" x:Key="OrganizationListBoxItem">
@@ -122,12 +121,12 @@
                                                     <Border Background="Transparent" BorderThickness="1" BorderBrush="#FF320B86" CornerRadius="3" Name="brd">
                                                         <i:Interaction.Triggers>
                                                             <i:EventTrigger EventName="MouseRightButtonDown">
-                                                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}},Path=DataContext.EditOrganization}"
-                                                                       CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}"/>
+                                                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}},Path=DataContext.OrganizationOpenCmd}"
+                                                                       CommandParameter="{Binding}"/>
                                                             </i:EventTrigger>
                                                             <i:EventTrigger EventName="MouseLeftButtonDown">
-                                                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}},Path=DataContext.OrganizationSelect}"
-                                                                       CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}"/>
+                                                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}},Path=DataContext.OrganizationSelectCmd}"
+                                                                       CommandParameter="{Binding}"/>
                                                             </i:EventTrigger>
                                                         </i:Interaction.Triggers>
                                                         <Grid>
@@ -165,15 +164,17 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Button Style="{StaticResource MaterialDesignFlatButton}" Content="Новая организация" HorizontalAlignment="Right" Margin="0,1,4,1"
-                            Command="{Binding Path=OpenNewOrganization}" FontSize="{StaticResource SmallFontSize}"/>
+                                    Command="{Binding Path=OrganizationOpenCmd}" FontSize="{StaticResource SmallFontSize}"/>
                             <ListBox ItemsSource="{Binding Path=Organizations}" Name="lbOrganizations" Grid.Row="1" FontSize="{StaticResource SmallFontSize}"
-                             ItemContainerStyle="{StaticResource OrganizationListBoxItem}" Margin="2"/>
+                                     ItemContainerStyle="{StaticResource PopUpListBoxItem}" Margin="2"
+                                     ItemTemplate="{StaticResource OrgamizationPopUpDataTemplate}"/>
                         </Grid>
                     </Border>
                 </Popup>
-                <TextBlock Grid.Row="3" Style="{StaticResource InactiveTextBlock}" Margin="10,20,0,0" Text="Отдел"/>
+                <TextBlock Grid.Row="3" Style="{StaticResource InactiveTextBlock}" Margin="10,20,0,0" Text="Отдел"
+                           Visibility="{Binding ElementName=tbOrganization, Path=Visibility, Mode=OneWay}"/>
                 <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,5,0"
-                 Text="{Binding Path=Customer.Departament}"/>
+                         Text="{Binding Path=Customer.Departament}" Visibility="{Binding ElementName=tbOrganization, Path=Visibility, Mode=OneWay}"/>
             </Grid>
         </StackPanel>
         

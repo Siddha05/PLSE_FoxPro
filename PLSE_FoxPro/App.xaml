@@ -8,6 +8,7 @@
     <!--"Windows/MainWindow.xaml"-->
     <!--"Pages/AddEditSpeciality.xaml"-->
     <!--"Windows/Login.xaml"-->
+    <!--"Pages/Test.xaml"-->
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,6 +26,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/ListBoxItem.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/DataGrid.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/VariousControls.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Dictionaries/DataTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

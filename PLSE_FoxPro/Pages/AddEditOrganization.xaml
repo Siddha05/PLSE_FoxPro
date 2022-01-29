@@ -1,0 +1,170 @@
+﻿<Page x:Class="PLSE_FoxPro.Pages.AddEditOrganization"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:converters="clr-namespace:PLSE_FoxPro.Converters"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:model="clr-namespace:PLSE_FoxPro.Models"
+      xmlns:local="clr-namespace:PLSE_FoxPro.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="799" d:DesignWidth="1200" Name="mv" Background="White"
+      Title="AddEditOrganization">
+    <Page.Resources>
+        <converters:WorkPhoneStyleConverter x:Key="WorkPhoneStyleConv"/>
+    </Page.Resources>
+    <DockPanel Margin="10"  VerticalAlignment="Top" HorizontalAlignment="Left">
+        <StackPanel Orientation="Horizontal" Grid.Row="9" Grid.ColumnSpan="4" HorizontalAlignment="Right" VerticalAlignment="Top"
+                    Margin="0,40,20,10" DockPanel.Dock="Bottom">
+            <Button Style="{StaticResource SaveButtonFlat}" Command="{Binding Path=SaveCmd}" CommandParameter="{Binding ElementName=mv}"/>
+            <Button Style="{StaticResource CancelButtonFlat}" Command="{Binding Path=CancelCmd}"/>
+        </StackPanel>
+        <Grid DockPanel.Dock="Bottom" IsEnabled="{Binding ElementName=tgEnable, Path=IsChecked}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Style="{StaticResource InactiveTextBlock }" Margin="10,20,0,0" Text="Название"/>
+            <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Row="0" Grid.Column="1" Margin="5,20,10,0" Grid.ColumnSpan="2">
+                <TextBox.Text>
+                    <Binding Path="Organization.Name">
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <TextBlock Grid.Row="1" Style="{StaticResource InactiveTextBlock }" Margin="10,20,0,0" Text="Краткое название"/>
+            <TextBox Grid.Row="1" Style="{StaticResource UIOutlinedTextBox}" Grid.Column="1" Margin="5,20,10,0" Text="{Binding Path=Organization.ShortName}"
+                 Grid.ColumnSpan="2"/>
+            <TextBlock Grid.Row="3" Style="{StaticResource InactiveTextBlock }" Margin="10,20,0,0" Text="Телефон 1"/>
+            <TextBox Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,70,0" Grid.Column="1" Grid.Row="3"
+                 Text="{Binding Path=Organization.Telephone, Converter={StaticResource WorkPhoneStyleConv}, ValidatesOnExceptions=True}"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource InactiveTextBlock }" Margin="10,20,0,0" Text="Телефон 2"/>
+            <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Row="4" Grid.Column="1" Margin="5,20,70,0"
+                 Text="{Binding Path=Organization.Telephone2,Converter={StaticResource WorkPhoneStyleConv}, ValidatesOnExceptions=True}"/>
+            <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource InactiveTextBlock }" Margin="10,20,0,0" Text="Факс"/>
+            <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Row="5" Grid.Column="1" Margin="5,20,70,0"
+                 Text="{Binding Path=Organization.Fax, Converter={StaticResource WorkPhoneStyleConv},ValidatesOnExceptions=True}"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource InactiveTextBlock }" Margin="10,20,0,0" Text="Индекс"/>
+            <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Row="2" Grid.Column="1" Margin="5,20,70,0"
+                 Text="{Binding Path=Organization.PostCode, ValidatesOnExceptions=True}"/>
+            <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource InactiveTextBlock }" Margin="10,20,0,0" Text="Email"/>
+            <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Row="6" Grid.Column="1" Margin="5,20,10,0" Text="{Binding Path=Organization.Email, ValidatesOnExceptions=True}"/>
+            <TextBlock Grid.Row="7" Grid.Column="0" Style="{StaticResource InactiveTextBlock }" Margin="10,20,0,0" Text="Web-Site"/>
+            <TextBox Style="{StaticResource UIOutlinedTextBox}" Grid.Row="7" Grid.Column="1" Margin="5,20,10,0"
+                  Text="{Binding Path=Organization.WebSite, ValidatesOnExceptions=True}" />
+            <GroupBox Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="6" Style="{x:Null}" Margin="45,10,10,0" BorderBrush="Gray" Grid.Column="3"
+                  >
+                <GroupBox.Header>
+                    <TextBlock Text="Адрес" FontSize="{StaticResource LargeFontSize}" FontWeight="Medium" Foreground="Gray"/>
+                </GroupBox.Header>
+                <Grid Margin="5,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource InactiveTextBlock }" Margin="10,20,0,0" Text="Город"/>
+                    <TextBox Style="{StaticResource UIOutlinedTextBox}" Name="tbsettlement" Grid.Column="1" Grid.Row="0" Width="350" HorizontalAlignment="Left"
+                             materialDesign:HintAssist.Hint="Введите название" Margin="5,20,10,0" Grid.ColumnSpan="3">
+                        <TextBox.Text>
+                            <Binding Path="Organization.Adress.Settlement" Mode="OneWay" UpdateSourceTrigger="LostFocus" Delay="500">
+                            </Binding>
+                        </TextBox.Text>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding Path=SettlementSearchCmd}" CommandParameter="{Binding ElementName=tbsettlement}"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LostFocus">
+                                <i:InvokeCommandAction Command="{Binding Path=SettlementLostFocusCmd}" CommandParameter="{Binding ElementName=tbsettlement}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <Popup AllowsTransparency="True" PopupAnimation="Scroll" PlacementTarget="{Binding ElementName=tbsettlement}" StaysOpen="False" Placement="Bottom" Grid.Row="6" Grid.Column="1"
+                           VerticalOffset="3" Width="{Binding ElementName=tbsettlement, Path=ActualWidth}" IsOpen="{Binding Path=IsPopupSettlementsOpen}">
+                        <Border Background="White" MaxHeight="198" BorderBrush="Black" BorderThickness="1" CornerRadius="3">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button Style="{StaticResource MaterialDesignFlatButton}" Content="Новый нас. пункт" TextBlock.FontSize="{StaticResource SmallFontSize}" Panel.ZIndex="2"
+                                        Command="{Binding Path=OpenSettlementCmd}" Margin="1,1,4,1" CommandParameter="{x:Null}" HorizontalAlignment="Right"/>
+                                <ListBox ItemsSource="{Binding Path=Settlements}" Name="lbSettlements" Grid.Row="1" ItemContainerStyle="{StaticResource PopUpListBoxItem}"
+                                         ItemTemplate="{StaticResource SettlementPopUpDataTemplate}"/>
+                            </Grid>
+                        </Border>
+                    </Popup>
+                    <ComboBox Grid.Row="1" ItemsSource="{Binding Path=StreetPrefixes}" Name="cbStreettype" Style="{StaticResource UIOutlinedComboBox}" Margin="0,20,0,0"
+                      Width="100" materialDesign:HintAssist.Hint="">
+                        <ComboBox.SelectedItem>
+                            <Binding Path="Organization.Adress.StreetPrefix">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </ComboBox.SelectedItem>
+                    </ComboBox>
+                    <TextBox Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,10,0" Grid.Column="1" Grid.Row="1" Width="350" HorizontalAlignment="Left"
+                             Grid.ColumnSpan="3">
+                        <TextBox.Text>
+                            <Binding Path="Organization.Adress.Street" UpdateSourceTrigger="PropertyChanged">
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <TextBlock Style="{StaticResource InactiveTextBlock}" Text="Дом" Grid.Row="2" Margin="0,20,0,0"/>
+                    <TextBox Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,5,0" Width="75" Grid.Column="1" Grid.Row="2"
+                             HorizontalAlignment="Left" Text="{Binding Path=Organization.Adress.Housing}"/>
+                    <TextBlock Style="{StaticResource InactiveTextBlock}" Text="Офис" Grid.Row="3" Margin="0,20,0,0"/>
+                    <TextBox Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,5,0" Grid.Column="1" Grid.Row="3"
+                             Text="{Binding Path=Organization.Adress.Flat}" Width="75" HorizontalAlignment="Left"/>
+                    <TextBlock Style="{StaticResource InactiveTextBlock}" Text="Корпус" Grid.Column="2" Grid.Row="2" Margin="0,20,0,0"/>
+                    <TextBox Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,5,0" HorizontalAlignment="Left"
+                             Text="{Binding Path=Organization.Adress.Corpus}" Width="75" Grid.Column="3" Grid.Row="2"/>
+                    <TextBlock Style="{StaticResource InactiveTextBlock}" Text="Стр." Grid.Column="2" Grid.Row="3" Margin="0,20,0,0"/>
+                    <TextBox Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,5,0" Grid.Column="3" Grid.Row="3" HorizontalAlignment="Left"
+                             Text="{Binding Path=Organization.Adress.Structure}" Width="75"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <StackPanel Orientation="Horizontal" Margin="40,20,0,20">
+            <ToggleButton Style="{StaticResource MaterialDesignActionToggleButton}" Name="tgEnable" IsChecked="{Binding Path=Organization.IsValid}">
+                <materialDesign:PackIcon Kind="Close" Foreground="White"/>
+            </ToggleButton>
+            <TextBlock VerticalAlignment="Center" FontSize="{StaticResource LargeFontSize}" Margin="10,0,0,0">
+                <TextBlock.Text>
+                    <Binding Path="IsChecked" ElementName="tgEnable">
+                        <Binding.Converter>
+                            <converters:BoolToEnableConverter/>
+                        </Binding.Converter>
+                    </Binding>
+                </TextBlock.Text>
+                <TextBlock.Foreground>
+                    <Binding Path="IsChecked" ElementName="tgEnable">
+                        <Binding.Converter>
+                            <converters:BoolToColorConverter/>
+                        </Binding.Converter>
+                    </Binding>
+                </TextBlock.Foreground>
+            </TextBlock>
+        </StackPanel>
+    </DockPanel>
+</Page>

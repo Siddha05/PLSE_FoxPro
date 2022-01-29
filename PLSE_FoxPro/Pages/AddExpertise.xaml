@@ -8,13 +8,14 @@
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:vm="clr-namespace:PLSE_FoxPro.ViewModels"
+      Name="mw"
       mc:Ignorable="d" 
       d:DesignHeight="850" d:DesignWidth="1000" Background="White"
       Title="AddExpertise">
     <!--<Page.DataContext>
         <vm:AddExpertiseVM/>
     </Page.DataContext>-->
-    <Grid>
+    <Grid Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="auto"/>
@@ -24,7 +25,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Margin="0,10,10,10">
-            <Button Style="{StaticResource SaveButtonFlat}"/>
+            <Button Style="{StaticResource SaveButtonFlat}" Command="{Binding Path=SaveCmd}" CommandParameter="{Binding ElementName=mw}"/>
             <Button Style="{StaticResource CancelButtonFlat}" Command="{Binding Path=CancelCmd}"/>
         </StackPanel>
         <GroupBox Style="{StaticResource CaptionGroupBox}" Margin="16">
@@ -57,6 +58,11 @@
                           Name="cbExpertiseType" Width="230" HorizontalAlignment="Left"/>
                 <TextBlock Text="Предыдущая" Style="{StaticResource InactiveTextBlock}" Grid.Row="3" Grid.Column="0" Margin="0,20,0,0" Name="tbPreviewExp"
                    />
+                <TextBlock Grid.Row="3" Grid.Column="1" Margin="5,20,0,0" FontSize="{StaticResource MediumFontSize}">
+                    <Hyperlink  Command="{Binding Path=AttachExpertiseCmd}">
+                        3241/2-2 от 21.12.2021
+                    </Hyperlink>
+                </TextBlock>
                 <TextBlock Text="Срок" Style="{StaticResource InactiveTextBlock}" Grid.Row="4" Margin="10,20,0,0"/>
                 <customcontrols:NumericUpDown Grid.Column="1" Grid.Row="4" MinValue="1" Value="{Binding Path=Expertise.TimeLimit}" Margin="5,20,10,0"
                                               HorizontalAlignment="Left" Width="120"/>
@@ -82,10 +88,20 @@
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,10,0">
                     <Button Style="{StaticResource AddGreenButton}" Command="{Binding Path=AttachBillCmd}"/>
-                    <Button Style="{StaticResource DeleteRedButton}" Command="{Binding Path=DeleteBillCmd}" Margin="5,0,0,0"/>
+                    <Button Style="{StaticResource DeleteRedButton}" Command="{Binding Path=DeleteBillCmd}" Margin="5,0,0,0"
+                            CommandParameter="{Binding ElementName=lvBills, Path=SelectedItem}"/>
                 </StackPanel>
-                <ListView Margin="0,10,0,0">
-                    
+                <ListView Margin="1,20" Name="lvBills" ItemsSource="{Binding Path=Expertise.Bills}">
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="False">
+                            <GridViewColumn Header="Номер" Width="80" DisplayMemberBinding="{Binding Path=Number}"/>
+                            <GridViewColumn Header="Плательщик" DisplayMemberBinding="{Binding Path=Payer}"/>
+                            <GridViewColumn Header="Сумма счета" DisplayMemberBinding="{Binding Path=Price, Mode=OneWay, StringFormat={}{0:c},
+                                ConverterCulture='ru-RU'}"/>
+                            <GridViewColumn Header="Баланс" DisplayMemberBinding="{Binding Path=Balance, Mode=OneWay, StringFormat={}{0:c},
+                                ConverterCulture='ru-RU'}"/>
+                        </GridView>
+                    </ListView.View>
                 </ListView>
             </StackPanel>
         </GroupBox>

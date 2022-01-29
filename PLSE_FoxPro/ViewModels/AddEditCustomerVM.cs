@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using PLSE_FoxPro.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -16,9 +18,11 @@ namespace PLSE_FoxPro.ViewModels
     {
         #region Fields
         RelayCommand<string> _orgsearch;
+        RelayCommand<Organization> _open_org;
         bool _IsOrganizationPopupOpen;
         bool _is_individual_person;
         bool _is_enable_office = true;
+        Visibility _org_visible;
         #endregion
 
         #region Properties
@@ -42,11 +46,13 @@ namespace PLSE_FoxPro.ViewModels
                     Customer.Office = "гражданин";
                     Customer.Rank = null;
                     IsEnableOffice = false;
+                    OrganizationVisible = Visibility.Collapsed;
                 }
                 else
                 {
                     Customer.Office = null;
                     IsEnableOffice = true;
+                    OrganizationVisible = Visibility.Visible;
                 }
                 OnPropertyChanged();
             }
@@ -59,6 +65,11 @@ namespace PLSE_FoxPro.ViewModels
                 _is_enable_office = value;
                 OnPropertyChanged();
             }
+        }
+        public Visibility OrganizationVisible
+        {
+            get => _org_visible;
+            set => SetProperty(ref _org_visible, value);
         }
         #endregion
 
@@ -73,7 +84,8 @@ namespace PLSE_FoxPro.ViewModels
                 {
                     if (App.HasValidState(n))
                     {
-
+                        WeakReferenceMessenger.Default.Send(Customer);
+                        App.Services.GetService<IPagesService>().RemovePage();
                     }
                 });
             }
@@ -118,37 +130,32 @@ namespace PLSE_FoxPro.ViewModels
                 });
             }
         }
-        public ICommand OpenNewOrganizationCmd
+        public ICommand OrganizationOpenCmd
         {
             get
             {
-                return new RelayCommand(() =>
+                return _open_org ??= new RelayCommand<Organization>(n =>
                 {
-
-                    MessageBox.Show("Invoke OpenNewOrganizationCmd");
-                });
-            }
-        }
-        public ICommand EditOrganizationCmd
-        {
-            get
-            {
-                return new RelayCommand<Organization>(n =>
-                {
-
-                    MessageBox.Show("Invoke EditOrganizationCmd");
+                    if (!WeakReferenceMessenger.Default.IsRegistered<Organization>(this))
+                        WeakReferenceMessenger.Default.Register<Organization>(this, (s, m) => SetAndUnregister(s, m));
+                    var p = new Pages.AddEditOrganization();
+                    p.DataContext = new AddEditOrganizationVM(n);
+                    App.Services.GetService<IPagesService>().AddPage(p);
                 });
             }
         }
         #endregion
+
         public AddEditCustomerVM(Customer customer = null)
         {
-            Customer = customer ?? Customer.New;
+            Customer = customer?.Clone() ?? Customer.New;
             Customer.Validate();
+            (Customer as Person).Validate();
         }
-        //public AddEditCustomer()
-        //{
-        //    Customer = Customer.New;
-        //}
+        private void SetAndUnregister(object sender, Organization message)
+        {
+            Customer.Organization = message;
+            WeakReferenceMessenger.Default.Unregister<Organization>(this);
+        }
     }
 }

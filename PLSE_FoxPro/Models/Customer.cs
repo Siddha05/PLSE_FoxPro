@@ -19,6 +19,7 @@ namespace PLSE_FoxPro.Models
         private string _email;
         private bool _actual;
         #endregion
+
         #region Properties
         public int? PreviousID
         {
@@ -104,6 +105,7 @@ namespace PLSE_FoxPro.Models
             }
         }
         #endregion
+
         #region Metods
         public override string ToString()
         {
@@ -112,7 +114,7 @@ namespace PLSE_FoxPro.Models
             {
                 stringBuilder.Append(Office).Append(" ");
             }
-            stringBuilder.Append(base.ToString());
+            stringBuilder.Append(Fio);
             if (Organization != null)
             {
                 stringBuilder.AppendLine();

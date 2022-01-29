@@ -50,9 +50,9 @@ namespace PLSE_FoxPro.Models
         public override string ToString() => Acronym;
         #endregion
 
-        public Departament(int id, string title, string acronym, string code, bool isvalid)
+        public Departament(int id, string title, string acronym, string code, bool isvalid, Version vr)
+            : base(id, vr)
         {
-            ID = id;
             _title = title;
             _acronym = acronym;
             _digitalcode = code;

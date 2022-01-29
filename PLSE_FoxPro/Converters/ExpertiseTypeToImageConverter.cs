@@ -6,12 +6,14 @@ using System.Windows.Data;
 
 namespace PLSE_FoxPro.Converters
 {
-    class BoolToColorConverter : IValueConverter
+    internal class ExpertiseTypeToImageConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => value switch
         {
-            bool b when b == true => "SpringGreen",
-            _ => "Red",
+            string s when s.Equals("первичная") => "RayStartArrow",
+            string s when s.Equals("дополнительная") => "Plus",
+            string s when s.Equals("повторная") => "Restart",
+            _ => "Help"
         };
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -10,7 +10,7 @@
       xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       xmlns:local="clr-namespace:PLSE_FoxPro.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="850" d:DesignWidth="1600" Background="White"
+      d:DesignHeight="850" d:DesignWidth="1600" Background="White" Name="mw"
       Title="AddResolution">
     <Page.Resources>
         <!--<converters:IntToVisibilityConverter x:Key="More0VisibleConv" />
@@ -19,103 +19,30 @@
         <converters:ExpertiseTypeToVisibleConverter x:Key="ExpertiseTypeToVisibleConv"/>
         <converters:CaseNumVisibilityConverter x:Key="CaseNumVisiblityConv"/>
         <converters:PlaintiffVisibilityConverter x:Key="PlaintiffVisibilityConv"/>-->
-        <Style TargetType="{x:Type ListBoxItem}" x:Key="CustomerListBoxItem">
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
-            <Setter Property="Padding" Value="2,1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                        <ContentPresenter Margin="2">
-                            <ContentPresenter.ContentTemplate>
-                                <DataTemplate DataType="Customer">
-                                    <Border BorderBrush="#FF320B86" BorderThickness="1" CornerRadius="4" x:Name="brd" Background="White" MouseLeftButtonUp="brd_MouseLeftButtonUp">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="MouseRightButtonUp">
-                                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}},Path=DataContext.EditCustomer}"
-                                                                       CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}"/>
-                                            </i:EventTrigger>
-                                            <i:EventTrigger EventName="MouseLeftButtonUp">
-                                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Page}},Path=DataContext.CustomerSelect}"
-                                                                       CommandParameter="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}"/>
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition Width="auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition/>
-                                                <RowDefinition/>
-                                            </Grid.RowDefinitions>
-                                            <lvc:Gauge Uses360Mode="True" Value="{Binding Path=Completeness, Mode=OneWay}" To="100" From="0" HorizontalAlignment="Right" Margin="0,5,5,0"
-                                                       Grid.RowSpan="1" HighFontSize="12" Height="41" Width="41">
-                                            </lvc:Gauge>
-                                            <TextBlock Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,5,2">
-                                                <TextBlock.Text>
-                                                    <Binding Path="LastDBModifyDate" Mode="OneWay">
-                                                        <Binding.Converter>
-                                                            <converters:TimeAgoConverter/>
-                                                        </Binding.Converter>
-                                                    </Binding>
-                                                </TextBlock.Text>
-                                            </TextBlock>
-                                            <TextBlock Grid.ColumnSpan="2" Margin="4,2,50,2" TextTrimming="CharacterEllipsis">
-                                                    <Run Text="{Binding Path=Office, Mode=OneWay}"/>
-                                                    <Run Text="{Binding Path=Fio, Mode=OneWay}" FontWeight="DemiBold" FontSize="{StaticResource MediumFontSize}"/>
-                                                    <Run Text="{Binding Path=Rank, Mode=OneWay, TargetNullValue='', StringFormat=',{0}'}"/>
-                                                    <LineBreak/>
-                                                    <Run Text="{Binding Path=Departament, TargetNullValue='', Mode=OneWay, StringFormat='{}{0},'}"/>
-                                                    <Run Text="{Binding Path=Organization, Mode=OneWay}"/>
-                                            </TextBlock>
-                                            <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="5,5,0,2" HorizontalAlignment="Left">
-                                                <StackPanel.Resources>
-                                                    <converters:MobilePhoneStyleConverter x:Key="MobileStyleConv"/>
-                                                    <!--<Style TargetType="{x:Type materialDesign:PackIcon}">
-                                                        <Setter Property="Width" Value="18"/>
-                                                        <Setter Property="Height" Value="18"/>
-                                                        <Setter Property="Foreground" Value="Gray"/>
-                                                    </Style>-->
-                                                </StackPanel.Resources>
-                                                <materialDesign:PackIcon Kind="Phone"/>
-                                                <TextBlock Margin="0,0,10,0" Text="{Binding Path = Mobilephone, Mode=OneWay, TargetNullValue='н/д', Converter={StaticResource MobileStyleConv}}"
-                                                           VerticalAlignment="Center"/>
-                                                <materialDesign:PackIcon Kind="Email"/>
-                                                <TextBlock Margin="0,0,2,0" Text="{Binding Path=Email, Mode=OneWay, TargetNullValue='н/д'}" VerticalAlignment="Center" />
-                                            </StackPanel>
-                                        </Grid>
-                                    </Border>
-                                    <DataTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" TargetName="brd" Value="#FFEBF5F9"/>
-                                        </Trigger>
-                                    </DataTemplate.Triggers>
-                                </DataTemplate>
-                            </ContentPresenter.ContentTemplate>
-                        </ContentPresenter>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Page.Resources>
     <Page.DataContext>
         <viewmodels:AddResolutionVM/>
     </Page.DataContext>
-    <Grid>
+    <Grid Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="600"/>
+            <ColumnDefinition Width="600"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
         <GroupBox Style="{DynamicResource MaterialDesignGroupBox}" Margin="16" materialDesign:ShadowAssist.ShadowDepth="Depth1" BorderThickness="0"
-                          materialDesign:ColorZoneAssist.Background="Black" materialDesign:ColorZoneAssist.Foreground="White"
-                          materialDesign:ColorZoneAssist.Mode="Custom">
+                  materialDesign:ColorZoneAssist.Background="Black" materialDesign:ColorZoneAssist.Foreground="White"
+                  materialDesign:ColorZoneAssist.Mode="Custom">
                 <GroupBox.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Path=Resolution.ResolutionStatus, StringFormat='Основание для производства ({0})'}" Foreground="White"
-                                       FontSize="{StaticResource LargeFontSize}"/>
+                                   FontSize="{StaticResource LargeFontSize}"/>
                     </StackPanel>
                 </GroupBox.Header>
+            <ScrollViewer>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
@@ -132,21 +59,20 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Style="{StaticResource InactiveTextBlock}" Text="Тип" Margin="0,20,0,0"/>
-                    <ComboBox Grid.Column="1" Style="{StaticResource UIOutlinedComboBox}" ItemsSource="{Binding Path=ResolutionTypes}" DisplayMemberPath="Value"
-                                  Margin="5,20,5,0" SelectedValue="{Binding Path=Resolution.ResolutionType, ValidatesOnDataErrors=True}" Grid.ColumnSpan="1"
-                                  SelectedValuePath="Key" Name="cbResType">
+                    <ComboBox Grid.Column="1" Style="{StaticResource UIOutlinedComboBox}" ItemsSource="{Binding Path=ResolutionTypes}" 
+                              Margin="5,20,5,0" SelectedValue="{Binding Path=Resolution.ResolutionType, ValidatesOnDataErrors=True}" Name="cbResType">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding Path=ResolutionTypeChanged}" CommandParameter="{Binding ElementName=cbResType, Path=SelectedItem}"/>
+                                <i:InvokeCommandAction Command="{Binding Path=ResolutionTypeChangedCmd}" CommandParameter="{Binding ElementName=cbResType, Path=SelectedItem}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </ComboBox>
                     <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource InactiveTextBlock}" Text="Дата вынесения" Margin="0,20,0,0"/>
                     <DatePicker Style="{StaticResource UIOutlinedDatePicker}" Margin="5,20,5,0" Grid.Column="1" Grid.Row="1"
-                                     SelectedDate="{Binding Path=Resolution.ResolutionDate, NotifyOnSourceUpdated=True}">
+                                SelectedDate="{Binding Path=Resolution.ResolutionDate, NotifyOnSourceUpdated=True}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SourceUpdated">
-                                <i:InvokeCommandAction Command="{Binding Path=ResolutionDateChanged}" CommandParameter="{Binding ElementName=dpRegdate}"/>
+                                <i:InvokeCommandAction Command="{Binding Path=ResolutionDateChangedCmd}" CommandParameter="{Binding ElementName=dpRegdate}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </DatePicker>
@@ -162,52 +88,54 @@
                     </DatePicker>
                     <TextBlock Grid.Row="3" Style="{StaticResource InactiveTextBlock}" Text="Заказчик" Margin="0,20,0,0"/>
                     <TextBox Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,5,0" Name="tbCustomer" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="1"
-                                 materialDesign:HintAssist.Hint="Введите фамилию" materialDesign:HintAssist.IsFloating="False">
+                             materialDesign:HintAssist.Hint="Введите фамилию" materialDesign:HintAssist.IsFloating="False">
                         <TextBox.Text>
-                            <Binding Path="Resolution.Customer.Requisite" Mode="OneWay">
+                            <Binding Path="Resolution.Customer" Mode="OneWay">
                                 <Binding.ValidationRules>
                                     <ExceptionValidationRule ValidatesOnTargetUpdated="True"/>
+                                    <DataErrorValidationRule/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="LostFocus">
-                                <i:InvokeCommandAction Command="{Binding Path=CustomerLostFocus}" CommandParameter="{Binding ElementName=tbCustomer}"/>
+                                <i:InvokeCommandAction Command="{Binding Path=CustomerLostFocusCmd}" CommandParameter="{Binding ElementName=tbCustomer}"/>
                             </i:EventTrigger>
                             <i:EventTrigger EventName="GotFocus">
-                                <i:InvokeCommandAction Command="{Binding Path=CustomerGotFocus}" CommandParameter="{Binding ElementName=tbCustomer}"/>
+                                <i:InvokeCommandAction Command="{Binding Path=CustomerGotFocusCmd}" CommandParameter="{Binding ElementName=tbCustomer}"/>
                             </i:EventTrigger>
                             <i:EventTrigger EventName="TextChanged">
-                                <i:InvokeCommandAction Command="{Binding Path=CustomerSearch}" CommandParameter="{Binding ElementName=tbCustomer, Path=Text}"/>
+                                <i:InvokeCommandAction Command="{Binding Path=CustomerSearchCmd}" CommandParameter="{Binding ElementName=tbCustomer, Path=Text}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </TextBox>
-                    <Popup Width="{Binding ElementName=tbCustomer, Path=ActualWidth}" Grid.Row="2" Grid.Column="1"
-                               PlacementTarget="{Binding ElementName=tbCustomer}" IsOpen="{Binding Path=IsCustomerPopupOpen}">
-                        <Border  Margin="0,0" MaxHeight="350" Background="White">
+                    <Popup Width="{Binding ElementName=tbCustomer, Path=ActualWidth}" Grid.Row="2" Grid.Column="1" VerticalOffset="3"
+                           PlacementTarget="{Binding ElementName=tbCustomer}" IsOpen="{Binding Path=IsCustomerPopupOpen}" StaysOpen="False"> 
+                        <Border Margin="0,0" MaxHeight="350" Background="White" Style="{StaticResource ScrollBorder}">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <Button Style="{StaticResource MaterialDesignFlatButton}" Content="Новый заказчик" HorizontalAlignment="Right" FontSize="{StaticResource SmallFontSize}"
-                                            Command="{Binding Path=OpenNewCustomer}" Margin="1,2,5,2" CommandParameter="{Binding ElementName=mw}" Panel.ZIndex="2" Background="Transparent"/>
+                                        Command="{Binding Path=OpenCustomerCmd}" Margin="1,2,5,2" CommandParameter="{x:Null}" Panel.ZIndex="2" Background="Transparent"/>
                                 <ListBox ItemsSource="{Binding Path=Customers}" Name="lbCustomers" Grid.Row="1" FontSize="{StaticResource SmallFontSize}"
-                                             ItemContainerStyle="{StaticResource CustomerListBoxItem}" Margin="3,0,2,4">
+                                         ItemContainerStyle="{StaticResource PopUpListBoxItem}" Margin="3,0,2,4"
+                                         ItemTemplate="{StaticResource CustomerPopUpDataTemplate}">
                                 </ListBox>
                             </Grid>
                         </Border>
                     </Popup>
                     <TextBlock Grid.Row="4" Style="{StaticResource InactiveTextBlock}" Text="Нативный вид" Margin="0,20,0,0"/>
                     <TextBox Style="{StaticResource UIOutlinedTextBox}" Text="{Binding Path=Resolution.PrescribeType}" Name="tbNative" Grid.Column="1" Grid.Row="4"
-                                 Margin="5,20,5,0" Grid.ColumnSpan="1"/>
+                             Margin="5,20,5,0" Grid.ColumnSpan="1"/>
                     <materialDesign:PackIcon Style="{StaticResource HelpIcon}" ToolTip="Вид экспертизы согласно постановлению" Grid.Row="4" Grid.Column="2"
                                                   Margin="0,20,0,0"/>
                     <Expander Grid.Row="5" Grid.ColumnSpan="4" Grid.Column="0" Margin="5,20,0,0" BorderThickness="0" BorderBrush="Black"
                                   materialDesign:ExpanderAssist.HorizontalHeaderPadding="0" Background="Transparent">
                         <Expander.Header>
-                            <TextBlock Text="{Binding Path=Resolution.Questions.Count, StringFormat='Вопросы ({0})'}" FontSize="{StaticResource MediumFontSize}"
-                                           Foreground="{StaticResource InactiveText}"/>
+                            <TextBlock Text="{Binding Path=Resolution.Questions.Count, StringFormat='Вопросы ({0})'}" 
+                                       Foreground="{StaticResource InactiveText}" FontSize="{StaticResource MediumFontSize}"/>
                         </Expander.Header>
                         <Grid>
                             <Grid.RowDefinitions>
@@ -218,54 +146,26 @@
                             </Grid.RowDefinitions>
                             <StackPanel Orientation="Horizontal" Margin="10,3,0,5">
                                 <CheckBox materialDesign:CheckBoxAssist.CheckBoxSize="20" Content="Нативная нумерация"
-                                              IsChecked="{Binding Path=Resolution.NativeQuestionNumeration}" Style="{StaticResource MaterialDesignAccentCheckBox}"/>
+                                          IsChecked="{Binding Path=Resolution.NativeQuestionNumeration}" Style="{StaticResource MaterialDesignAccentCheckBox}"/>
                                 <materialDesign:PackIcon Style="{StaticResource HelpIcon}" Margin="3,0,0,0" ToolTip="Нумерация вопросов задана в постановлении и совпадает с введеной"/>
                             </StackPanel>
-                            <DataGrid ItemsSource="{Binding Path=Resolution.Questions}" AutoGenerateColumns="False"  GridLinesVisibility="None" BorderThickness="0" 
-                                          HorizontalScrollBarVisibility="Disabled"  Background="White" CanUserAddRows="False" Name="dgQuestions" Margin="5,5,5,1"
-                                           Grid.Row="1"
-                                         >
-                                <!--RowStyle="{StaticResource DataGridSimpleRow}" ColumnHeaderStyle="{StaticResource DataGridNoHeaders}" CellStyle="{StaticResource DataGridSimpleCell}"-->
-                                <DataGrid.Columns>
-                                    <DataGridTemplateColumn Width="30">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Grid>
-                                                    <TextBlock FontWeight="Bold" Text="{Binding Path=Number}" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                                                    FontSize="{StaticResource MediumFontSize}" Foreground="#FF1263D8" Focusable="False" />
-                                                </Grid>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Width="*">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock FontSize="{StaticResource MediumFontSize}" Text="{Binding Path=Content}" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                        <DataGridTemplateColumn.CellEditingTemplate>
-                                            <DataTemplate>
-                                                <TextBox FontSize="{StaticResource MediumFontSize}" Text="{Binding Path=Content}" TextWrapping="Wrap" AcceptsReturn="False"
-                                                     Margin="0,0,5,0"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellEditingTemplate>
-                                    </DataGridTemplateColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
+                            <ListBox ItemsSource="{Binding Path=Resolution.Questions}" Name="dgQuestions" Margin="5,5,5,1" Grid.Row="1"
+                                 ItemContainerStyle="{StaticResource UnHighlightedListBoxItem}" 
+                                 ItemTemplate="{StaticResource NumerableContentDataTemplate}"/>
                             <!--<TextBlock Grid.Row="2" HorizontalAlignment="Right" Foreground="Gray" FontStyle="Italic" Margin="0,0,3,0"
                                             Text="Нажмите 'Delete' для удаления выбранного объекта или 'MouseDoubleClick' для редактирования" 
                                             Visibility="{Binding ElementName=dgQuestions, Path=Items.Count, Converter={StaticResource More0VisibleConv}}"/>-->
                         <TextBox Grid.Row="3" Margin="10,15,5,8" TextWrapping="Wrap" Height="auto" HorizontalAlignment="Stretch" Name="tbEnterQuestion"
-                                        materialDesign:HintAssist.Hint="Введите вопрос и нажмите 'Enter'" PreviewKeyDown="tbEnterQuestion_PreviewKeyDown"
-                                        Text="{Binding Path=ObjectText, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" >
+                                 materialDesign:HintAssist.Hint="Введите вопрос и нажмите 'Enter'" PreviewKeyDown="tbEnterQuestion_PreviewKeyDown"
+                                 Text="{Binding Path=ObjectText, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" >
                         </TextBox>
                         </Grid>
                     </Expander>
                     <Expander Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" Margin="5,20,0,0" BorderThickness="0" BorderBrush="Black" Background="Transparent"
-                                   materialDesign:ExpanderAssist.HorizontalHeaderPadding="0" >
+                              materialDesign:ExpanderAssist.HorizontalHeaderPadding="0">
                         <Expander.Header>
                             <TextBlock Text="{Binding Path=Resolution.Objects.Count, StringFormat='Объекты ({0})'}" FontSize="{StaticResource MediumFontSize}"
-                                           Foreground="{StaticResource InactiveText}"/>
+                                       Foreground="{StaticResource InactiveText}"/>
                         </Expander.Header>
                         <Grid>
                             <Grid.RowDefinitions>
@@ -274,48 +174,21 @@
                                 <RowDefinition Height="auto"/>
                                 <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
-                            <DataGrid ItemsSource="{Binding Path=Resolution.Objects}" AutoGenerateColumns="False"  GridLinesVisibility="None" BorderThickness="0" Margin="5,5,5,1"
-                                          HorizontalScrollBarVisibility="Disabled"  Background="White" CanUserAddRows="False" Name="dgObjects"
-                                          >
-                                <!--RowStyle="{StaticResource DataGridSimpleRow}" ColumnHeaderStyle="{StaticResource DataGridNoHeaders}" 
-                                          CellStyle="{StaticResource DataGridSimpleCell}"-->
-                                <DataGrid.Columns>
-                                    <DataGridTemplateColumn Width="30">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Grid>
-                                                    <TextBlock FontWeight="Bold" Text="{Binding Path=Number}" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                                                    FontSize="{StaticResource MediumFontSize}" Foreground="#FF1263D8" Focusable="False" />
-                                                </Grid>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Width="*">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock FontSize="{StaticResource MediumFontSize}" Text="{Binding Path=Content}" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                        <DataGridTemplateColumn.CellEditingTemplate>
-                                            <DataTemplate>
-                                                <TextBox FontSize="{StaticResource MediumFontSize}" Text="{Binding Path=Content}" TextWrapping="Wrap" AcceptsReturn="False"
-                                                     Margin="0,0,5,0"/>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellEditingTemplate>
-                                    </DataGridTemplateColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
+                            <ListBox ItemsSource="{Binding Path=Resolution.Objects}" Margin="5,5,5,1" Grid.Row="1"
+                                 ItemContainerStyle="{StaticResource UnHighlightedListBoxItem}" 
+                                 ItemTemplate="{StaticResource NumerableContentDataTemplate}"/>
                             <!--<TextBlock Grid.Row="1" HorizontalAlignment="Right" Foreground="Gray" FontStyle="Italic" Margin="0,0,3,0"
                                            Text="Нажмите 'Delete' для удаления выбранного объекта или 'MouseDoubleClick' для редактирования" 
                                            Visibility="{Binding ElementName=dgObjects, Path=Items.Count, Converter={StaticResource More0VisibleConv}}"/>-->
                             <TextBox Grid.Row="2" Margin="5,15,5,3" TextWrapping="Wrap" Height="auto" HorizontalAlignment="Stretch" Name="tbEnterObject"
-                                         materialDesign:HintAssist.Hint="Введите объект и нажмите 'Enter'" PreviewKeyDown="tbEnterObject_PreviewKeyDown"
-                                         Text="{Binding Path=ObjectText, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True">
+                                     materialDesign:HintAssist.Hint="Введите объект и нажмите 'Enter'" PreviewKeyDown="tbEnterObject_PreviewKeyDown"
+                                     Text="{Binding Path=ObjectText, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True">
                             </TextBox>
                         </Grid>
                     </Expander>
                 </Grid>
-            </GroupBox>
+            </ScrollViewer>
+        </GroupBox>
         
             <GroupBox Style="{DynamicResource MaterialDesignGroupBox}" Margin="16" materialDesign:ShadowAssist.ShadowDepth="Depth1" BorderThickness="0"
                           materialDesign:ColorZoneAssist.Background="Black" materialDesign:ColorZoneAssist.Mode="Custom" Grid.Column="1">
@@ -338,18 +211,25 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition/>
                 </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Style="{StaticResource InactiveTextBlock}" Margin="0,20,0,0" Text="Вид"/>
-                        <ComboBox Style="{StaticResource UIOutlinedComboBox}" ItemsSource="{Binding Path=CaseTypes}" Grid.Column="1" Margin="5,20,10,0">
-                            <ComboBox.SelectedValue>
-                                <Binding Path="Resolution.TypeCase" NotifyOnSourceUpdated="True">
-                                    <Binding.ValidationRules>
-                                        <DataErrorValidationRule/>
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </ComboBox.SelectedValue>
-                        </ComboBox>
-                        <TextBlock Grid.Row="1" Style="{StaticResource InactiveTextBlock}" Margin="0,20,0,0" Text="Номер дела" Visibility="{Binding ElementName=tbnumcase, Path=Visibility}"/>
-                        <TextBox Style="{StaticResource UIOutlinedTextBox}"  Margin="5,20,10,0" Grid.Column="1" Grid.Row="1" Name="tbnumcase">
+                <TextBlock Grid.Row="0" Style="{StaticResource InactiveTextBlock}" Margin="0,20,0,0" Text="Вид"/>
+                <ComboBox Style="{StaticResource UIOutlinedComboBox}" ItemsSource="{Binding Path=SuitableCaseTypes}" Grid.Column="1"
+                          Margin="5,20,10,0" DisplayMemberPath="Type" Name="cbCaseType" Grid.ColumnSpan="2" SelectedIndex="0">
+                    <ComboBox.SelectedValue>
+                        <Binding Path="Resolution.TypeCase" NotifyOnSourceUpdated="True">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </ComboBox.SelectedValue>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding Path=CaseTypeChangedCmd}" CommandParameter="{Binding ElementName=cbCaseType, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
+                <TextBlock Grid.Row="1" Style="{StaticResource InactiveTextBlock}" Margin="0,20,0,0" Text="Номер дела" Visibility="{Binding ElementName=tbnumcase, Path=Visibility}"/>
+                        <TextBox Style="{StaticResource UIOutlinedTextBox}"  Margin="5,20,10,0" Grid.Column="1" Grid.Row="1" Name="tbnumcase"
+                                 Visibility="{Binding Path=CaseVisibility, Mode=OneWay}">
                             <TextBox.Text>
                                 <Binding Path="Resolution.CaseNumber">
                                     <Binding.ValidationRules>
@@ -377,8 +257,10 @@
                                 </ToolTip>
                             </materialDesign:PackIcon.ToolTip>
                         </materialDesign:PackIcon>
-                        <TextBlock Grid.Row="3" Style="{StaticResource InactiveTextBlock}" Margin="0,20,0,0" Text="Истец" Visibility="{Binding ElementName=tbPlaintiff, Path=Visibility}"/>
-                        <TextBox Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,10,0" Name="tbPlaintiff" Grid.Column="1" Grid.Row="3">
+                        <TextBlock Grid.Row="3" Style="{StaticResource InactiveTextBlock}" Margin="0,20,0,0" Text="Истец"
+                                   Visibility="{Binding ElementName=tbPlaintiff, Path=Visibility}"/>
+                        <TextBox Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,10,0" Name="tbPlaintiff" Grid.Column="1" Grid.Row="3"
+                                 Visibility="{Binding Path=PlantiffVisiblity, Mode=OneWay}">
                             <TextBox.Text>
                                 <Binding Path="Resolution.Plaintiff">
                                     <Binding.ValidationRules>
@@ -405,11 +287,8 @@
                                  SpellCheck.IsEnabled="True" Margin="5,20,10,0" Text="{Binding Path=Resolution.Comment}" Grid.ColumnSpan="3" MinLines="4"/>
                     </Grid>
                 </GroupBox>
-        <DockPanel Grid.Column="2" VerticalAlignment="Stretch" Margin="5">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,20,20" DockPanel.Dock="Bottom">
-                <Button  Style="{StaticResource SaveButtonFlat}" Width="120" Command="{Binding Path=SaveResolutionCmd}" CommandParameter="{Binding ElementName=mw}"/>
-                <Button Style="{StaticResource CancelButtonFlat}" Command="{Binding Path=CancelCmd}"/>
-            </StackPanel>
+        <DockPanel Grid.Column="2" VerticalAlignment="Stretch" Margin="0">
+            
             <GroupBox Style="{DynamicResource MaterialDesignGroupBox}" Margin="16" materialDesign:ShadowAssist.ShadowDepth="Depth1" BorderThickness="0"
                       materialDesign:ColorZoneAssist.Mode="Custom" materialDesign:ColorZoneAssist.Background="Black" materialDesign:ColorZoneAssist.Foreground="White">
                 <GroupBox.Header>
@@ -418,13 +297,31 @@
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button Style="{StaticResource AddGreenButton}" Command="{Binding Path=AddExpertiseCmd}" Margin="2"/>
-                        <Button Style="{StaticResource DeleteRedButton}" Command="{Binding Path=DeleteExpertiseCmd}" Margin="2"/>
+                        <Button Style="{StaticResource DeleteRedButton}" Command="{Binding Path=DeleteExpertiseCmd}" Margin="2"
+                                CommandParameter="{Binding ElementName=lvExpertises, Path=SelectedItem}"/>
                     </StackPanel>
-                    <ListView ItemsSource="{Binding Path=FakeExpertise}" Margin="5" >
+                    <ListView ItemsSource="{Binding Path=Resolution.Expertisies}" Margin="1,20" Name="lvExpertises">
                         <ListView.View>
                             <GridView >
-                                <GridViewColumn  Width="150" DisplayMemberBinding="{Binding Path=Number}" Header="Номер"/>
-                                <GridViewColumn Width="250" DisplayMemberBinding="{Binding Path=Expert.Employee.Fio}" Header="Эксперт" />
+                                <GridViewColumn Width="40">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <materialDesign:PackIcon Height="20" Width="20" Foreground="Blue">
+                                                <materialDesign:PackIcon.Kind>
+                                                    <Binding Path="ExpertiseType" Mode="OneWay">
+                                                        <Binding.Converter>
+                                                            <converters:ExpertiseTypeToImageConverter/>
+                                                        </Binding.Converter>
+                                                    </Binding>
+                                                </materialDesign:PackIcon.Kind>
+                                            </materialDesign:PackIcon>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Number}" Header="Номер" />
+                                <GridViewColumn Width="180" DisplayMemberBinding="{Binding Path=Expert}" Header="Эксперт" />
+                                <GridViewColumn Width="110" DisplayMemberBinding="{Binding Path=StartDate, StringFormat={}{0:d}, ConverterCulture='ru-RU'}"
+                                    Header="Начата"/>
                                 <GridViewColumn Width="110" DisplayMemberBinding="{Binding Path=TimeLimit}" Header="Срок" />
                             </GridView>
                         </ListView.View>
@@ -432,5 +329,9 @@
                 </StackPanel>
             </GroupBox>
         </DockPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,20,20" DockPanel.Dock="Bottom" Grid.Row="1" Grid.Column="2">
+            <Button  Style="{StaticResource SaveButtonFlat}" Width="120" Command="{Binding Path=SaveResolutionCmd}" CommandParameter="{Binding ElementName=mw}"/>
+            <Button Style="{StaticResource CancelButtonFlat}" Command="{Binding Path=CancelCmd}"/>
+        </StackPanel>
     </Grid>
 </Page>

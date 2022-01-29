@@ -19,18 +19,20 @@ namespace PLSE_FoxPro.Models
         #endregion
 
         #region Properties
-        [RegularExpression(@"^\p{IsCyrillic}{2,25}$|^\p{IsCyrillic}\.$", ErrorMessage ="неверный формат имени")]
+        [Required(ErrorMessage = "обязательное поле")][RegularExpression(@"^\p{IsCyrillic}{2,25}$|^\p{IsCyrillic}\.$", ErrorMessage ="неверный формат имени")]
         public string Fname
         {
             get => _fname;
             set => SetProperty(ref _fname, value.ToProperNoun(), true);
         }
+        [Required(ErrorMessage = "обязательное поле")]
         [RegularExpression(@"^\p{IsCyrillic}{2,25}$|^\p{IsCyrillic}\.$", ErrorMessage = "неверный формат отчества")]
         public string Mname
         {
             get => _mname;
             set => SetProperty(ref _mname, value.ToProperNoun(), true);
         }
+        [Required(ErrorMessage = "обязательное поле")]
         [RegularExpression(@"^\p{IsCyrillic}{2,15}(?:-\p{IsCyrillic}{2,15})?$", ErrorMessage = "неверный формат фамилии")]
         public string Sname
         {

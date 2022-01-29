@@ -53,17 +53,20 @@ namespace PLSE_FoxPro.Models
         public event PropertyChangedEventHandler PropertyChanged;
        
     }
-    public class NumberingObservableCollection : Collection<NumerableContentWrapper>, INotifyCollectionChanged
+    [Serializable]
+    public class NumberingObservableCollection : Collection<NumerableContentWrapper>, INotifyCollectionChanged, INotifyPropertyChanged
     {
         protected override void InsertItem(int index, NumerableContentWrapper item)
         {
             base.InsertItem(index, item);
             SetNumeration(index);
+            OnPropertyChanged(new PropertyChangedEventArgs("Count"));
             OnCollecttionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, new List<NumerableContentWrapper> { item }));
         }
         protected override void ClearItems()
         {
             base.ClearItems();
+            OnPropertyChanged(new PropertyChangedEventArgs("Count"));
             OnCollecttionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
         protected override void RemoveItem(int index)
@@ -71,6 +74,7 @@ namespace PLSE_FoxPro.Models
             var old = this[index];
             base.RemoveItem(index);
             SetNumeration(index);
+            OnPropertyChanged(new PropertyChangedEventArgs("Count"));
             OnCollecttionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, new List<NumerableContentWrapper> { old }));
         }
         protected override void SetItem(int index, NumerableContentWrapper item)
@@ -82,7 +86,10 @@ namespace PLSE_FoxPro.Models
                                                                                                             new List<NumerableContentWrapper> { old }));
         }
         public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private void OnCollecttionChanged(NotifyCollectionChangedEventArgs e) => CollectionChanged?.Invoke(this, e);
+        private void OnPropertyChanged(PropertyChangedEventArgs e) => PropertyChanged?.Invoke(this, e);
         private void SetNumeration(int start_index)
         {
             for (int i = start_index; i < this.Count;)

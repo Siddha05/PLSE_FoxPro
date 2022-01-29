@@ -13,8 +13,10 @@ namespace PLSE_FoxPro.Models
 
     public class ConsoleErrorLogger : IErrorLogger
     {
-        public void LogError(Exception exception, [CallerMemberName] string source = null) => Console.WriteLine($"Error {exception.Message} occured in {source}\n{exception.StackTrace}");
+        public void LogError(Exception exception, [CallerMemberName] string source = null) => 
+                            Console.WriteLine($"Error {exception.Message} occured in {source}\n{exception.StackTrace}");
 
-        public void LogError(string message, [CallerMemberName] string source = null) => Console.WriteLine($"Error {message} occured in {source}");
+        public void LogError(string message, [CallerMemberName] string source = null) => 
+                            Console.WriteLine($"Error {message} occured in {source}");
     }
 }

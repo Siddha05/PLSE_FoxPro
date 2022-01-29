@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 
 namespace PLSE_FoxPro.Models
@@ -14,13 +16,71 @@ namespace PLSE_FoxPro.Models
         Original,
         Edited
     }
-    public abstract class VersionBase : ObservableValidator
+
+    public abstract class ValidatorBase : ObservableValidator
+    {
+        /// <summary>
+        /// Валидирует все открытие свойства объекта, помеченные аттрибутом ValidationAttribute
+        /// </summary>
+        public void Validate()
+        {
+            foreach (var item in GetOpenProperties())
+            {
+                if (IsDefineAttribute(item, typeof(ValidationAttribute))) ValidateProperty(item.GetValue(this), item.Name);
+                if (IsInheritValidatorBase(item.PropertyType))
+                {
+                    var obj = (item.GetValue(this)) as ValidatorBase;
+                    if (obj != null) obj.Validate();
+                }
+            }
+        }
+        /// <summary>
+        /// Является ли <paramref name="type"/> наследником ValidatorBase?
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns>True если наследует, иначе false</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        private bool IsInheritValidatorBase(Type type)
+        {
+            if (type == null) throw new ArgumentNullException();
+            if (type == typeof(object)) return false;
+            if (type.BaseType == typeof(ValidatorBase)) return true;
+            else return IsInheritValidatorBase(type.BaseType);
+        }
+        /// <summary>
+        /// Декларирует ли <paramref name="member"/> аттрибут типа <paramref name="type"/>?
+        /// </summary>
+        /// <param name="member">Член чля которого определяется наличие аттрибута</param>
+        /// <param name="type">Тип определяемого аттрибута</param>
+        /// <returns>True если определяет, иначе false</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public bool IsDefineAttribute(MemberInfo member, Type type)
+        {
+            if (member == null) throw new ArgumentNullException($"{nameof(member)} was null");
+            if (type == null) throw new ArgumentNullException($"{nameof(type)} was null");
+            return member.IsDefined(type);
+        }
+        /// <summary>
+        /// Возвращает все открытые свойства
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<PropertyInfo> GetOpenProperties()
+        {
+            foreach (var item in GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                yield return item;
+            }
+        }
+    }
+
+    public abstract class VersionBase : ValidatorBase
     {
         #region Fields
         private Version _version;
         private DateTime _object_update;
         private int _id;
         #endregion
+
         #region Properties
         public DateTime ObjectModificationDate => _object_update;
         public Version Version
@@ -44,8 +104,6 @@ namespace PLSE_FoxPro.Models
             _object_update = DateTime.Now;
             Debug.WriteLine($"Object {this.GetType().Name} changed to version {_version} (init property {e.PropertyName})", "VersionBase");
         }
-        public void Validate() => ValidateAllProperties();
-        public void ValidateProperty() => ValidateProperty();
         #endregion
 
         public VersionBase(int id, Version version)

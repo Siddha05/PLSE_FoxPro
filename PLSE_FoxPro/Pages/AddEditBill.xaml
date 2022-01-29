@@ -7,9 +7,9 @@
       xmlns:converters="clr-namespace:PLSE_FoxPro.Converters"
       xmlns:local="clr-namespace:PLSE_FoxPro.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="650" d:DesignWidth="900" Background="White"
+      d:DesignHeight="650" d:DesignWidth="900" Background="White" Name="mv"
       Title="AddEditBill">
-    <Grid Margin="10,20">
+    <Grid Margin="10,20" HorizontalAlignment="Left">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="170"/>
@@ -34,7 +34,7 @@
         <TextBlock Style="{StaticResource InactiveTextBlock}" Text="Плательщик" Grid.Row="2" Margin="0,20,0,0"/>
         <ComboBox IsEditable="True" Grid.Row="2" Grid.ColumnSpan="4" Grid.Column="1" ItemsSource="{Binding Path=CommonPayers}" SelectedItem="{Binding Path=Bill.Payer}"
                   Margin="5,20,5,0" Style="{StaticResource UIOutlinedComboBox}" Background="White" Width="400" HorizontalAlignment="Left"
-                  materialDesign:HintAssist.Hint="Выберите или введите"/>
+                  materialDesign:HintAssist.Hint="Выберите или введите" Text="{Binding Path=Bill.Payer}"/>
         <TextBlock Style="{StaticResource InactiveTextBlock}" Text="Цена часа" Grid.Row="3" Margin="0,20,0,0"/>
         <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource UIOutlinedTextBox}" Margin="5,20,5,0" 
                  Text="{Binding Path=Bill.HourPrice, StringFormat={}{0:c}, ConverterCulture='ru-Ru'}" />
@@ -66,7 +66,7 @@
                         Margin="5,20,5,0"/>
         <materialDesign:PackIcon Grid.Row="6" Grid.Column="2" Style="{StaticResource HelpIcon}" ToolTip="Последняя дата оплаты" Margin="0,20,0,0"/>
         <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="3" HorizontalAlignment="Left" Margin="10,30,0,0">
-            <Button Style="{StaticResource SaveButtonFlat}" Command="{Binding Path=SaveCmd}"/>
+            <Button Style="{StaticResource SaveButtonFlat}" Command="{Binding Path=SaveCmd}" CommandParameter="{Binding ElementName=mv}"/>
             <Button Style="{StaticResource CancelButtonFlat}" Command="{Binding Path=CancelCmd}"/>
         </StackPanel>
     </Grid>

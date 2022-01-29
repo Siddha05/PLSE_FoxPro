@@ -21,14 +21,18 @@ namespace PLSE_FoxPro.ViewModels
         bool _suppresstextchangedevent;
         RelayCommand<string> _cussearch;
         RelayCommand<Customer> _cusselect;
-        RelayCommand _newcustomeropen;
-        RelayCommand _editcustomer;
         RelayCommand _addexpertise;
         RelayCommand<Expertise> _deleteexpertise;
-        RelayCommand _resoltype_changed;
+        RelayCommand<string> _resoltype_changed;
+        RelayCommand<CaseType> _casetype_changed;
+        RelayCommand<NumerableContentWrapper> _del_content;
+        RelayCommand<Customer> _open_customer;
+        private Visibility _case_num_visible;
+        private Visibility _case_plantiff_visible;
+
         Predicate<object> _empty = n => false;
-        Predicate<object> _onlycontract = n => (n as string) == "исследование";
-        Predicate<object> _exeptcontract = n => (n as string) != "исследование";
+        Predicate<object> _onlycontract = n => ((CaseType)n).Code.Equals("6", StringComparison.Ordinal);
+        Predicate<object> _exeptcontract = n => !((CaseType)n).Code.Equals("6", StringComparison.Ordinal);
         #endregion
 
         #region Properties
@@ -38,13 +42,21 @@ namespace PLSE_FoxPro.ViewModels
             get => _iscustomerpopupopen;
             set => SetProperty(ref _iscustomerpopupopen, value);
         }
-
-        //public IReadOnlyDictionary<ResolutionTypes, string> ResolutionTypes => App.PLSE_Storage.ResolutionTypesMap;
+        public Visibility CaseVisibility
+        {
+            get => _case_num_visible;
+            set => SetProperty(ref _case_num_visible, value);
+        }
+        public Visibility PlantiffVisiblity
+        {
+            get => _case_plantiff_visible;
+            set => SetProperty(ref _case_plantiff_visible, value);
+        }
+        public ListCollectionView SuitableCaseTypes { get; } = new ListCollectionView(App.Services.GetService<ILocalStorage>().CaseTypes.ToList());
+        public IReadOnlyCollection<string> ResolutionTypes => App.Services.GetService<ILocalStorage>().ResolutionTypes;
         public IReadOnlyCollection<string> ResolutionStatus => App.Services.GetService<ILocalStorage>().ResolutionStatuses;
-        public IReadOnlyCollection<CaseType> CaseTypes => App.Services.GetService<ILocalStorage>().CaseTypes;
-        public ListCollectionView Customers { get; } //= new ListCollectionView(App.Services.GetService<ILocalStorage>().CustomerAccessService.Items().ToList());
+        public ListCollectionView Customers { get; } = new ListCollectionView(App.Services.GetService<ILocalStorage>().CustomerAccessService.Items().ToList());
         
-        public List<Expertise> FakeExpertise { get; } //= new List<Expertise> { DesignData.TestInstance.Expertise1, DesignData.TestInstance.Expertise2 };
         #endregion
 
         #region Commands
@@ -59,10 +71,9 @@ namespace PLSE_FoxPro.ViewModels
                         _suppresstextchangedevent = false;
                         return;
                     }
-                    string text = n as string;
-                    if (text.Length > 1)
+                    if (n.Length > 1)
                     {
-                        //Customers.Filter = e => (e as Customer).Sname.StartsWith(text, StringComparison.OrdinalIgnoreCase);
+                        Customers.Filter = e => (e as Customer).Sname.StartsWith(n, StringComparison.OrdinalIgnoreCase);
                         IsCustomerPopupOpen = true;
                     }
                     else
@@ -83,38 +94,22 @@ namespace PLSE_FoxPro.ViewModels
                 });
             }
         }
-        public ICommand OpenNewCustomerCmd
+        public ICommand OpenCustomerCmd
         {
             get
             {
-                return _newcustomeropen ??= new RelayCommand(() =>
-                {
-                    //var w = new Pages.AddEditCustomer();
-                    //var cnx = new ViewModels.AddEditCustomer(target: Resolution);
-                    //w.DataContext = cnx;
-                    //App.AddPage(w);
-
-                    MessageBox.Show("Invoke OpenCustomerCmd");
-                });
-            }
-        }
-        public ICommand EditCustomerCmd
-        {
-            get
-            {
-                return _editcustomer ??= new RelayCommand(() =>
-                {
-                    //var w = new Pages.AddEditCustomer();
-                    //var cnx = new ViewModels.AddEditCustomer(n as Customer, Resolution);
-                    //w.DataContext = cnx;
-                    //App.AddPage(w);
-
-                    MessageBox.Show("Invoke EditCustomerCmd");
-                });
+                return _open_customer ??= new RelayCommand<Customer>(n =>
+               {
+                   if (!WeakReferenceMessenger.Default.IsRegistered<Customer>(this))
+                            WeakReferenceMessenger.Default.Register<Customer>(this, SetAndUnRegister);
+                   var w = new Pages.AddEditCustomer();
+                   var cnx = new AddEditCustomerVM(n);
+                   w.DataContext = cnx;
+                   App.Services.GetService<IPagesService>().AddPage(w);
+               });
             }
         }
         public ICommand CustomerLostFocusCmd => new RelayCommand<TextBox>(n => n.GetBindingExpression(TextBox.TextProperty).UpdateTarget());
-
         public ICommand CustomerGotFocusCmd
         {
             get
@@ -144,17 +139,17 @@ namespace PLSE_FoxPro.ViewModels
                 {
                     if (App.HasValidState(n))
                     {
-                        try
-                        {
+                        //try
+                        //{
                             App.Services.GetService<ILocalStorage>().ResolutionAccessService.SaveChanges(this.Resolution);
                             App.SendMessage(App.SuccessSave);
                             App.Services.GetService<IPagesService>().RemovePage();
-                        }
-                        catch (Exception ex)
-                        {
-                            App.Services.GetService<IErrorLogger>().LogError(ex);
-                            App.SendMessage(App.ErrorOnSave);
-                        }
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //    App.Services.GetService<IErrorLogger>().LogError(ex);
+                        //    App.SendMessage(App.ErrorOnSave);
+                        //}
                     }
                 });
             }
@@ -189,29 +184,60 @@ namespace PLSE_FoxPro.ViewModels
             }
         }
         public ICommand CancelCmd => new RelayCommand(() => App.Services.GetService<IPagesService>().RemovePage());
-        public RelayCommand ResolutionTypeChangedCmd
+        public ICommand ResolutionTypeChangedCmd
         {
             get
             {
-                return _resoltype_changed;
-                //    != null ? _resoltype_changed : _resoltype_changed = new RelayCommand(n =>
-                //{
-                //    var sel = (KeyValuePair<ResolutionTypes, string>)n;
-                //    switch (sel.Key)
-                //    {
-                //        case Model.ResolutionTypes.Resolution:
-                //        case Model.ResolutionTypes.Definition:
-                //        case Model.ResolutionTypes.Relationship:
-                //            CaseTypes.Filter = _exeptcontract;
-                //            break;
-                //        case Model.ResolutionTypes.Contract:
-                //            CaseTypes.Filter = _onlycontract;
-                //            break;
-                //        default:
-                //            CaseTypes.Filter = _empty;
-                //            break;
-                //    }
-                //});
+                return _resoltype_changed ??= new RelayCommand<string>(n =>
+                {
+                    switch(n)
+                    {
+                        case "договор":
+                            SuitableCaseTypes.Filter = _onlycontract;
+                            break;
+                        case null:
+                            SuitableCaseTypes.Filter = _empty;
+                            break;
+                        default:
+                            SuitableCaseTypes.Filter = _exeptcontract;
+                            break;
+                    }
+                });
+            }
+        }
+        public ICommand CaseTypeChangedCmd
+        {
+            get
+            {
+                return _casetype_changed ??= new RelayCommand<CaseType>(n =>
+                {
+                    switch (n.Code)
+                    {
+                        case "6":
+                            CaseVisibility = PlantiffVisiblity = Visibility.Collapsed;
+                            break;
+                        case "1":
+                        case "5":
+                        case "4":
+                            CaseVisibility = Visibility.Visible;
+                            PlantiffVisiblity = Visibility.Collapsed;
+                            break;
+                        default:
+                            CaseVisibility = PlantiffVisiblity = Visibility.Visible;
+                            break;
+                    }
+                });
+            }
+        }
+        public ICommand DeleteContentCmd
+        {
+            get
+            {
+                return _del_content ??= new RelayCommand<NumerableContentWrapper>(n =>
+                {
+                    Resolution.Questions.Remove(n);
+                    Resolution.Objects.Remove(n);
+                });
             }
         }
         #endregion
@@ -220,6 +246,12 @@ namespace PLSE_FoxPro.ViewModels
         {
             Resolution = Resolution.New;
             Resolution.Validate();
+        }
+
+        private void SetAndUnRegister(object s, Customer message)
+        {
+            Resolution.Customer = message;
+            WeakReferenceMessenger.Default.Unregister<Customer>(this);
         }
     }
 }

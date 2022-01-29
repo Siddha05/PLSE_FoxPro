@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PLSE_FoxPro.ViewModels
@@ -16,7 +17,7 @@ namespace PLSE_FoxPro.ViewModels
         #region Fields
         RelayCommand<Expert> _expertchanged;
         RelayCommand _addbill;
-        RelayCommand _deletebill;
+        RelayCommand<Bill> _deletebill;
         ICollection<Expert> _experts;
         #endregion
 
@@ -33,11 +34,12 @@ namespace PLSE_FoxPro.ViewModels
         {
             get
             {
-                return new RelayCommand<Window>(n =>
+                return new RelayCommand<Page>(n =>
                 {
                     if (App.HasValidState(n))
                     {
-
+                        WeakReferenceMessenger.Default.Send(Expertise, 1);
+                        App.Services.GetService<IPagesService>().RemovePage();
                     }
                 });
             }
@@ -63,12 +65,11 @@ namespace PLSE_FoxPro.ViewModels
         {
             get
             {
-                return _deletebill ??= new RelayCommand(() =>
+                return _deletebill ??= new RelayCommand<Bill>(n =>
                 {
-
-                    MessageBox.Show("Invoke Bill delete");
+                    Expertise.Bills.Remove(n);
                 },
-                    () => Expertise.Bills.Count > 0
+                    _ => Expertise.Bills.Count > 0
                 );
             }
         }
@@ -80,11 +81,8 @@ namespace PLSE_FoxPro.ViewModels
                 {
                     if (!WeakReferenceMessenger.Default.IsRegistered<Bill, int>(this, 1))
                     {
-
-                        MessageBox.Show("---------- register message");
                         WeakReferenceMessenger.Default.Register<Bill, int>(this, 1, (r, m) => Expertise.Bills.Add(m));
                     }
-                    else MessageBox.Show("--------- already registered");
                     var p = new Pages.AddEditBill();
                     var cnt = new AddEditBillVM();
                     p.DataContext = cnt;
@@ -93,23 +91,14 @@ namespace PLSE_FoxPro.ViewModels
             }
         }
         #endregion
+
         public AddExpertiseVM(Resolution resolution)
         {
             Expertise = Expertise.New;
             Expertise.FromResolution = resolution;
             _experts = App.Services.GetService<ILocalStorage>().ExpertAccessService.Items();
             Experts = _experts.Distinct(new Comparers.ExpertEqualityByEmployeeIDComparer());
-
-        }
-        public AddExpertiseVM()
-        {
-            Expertise = Expertise.New;
-            App.Services.GetService<ILocalStorage>().Inicialize();
-            _experts = App.Services.GetService<ILocalStorage>().ExpertAccessService.Items();
-            Experts = _experts.Distinct(new Comparers.ExpertEqualityByEmployeeIDComparer());
-            ExpertiseTypes = App.Services.GetService<ILocalStorage>().ExpertiseTypes;
             Expertise.Validate();
-           
         }
         private void FillExpertSpecilities(Expert expert)
         {

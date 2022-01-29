@@ -87,5 +87,6 @@ namespace PLSE_FoxPro.Models
                               closed: _closed);
         }
         object ICloneable.Clone() => Clone();
+        public override string ToString() => $"{Speciality.Code} {Employee.Fio}";
     }
 }

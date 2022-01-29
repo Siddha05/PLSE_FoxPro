@@ -682,7 +682,8 @@ namespace PLSE_FoxPro.Models
                                                       title: rd.GetString(colTitle),
                                                       acronym: rd.GetString(colAcronym),
                                                       id: rd.GetByte(colID),
-                                                      code: rd.GetString(colCode));
+                                                      code: rd.GetString(colCode),
+                                                      vr: Version.Original);
                     }
                 }
             }
@@ -719,7 +720,8 @@ namespace PLSE_FoxPro.Models
                                                  title: rd.GetString(colTitle),
                                                  acronym: rd.GetString(colAcronym),
                                                  id: rd.GetByte(colID),
-                                                 code: rd.GetString(colCode))
+                                                 code: rd.GetString(colCode),
+                                                 vr: Version.Original)
                                 );
                     }
                 }
@@ -787,7 +789,8 @@ namespace PLSE_FoxPro.Models
                                                         title: rd.GetString(colTitle),
                                                         acronym: rd.GetString(colAcronym),
                                                         id: rd.GetByte(colID),
-                                                        code: rd.GetString(colCode));
+                                                        code: rd.GetString(colCode),
+                                                        vr: Version.Original);
                                 _cache.TryAdd(d.ID, d);
                             }
                         }
@@ -2378,11 +2381,11 @@ namespace PLSE_FoxPro.Models
             cmd.Parameters.Add("@TypeResol", SqlDbType.NVarChar,40).Value = ConvertToDBNull(item.ResolutionType);
             cmd.Parameters.Add("@Status", SqlDbType.NVarChar, 30).Value = item.ResolutionStatus;
             cmd.Parameters.Add("@CustID", SqlDbType.Int).Value = item.Customer.ID;
-            cmd.Parameters.Add("@TypeCase", SqlDbType.Char, 1).Value = item.TypeCase.Code;
+            cmd.Parameters.Add("@TypeCase", SqlDbType.VarChar, 2).Value = item.TypeCase.Code;
             cmd.Parameters.Add("@Annotate", SqlDbType.NVarChar, 500).Value = ConvertToDBNull(item.CaseAnnotate);
             cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, 500).Value = ConvertToDBNull(item.Comment);
             cmd.Parameters.Add("@NumberCase", SqlDbType.NVarChar, 50).Value = ConvertToDBNull(item.CaseNumber);
-            cmd.Parameters.Add("@Uid", SqlDbType.NVarChar).Value = ConvertToDBNull(item.UidCase);
+            cmd.Parameters.Add("@Uid", SqlDbType.NVarChar, 50).Value = ConvertToDBNull(item.UidCase);
             cmd.Parameters.Add("@Respondent", SqlDbType.NVarChar, 150).Value = ConvertToDBNull(item.Respondent);
             cmd.Parameters.Add("@Plaintiff", SqlDbType.NVarChar, 150).Value = ConvertToDBNull(item.Plaintiff);
             cmd.Parameters.Add("@PrescribeType", SqlDbType.NVarChar, 200).Value = ConvertToDBNull(item.PrescribeType);
@@ -2413,7 +2416,7 @@ namespace PLSE_FoxPro.Models
             cmd.Parameters.Add("@TypeResol", SqlDbType.NVarChar,40).Value = ConvertToDBNull(item.ResolutionType);
             cmd.Parameters.Add("@Status", SqlDbType.NVarChar, 30).Value = item.ResolutionStatus;
             cmd.Parameters.Add("@CustID", SqlDbType.Int).Value = item.Customer.ID;
-            cmd.Parameters.Add("@TypeCase", SqlDbType.Char, 1).Value = item.TypeCase.Code;
+            cmd.Parameters.Add("@TypeCase", SqlDbType.VarChar, 2).Value = item.TypeCase.Code;
             cmd.Parameters.Add("@Annotate", SqlDbType.NVarChar, 500).Value = ConvertToDBNull(item.CaseAnnotate);
             cmd.Parameters.Add("@Comment", SqlDbType.NVarChar, 500).Value = ConvertToDBNull(item.Comment);
             cmd.Parameters.Add("@NumberCase", SqlDbType.NVarChar, 50).Value = ConvertToDBNull(item.CaseNumber);

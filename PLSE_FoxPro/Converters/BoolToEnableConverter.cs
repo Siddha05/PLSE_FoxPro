@@ -6,12 +6,12 @@ using System.Windows.Data;
 
 namespace PLSE_FoxPro.Converters
 {
-    class BoolToColorConverter : IValueConverter
+    internal class BoolToEnableConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => value switch
         {
-            bool b when b == true => "SpringGreen",
-            _ => "Red",
+            bool b when b => "Действует",
+            _ => "Не действует"
         };
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

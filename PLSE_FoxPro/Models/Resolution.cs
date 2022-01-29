@@ -68,7 +68,7 @@ namespace PLSE_FoxPro.Models
         public string ResolutionStatus
         {
             get => _status;
-            set => SetProperty(ref _status, value, true);
+            private set => SetProperty(ref _status, value, true);
         }
         public NumberingObservableCollection Questions => _quest;
         /// <summary>
@@ -98,6 +98,7 @@ namespace PLSE_FoxPro.Models
             get => _customer;
             set => SetProperty(ref _customer, value, true);
         }
+        [Required(ErrorMessage = "обязательное поле")]
         public string ResolutionType
         {
             get => _restype;
@@ -181,8 +182,8 @@ namespace PLSE_FoxPro.Models
 
         private Resolution() : base()
         {
-            _quest.CollectionChanged += _quest_CollectionChanged;
-            _objects.CollectionChanged += _quest_CollectionChanged;
+            //_quest.CollectionChanged += _quest_CollectionChanged;
+            //_objects.CollectionChanged += _quest_CollectionChanged;
             _expertisies.CollectionChanged += ExpertiseListChanged;
         }
         public static Resolution New => new Resolution() { RegistrationDate = DateTime.Now, ResolutionStatus = "рассмотрение" };
@@ -207,28 +208,28 @@ namespace PLSE_FoxPro.Models
             _annotate = annotate;
             _comment = comment;
             _expertisies.CollectionChanged += ExpertiseListChanged;
-            _quest.CollectionChanged += _quest_CollectionChanged;
-            _objects.CollectionChanged += _quest_CollectionChanged;
+            //_quest.CollectionChanged += _quest_CollectionChanged;
+            //_objects.CollectionChanged += _quest_CollectionChanged;
         }
         #region Methods
-        private void _quest_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                case NotifyCollectionChangedAction.Remove:
-                case NotifyCollectionChangedAction.Replace:
-                case NotifyCollectionChangedAction.Move:
-                    var c = sender as ObservableCollection<NumerableContentWrapper>;
-                    for (int i = 0; i < c.Count; i++)
-                    {
-                        c[i].Number = i + 1;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
+        //private void _quest_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        //{
+        //    switch (e.Action)
+        //    {
+        //        case NotifyCollectionChangedAction.Add:
+        //        case NotifyCollectionChangedAction.Remove:
+        //        case NotifyCollectionChangedAction.Replace:
+        //        case NotifyCollectionChangedAction.Move:
+        //            var c = sender as ObservableCollection<NumerableContentWrapper>;
+        //            for (int i = 0; i < c.Count; i++)
+        //            {
+        //                c[i].Number = i + 1;
+        //            }
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
         private void ExpertiseStatusChanged(object o, PropertyChangedEventArgs e)
         {
             var ex = o as Expertise;

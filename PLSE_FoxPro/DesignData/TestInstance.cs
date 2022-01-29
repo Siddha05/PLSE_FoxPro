@@ -27,7 +27,7 @@ namespace PLSE_FoxPro.DesignData
                      secondname: "Козлова", password: "password123", emplstatus: "работает", foto: null,
                      gender: false, declinated: true, profile: PermissionProfile.Expert, vr: Version.Original, updatedate: System.DateTime.Now)
         ;
-        public static Departament DepartamentKE => new Departament(id: 0, title: "отдел криминалистических экспертиз", acronym: "КЭ", code: "3", isvalid: true);
+        public static Departament DepartamentKE => new Departament(id: 0, title: "отдел криминалистических экспертиз", acronym: "КЭ", code: "3", isvalid: true, vr: Version.Original);
         public static Settlement Penza => new Settlement(id: -1, title: "Пенза", type: "г.", significance: "федеральный", telephonecode: "8412", postcode: "440000",
                                 federallocation: "Пензенская область", territoriallocation: null, isvalid: true, vr: Version.Original, updatedate: System.DateTime.Now);
         public static Adress AdressPenza1 => new Adress()
@@ -87,14 +87,16 @@ namespace PLSE_FoxPro.DesignData
         public static Response Response1 => new Response(-2, Expertise2, new System.DateTime(2020, 1, 9), new System.DateTime(2020, 1, 9),"осмотр",-1, true, Version.Original);
         public static Expertise Expertise1 => new Expertise(id: -1, number: "3", expert: ExpertKojaeva1, result: "заключение", start: new System.DateTime(2020, 11, 8),
                         end: new System.DateTime(2021, 3, 13), timelimit: 30, type: "первичная", previous: 12, spendhours: 48, vr: Version.Original)
-        { Evaluation = 7 };
+        //{ Evaluation = 7 }
+        ;
         public static Expertise Expertise2
         {
             get
             {
                 var e = new Expertise(id: -1, number: "3245", expert: ExpertKojaeva2, result: "заключение", start: new System.DateTime(2020, 12, 18),
                         end: new System.DateTime(2021, 1, 23), timelimit: 30, type: "дополнительная", previous: null, spendhours: 48, vr: Version.Original)
-                { Evaluation = 4, };
+                //{ Evaluation = 4, }
+                ;
                 e.Bills.Add(Bill2); e.Bills.Add(Bill3);
                 e.Movements.Add(Request1); e.Movements.Add(Response1);
                 e.Movements.Add(Report1);

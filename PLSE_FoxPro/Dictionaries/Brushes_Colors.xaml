@@ -8,7 +8,7 @@
     <SolidColorBrush x:Key="HighlightedTextBlue" Color="DarkBlue"/>
 
     <SolidColorBrush x:Key="SelectedItemBrush" Color="#FF4E0789"/>
-    <SolidColorBrush x:Key="MouseOverBrush" Color="#FFE6E6E6"/>
+    <SolidColorBrush x:Key="MouseOverBrush" Color="#41b388ff"/>
 
     <SolidColorBrush x:Key="InactiveState" Color="Gray"/>
     <SolidColorBrush x:Key="WarningState" Color="#FFC3684D"/>

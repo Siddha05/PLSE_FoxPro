@@ -114,9 +114,9 @@ namespace PLSE_FoxPro.Models
         public EquipmentUsageDataAccess EquipmentUsageAccessService => throw new NotImplementedException();
         public DepartamentDataAccess DepartamentsAccessService => _departament;
         public CustomerDataAccess CustomerAccessService => _customer_da ??= new CustomerDataAccess(this);
-        public ResolutionDataAccess ResolutionAccessService => throw new NotImplementedException();
-        public ExpertiseDataAccess ExpertiseAccessService => throw new NotImplementedException();
-        public BillDataAccess BillAccessService => throw new NotImplementedException();
+        public ResolutionDataAccess ResolutionAccessService => _resolution_da ??= new ResolutionDataAccess(this);
+        public ExpertiseDataAccess ExpertiseAccessService => _expertise_da ??= new ExpertiseDataAccess(this);
+        public BillDataAccess BillAccessService => _bill_da ??= new BillDataAccess(this);
         public MovementDataAccess ExpertiseMovementAccessService => throw new NotImplementedException();
         public IReadOnlyList<string> InnerOffices => _inneroffices;
         public IReadOnlyList<string> EmployeeStatus => _employeestatus;
@@ -220,7 +220,7 @@ namespace PLSE_FoxPro.Models
                     List<CaseType> lTypeCase = new List<CaseType>();
                     while (rd.Read())
                     {
-                        lTypeCase.Add(new CaseType(rd.GetString(0), rd.GetString(1)));
+                        lTypeCase.Add(new CaseType(rd.GetString(1), rd.GetString(0)));
                     }
                     _casetypes = lTypeCase;
                 }
@@ -299,7 +299,7 @@ namespace PLSE_FoxPro.Models
 
         public Storage_Cached()
         {
-            
+            _genders = new List<string> { "мужской", "женский", "неизвестный" };
             _lab_da = new LaboratoryDataAccess(this);
             _settlement_da = new SettlementsDataAccessCached(this);
             _employee_da = new EmployeeDataAccessCached(this);

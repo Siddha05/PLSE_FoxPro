@@ -34,7 +34,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style TargetType="{x:Type ListBoxItem}" x:Key="SimpleRowListBoxItem">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
@@ -55,4 +55,36 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="{x:Type ListBoxItem}" x:Key="UnHighlightedListBoxItem">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Margin" Value="1,4"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <ContentPresenter />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type ListBoxItem}" x:Key="PopUpListBoxItem">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Margin" Value="1,2"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border Background="Transparent" BorderThickness="0" Padding="1" BorderBrush="#FF320B86" CornerRadius="3" Name="brd">
+                        <ContentPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Border.Background" TargetName="brd" Value="{StaticResource MouseOverBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
 </ResourceDictionary>

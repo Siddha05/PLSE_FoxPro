@@ -66,6 +66,7 @@ namespace PLSE_FoxPro.Models
             get => _prevexp;
             set => SetProperty(ref _prevexp, value);
         }
+        //[Required(ErrorMessage = "обязательное поле")]
         public string ExpertiseType
         {
             get => _type;
@@ -213,9 +214,6 @@ namespace PLSE_FoxPro.Models
         public ObservableCollection<ExpertiseMovement> Movements => _movements;
         public ObservableCollection<Bill> Bills => _bills;
         public ObservableCollection<EquipmentUsage> EquipmentUsages => _equipmentusage;
-        /// <summary>
-        /// Является ли экспертиза платной
-        /// </summary>
         public static Expertise New => new Expertise() { _startdate = DateTime.Now, _timelimit = 30};
         #endregion
 
@@ -401,6 +399,5 @@ namespace PLSE_FoxPro.Models
             }
         }
 
-       
     }
 }
