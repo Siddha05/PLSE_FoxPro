@@ -66,7 +66,7 @@ namespace PLSE_FoxPro.Models
             get => _prevexp;
             set => SetProperty(ref _prevexp, value);
         }
-        //[Required(ErrorMessage = "обязательное поле")]
+        [Required(ErrorMessage = "обязательное поле")]
         public string ExpertiseType
         {
             get => _type;

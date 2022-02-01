@@ -13,9 +13,8 @@ namespace PLSE_FoxPro.ViewModels
 {
     internal class TestVM
     {
-        
-        public Person Person {get;}
-        private string _prop;
+
+        public List<Expertise> Expertises { get; set; } = new List<Expertise> { DesignData.TestInstance.Expertise1 };
         
         public ICommand TestCmd
         {
@@ -24,34 +23,16 @@ namespace PLSE_FoxPro.ViewModels
                 return new RelayCommand<Button>(n =>
                 {
 
-                    MessageBox.Show(_prop);
+                    MessageBox.Show("Invoke command");
                 });
             }
         }
         public TestVM()
         {
-            Person = Customer.New;
-
-            var e = GetValidatedProperties(typeof(string));
-
-            MessageBox.Show($"{e.Count()}");
+            
             
             
         }
-        protected IEnumerable<PropertyInfo> GetProperties(Type t)
-        {
-            foreach (var item in t.GetProperties(BindingFlags.Instance | BindingFlags.Public))
-            {
-                yield return item;
-            }
-        }
-        protected IEnumerable<PropertyInfo> GetValidatedProperties(Type t)
-        {
-            foreach (var item in t.GetProperties(BindingFlags.Instance | BindingFlags.Public))
-            {
-                var att = item.GetCustomAttributes(typeof(ValidationAttribute), false);
-                if (att.Length > 0) yield return item;
-            }
-        }
+       
     }
 }

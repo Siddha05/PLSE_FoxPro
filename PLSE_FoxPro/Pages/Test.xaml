@@ -24,14 +24,27 @@
         <Grid.Resources>
            
         </Grid.Resources>
-        <Button Style="{StaticResource MaterialDesignFlatButton}" Height="45" Width="100" Name="b" Content="click"
-                Command="{Binding Path=TestCmd}">
-          
-        </Button>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20">
-            <TextBox Text="{Binding Path=Person.Fname}" Margin="2,20" Width="160"/>
-            <TextBox Text="{Binding Path=Person.Sname}" Margin="2,20" Width="160"/>
-            <TextBox Text="{Binding Path=Person.Mname}" Margin="2,20" Width="160"/>
-        </StackPanel>
+        <ListBox Margin="10" ItemsSource="{Binding Path=Expertises}" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="Expertise">
+                    <materialDesign:Card Background="#03a9f4" Height="200" UniformCornerRadius="6" TextBlock.Foreground="White">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{Binding Path=Number}" FontSize="{StaticResource ExtraHugeFontSize}" HorizontalAlignment="Center"/>
+                        </Grid>
+                        
+                    </materialDesign:Card>
+                </DataTemplate>
+            </ListBox.ItemTemplate>            
+        </ListBox>
+
     </Grid>
 </Page>

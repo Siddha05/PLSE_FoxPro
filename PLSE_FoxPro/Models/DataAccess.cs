@@ -92,20 +92,13 @@ namespace PLSE_FoxPro.Models
                 }
             }
         }
-        protected IEnumerable<PropertyInfo> GetAllProperties(Type t)
-        {
-            foreach (var item in t.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
-            {
-                yield return item;
-            }
-        }
         /// <summary>
         /// Копирует все поля из <paramref name="item2"/> в <paramref name="item1"/> и запускает событие для каждого свойства через делегат PropertyChangedEventHandler 
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="item1">Донор</param>
         /// <param name="item2">Реципиент</param>
-        protected void CopyFields<V>(V item1, V item2) where V : VersionBase
+        protected void CopyFields<V>(V item1, V item2) where V : VersionBase ///TODO: remove in TypeHelper?
         {
             Type type = typeof(V);
             FieldInfo pc = null;
@@ -121,7 +114,7 @@ namespace PLSE_FoxPro.Models
             var e = pc?.GetValue(item1) as PropertyChangedEventHandler;
             if (e != null)
             {
-                foreach (var prop in GetAllProperties(type))
+                foreach (var prop in TypeHelper.GetPublicProperties(type))
                 {
                     e.Invoke(item1, new PropertyChangedEventArgs(prop.Name));
                 }

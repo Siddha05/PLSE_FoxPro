@@ -24,9 +24,9 @@ namespace PLSE_FoxPro.Models
         /// </summary>
         public void Validate()
         {
-            foreach (var item in GetOpenProperties())
+            foreach (var item in TypeHelper.GetPublicPropertiesWithSetter(this.GetType()))
             {
-                if (IsDefineAttribute(item, typeof(ValidationAttribute))) ValidateProperty(item.GetValue(this), item.Name);
+                if (TypeHelper.IsDefineAttribute(item, typeof(ValidationAttribute))) ValidateProperty(item.GetValue(this), item.Name);
                 if (IsInheritValidatorBase(item.PropertyType))
                 {
                     var obj = (item.GetValue(this)) as ValidatorBase;
@@ -47,23 +47,12 @@ namespace PLSE_FoxPro.Models
             if (type.BaseType == typeof(ValidatorBase)) return true;
             else return IsInheritValidatorBase(type.BaseType);
         }
-        /// <summary>
-        /// Декларирует ли <paramref name="member"/> аттрибут типа <paramref name="type"/>?
-        /// </summary>
-        /// <param name="member">Член чля которого определяется наличие аттрибута</param>
-        /// <param name="type">Тип определяемого аттрибута</param>
-        /// <returns>True если определяет, иначе false</returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        public bool IsDefineAttribute(MemberInfo member, Type type)
-        {
-            if (member == null) throw new ArgumentNullException($"{nameof(member)} was null");
-            if (type == null) throw new ArgumentNullException($"{nameof(type)} was null");
-            return member.IsDefined(type);
-        }
+       
         /// <summary>
         /// Возвращает все открытые свойства
         /// </summary>
         /// <returns></returns>
+        [Obsolete]
         public IEnumerable<PropertyInfo> GetOpenProperties()
         {
             foreach (var item in GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
